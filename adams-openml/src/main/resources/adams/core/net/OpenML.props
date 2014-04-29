@@ -11,3 +11,6 @@ Password=
 
 # The OpenML URL to connect to
 URL=http://openml.liacs.nl/
+
+# The verbosity level
+VerboseLevel=0

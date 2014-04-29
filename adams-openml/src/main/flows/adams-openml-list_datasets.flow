@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2014-04-29 12:17:49
+# Date: 2014-04-29 13:39:05
 # User: fracpete
 #
 adams.flow.control.Flow
@@ -23,8 +23,6 @@ adams.flow.control.Flow
 		adams.flow.standalone.OpenMLConnection
 	-actor
 		adams.flow.source.OpenMLListDatasets
-			-logging-level
-			FINE
 			-regexp-name
 			a.*
 	-actor

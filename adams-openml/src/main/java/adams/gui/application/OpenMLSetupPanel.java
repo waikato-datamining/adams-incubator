@@ -25,7 +25,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 
 import adams.core.Constants;
 import adams.core.Properties;
@@ -59,6 +61,9 @@ public class OpenMLSetupPanel
   /** the URL. */
   protected JTextField m_TextURL;
 
+  /** the verbose level. */
+  protected JSpinner m_SpinnerVerboseLevel;
+  
   /**
    * Initializes the members.
    */
@@ -95,6 +100,13 @@ public class OpenMLSetupPanel
     m_TextURL = new JTextField(20);
     m_TextURL.setText(OpenMLHelper.getURL());
     m_PanelParameters.addParameter("U_RL", m_TextURL);
+
+    m_SpinnerVerboseLevel = new JSpinner();
+    ((SpinnerNumberModel) m_SpinnerVerboseLevel.getModel()).setMinimum(0);
+    ((SpinnerNumberModel) m_SpinnerVerboseLevel.getModel()).setMaximum(2);
+    ((SpinnerNumberModel) m_SpinnerVerboseLevel.getModel()).setStepSize(1);
+    m_SpinnerVerboseLevel.setValue(OpenMLHelper.getVerboseLevel());
+    m_PanelParameters.addParameter("_Verbose level", m_SpinnerVerboseLevel);
   }
 
   /**
@@ -110,6 +122,7 @@ public class OpenMLSetupPanel
     result.setProperty(OpenMLHelper.USER, m_TextUser.getText());
     result.setProperty(OpenMLHelper.PASSWORD, m_TextPassword.getText());
     result.setProperty(OpenMLHelper.URL, m_TextURL.getText());
+    result.setInteger(OpenMLHelper.VERBOSE_LEVEL, ((SpinnerNumberModel) m_SpinnerVerboseLevel.getModel()).getNumber().intValue());
 
     return result;
   }

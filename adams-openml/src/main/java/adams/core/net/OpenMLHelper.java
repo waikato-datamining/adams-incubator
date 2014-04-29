@@ -46,6 +46,9 @@ public class OpenMLHelper {
 
   /** the URL. */
   public final static String URL = "URL";
+
+  /** the verbose leve. */
+  public final static String VERBOSE_LEVEL = "VerboseLevel";
   
   /** the properties. */
   protected static Properties m_Properties;
@@ -100,7 +103,7 @@ public class OpenMLHelper {
    * @return		the user
    */
   public static String getUser() {
-    return getProperties().getPath(USER, "");
+    return getProperties().getProperty(USER, "");
   }
 
   /**
@@ -109,7 +112,7 @@ public class OpenMLHelper {
    * @return		the password
    */
   public static BasePassword getPassword() {
-    return new BasePassword(getProperties().getPath(PASSWORD, ""));
+    return new BasePassword(getProperties().getProperty(PASSWORD, ""));
   }
 
   /**
@@ -118,9 +121,18 @@ public class OpenMLHelper {
    * @return		the URL
    */
   public static String getURL() {
-    return getProperties().getPath(URL, "http://openml.liacs.nl/");
+    return getProperties().getProperty(URL, "http://openml.liacs.nl/");
   }
-  
+
+  /**
+   * Returns the verbose level.
+   *
+   * @return		the level
+   */
+  public static int getVerboseLevel() {
+    return getProperties().getInteger(VERBOSE_LEVEL, 0);
+  }
+
   /**
    * Extracts the status from the JSON result.
    * 

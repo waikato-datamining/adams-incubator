@@ -23,6 +23,7 @@ package adams.flow.standalone;
 import java.util.Date;
 
 import org.openml.apiconnector.io.ApiConnector;
+import org.openml.apiconnector.settings.Settings;
 import org.openml.apiconnector.xml.Authenticate;
 
 import adams.core.DateFormat;
@@ -252,8 +253,10 @@ public class OpenMLConnection
     result = null;
     
     try {
-      if (m_Connector == null)
+      if (m_Connector == null) {
 	m_Connector = new ApiConnector(m_URL);
+	Settings.API_VERBOSE_LEVEL = OpenMLHelper.getVerboseLevel();
+      }
       m_Session = m_Connector.openmlAuthenticate(m_User, m_Password.getValue());
       if (isLoggingEnabled())
 	getLogger().info("sessionHash=" + m_Session.getSessionHash() + ", validUntil=" + m_Session.getValidUntil());
