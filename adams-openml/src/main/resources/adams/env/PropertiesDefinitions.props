@@ -1,0 +1,7 @@
+# Stores the classnames of the properties definition files.
+#
+# Author: FracPete (fracpete at waikato dot ac dot nz)
+# Version: $Revision: 7103 $
+
+Definitions=\
+  adams.env.OpenMLDefinition

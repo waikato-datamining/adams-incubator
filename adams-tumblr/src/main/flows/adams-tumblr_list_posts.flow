@@ -1,0 +1,42 @@
+# Project: adams
+# Date: 2014-01-23 15:43:48
+# User: fracpete
+#
+adams.flow.control.Flow
+	-annotation
+	Simply displays some posts from the \"staff\" blog.
+	-actor
+		adams.flow.standalone.TumblrConnection
+	-actor
+		adams.flow.source.TumblrBlogPosts
+			-blog
+			staff
+	-actor
+		adams.flow.transformer.TumblrPostConverter
+			-converter
+				adams.data.tumblr.TextConverter
+					-field
+					BLOG_NAME
+					-field
+					TIMESTAMP
+					-field
+					DATE
+					-field
+					TYPE
+					-field
+					FORMAT
+					-field
+					POST_URL
+					-separator
+					\t
+					-quote
+					true
+	-actor
+		adams.flow.sink.Display
+			-name
+			Posts
+			-short-title
+			true
+	-flow-execution-listener
+		adams.flow.execution.NullListener
+

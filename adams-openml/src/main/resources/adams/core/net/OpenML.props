@@ -1,0 +1,13 @@
+# Properties file listing OpenML related parameters.
+#
+# Author: FracPete (fracpete at waikato dot ac dot nz)
+# Version: $Revision: 8481 $
+
+# The OpenML user
+User=
+
+# The user's password
+Password=
+
+# The OpenML URL to connect to
+URL=http://openml.liacs.nl/

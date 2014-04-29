@@ -1,0 +1,70 @@
+# Project: adams
+# Date: 2014-04-29 12:17:49
+# User: fracpete
+#
+adams.flow.control.Flow
+	-annotation
+	Lists all datasets that start with \"a\" and displays\nsome more information on the the first dataset.
+	-actor
+		adams.flow.standalone.TabView
+			-actor
+				adams.flow.sink.SpreadSheetDisplay
+					-name
+					datasets
+					-writer
+						adams.data.io.output.NullWriter
+			-actor
+				adams.flow.sink.Display
+					-name
+					description
+					-writer
+						adams.data.io.output.NullWriter
+	-actor
+		adams.flow.standalone.OpenMLConnection
+	-actor
+		adams.flow.source.OpenMLListDatasets
+			-logging-level
+			FINE
+			-regexp-name
+			a.*
+	-actor
+		adams.flow.control.Tee
+			-name
+			display datasets
+			-tee
+				adams.flow.sink.CallableSink
+					-callable
+					datasets
+	-actor
+		adams.flow.control.Tee
+			-name
+			description
+			-tee
+				adams.flow.transformer.SpreadSheetGetCell
+			-tee
+				adams.flow.transformer.Convert
+					-conversion
+						adams.data.conversion.StringToInt
+			-tee
+				adams.flow.transformer.OpenMLDatasetDescription
+			-tee
+				adams.flow.transformer.SpreadSheetRowFilter
+					-finder
+						adams.data.spreadsheet.rowfinder.ByValue
+							-att-index
+							first
+							-reg-exp
+							Description
+			-tee
+				adams.flow.transformer.SpreadSheetGetCell
+					-name
+					SpreadSheetGetCell-1
+					-col
+					2
+			-tee
+				adams.flow.sink.CallableSink
+					-callable
+					description
+	-flow-execution-listener
+		adams.flow.execution.NullListener
+

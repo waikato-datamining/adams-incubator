@@ -1,0 +1,106 @@
+% Copyright (c) 2014 by the University of Waikato, Hamilton, NZ. 
+% This work is made available under the terms of the 
+% Creative Commons Attribution-ShareAlike 3.0 license, 
+% http://creativecommons.org/licenses/by-sa/3.0/. 
+%
+% Version: $Revision$
+
+\documentclass[a4paper]{book}
+
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{multirow}
+\usepackage{scalefnt}
+\usepackage{tikz}
+
+% watermark -- for draft stage
+\usepackage[firstpage]{draftwatermark}
+\SetWatermarkLightness{0.9}
+\SetWatermarkScale{5}
+
+\input{latex_extensions}
+
+\title{
+  \textbf{ADAMS} \\
+  {\Large \textbf{A}dvanced \textbf{D}ata mining \textbf{A}nd \textbf{M}achine
+  learning \textbf{S}ystem} \\
+  {\Large Module: adams-openml} \\
+  \vspace{1cm}
+  \includegraphics[width=6cm]{images/openml-module.png} \\
+}
+\author{
+  Peter Reutemann
+}
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+\begin{document}
+
+\begin{titlepage}
+\maketitle
+
+\thispagestyle{empty}
+\center
+\begin{table}[b]
+	\begin{tabular}{c l l}
+		\parbox[c][2cm]{2cm}{\copyright 2014} &
+		\parbox[c][2cm]{5cm}{\includegraphics[width=5cm]{images/coat_of_arms.pdf}} \\
+	\end{tabular}
+	\includegraphics[width=12cm]{images/cc.png} \\
+\end{table}
+
+\end{titlepage}
+
+\tableofcontents
+\listoffigures
+%\listoftables
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction}
+\textit{OpenML.org}\cite{openml} is a website that gives public access to a vast range of machine learning experiments that have been run with different algorithms and varying parameters on benchmarking datasets (e.g., UCI datasets).
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=6.0cm]{images/openml-module.png}
+  \label{openml-module}
+\end{figure}
+
+ADAMS uses the \textit{ApiConnector} Java component \cite{apiconnector} to query the OpenML.org repository.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Flow}
+The following standalones are available:
+\begin{tight_itemize}
+	\item \textit{OpenMLConnection} -- defines how to connect to the OpenML.org repository.
+\end{tight_itemize}
+The following souerces are available:
+\begin{tight_itemize}
+	\item \textit{OpenMLSqlQuery} -- Outputs the results of a SQL query as JSON object.
+\end{tight_itemize}
+The following conversions are available:
+\begin{tight_itemize}
+	\item \textit{OpenMLJsonToSpreadSheet} -- turns a JSON result returned by OpenML.org 
+	into a spreadsheet.
+\end{tight_itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Preferences}
+\label{preferences}
+The \textit{OpenMLConnection} standalone actor uses the globally defined
+OpenML setup for its default settings. If you don't want to hand out your
+user and password, you can simply configure them in the global
+settings and just use the default \textit{OpenMLConnection} configuration.
+Figure \ref{openml_preferences} shows the preferences tab for OpenML.
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=8.0cm]{images/openml_preferences.png}
+  \caption{OpenML preferences}
+  \label{openml_preferences}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{bibliography}
+
+\end{document}

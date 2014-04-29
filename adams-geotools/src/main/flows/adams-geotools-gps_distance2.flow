@@ -1,0 +1,170 @@
+# Project: adams
+# Date: 2014-01-23 15:29:10
+# User: fracpete
+#
+adams.flow.control.Flow
+	-annotation
+	Loads a spreadsheet with four columns (two pairs of long/lat),\nconverts the two locations into GPS object columns and adds \na column with a formula that calculates the distance\nbetween the two positions.
+	-actor
+		adams.flow.standalone.CallableActors
+			-actor
+				adams.flow.sink.DisplayPanelManager
+					-width
+					740
+					-provider
+						adams.flow.sink.SpreadSheetDisplay
+					-entry-name-variable
+					name
+	-actor
+		adams.flow.source.FileSupplier
+			-file
+			${EXAMPLE_FLOWS}/data/gps.csv
+	-actor
+		adams.flow.transformer.SpreadSheetFileReader
+			-reader
+				adams.data.io.input.CsvSpreadSheetReader
+					-spreadsheet-type
+						adams.data.spreadsheet.SpreadSheet
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			join long1/lat1
+			-conversion
+				adams.data.conversion.SpreadSheetJoinColumns
+					-columns
+					long1,lat1
+					-glue
+					 
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			join long2/lat2
+			-conversion
+				adams.data.conversion.SpreadSheetJoinColumns
+					-columns
+					long2,lat2
+					-glue
+					 
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			rename to gps1
+			-conversion
+				adams.data.conversion.RenameSpreadSheetColumn
+					-no-copy
+					true
+					-column
+					long1 lat1
+					-new-name
+					gps1
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			rename to gps2
+			-conversion
+				adams.data.conversion.RenameSpreadSheetColumn
+					-no-copy
+					true
+					-column
+					long2 lat2
+					-new-name
+					gps2
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			gps1
+			-conversion
+				adams.data.conversion.SpreadSheetStringColumnToObject
+					-no-copy
+					true
+					-column
+					gps1
+					-handler
+						adams.data.spreadsheet.GPSDecimalDegrees
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			gps2
+			-conversion
+				adams.data.conversion.SpreadSheetStringColumnToObject
+					-no-copy
+					true
+					-column
+					gps2
+					-handler
+						adams.data.spreadsheet.GPSDecimalDegrees
+	-actor
+		adams.flow.control.Tee
+			-name
+			original
+			-tee
+				adams.flow.transformer.SetVariable
+					-var-name
+					name
+					-var-value
+					original
+			-tee
+				adams.flow.sink.CallableSink
+					-callable
+					DisplayPanelManager
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			calulate distance with formula
+			-conversion
+				adams.data.conversion.SpreadSheetAddFormulaColumn
+					-header
+					distance_geotools
+					-formula
+					=f_distance_wgs84(cellobj(A@),cellobj(B@))
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			materialize formulas
+			-conversion
+				adams.data.conversion.SpreadSheetMaterializeFormulas
+					-finder
+						adams.data.spreadsheet.cellfinder.CellRange
+							-columns
+							last
+	-actor
+		adams.flow.control.Tee
+			-name
+			with distance
+			-tee
+				adams.flow.transformer.SetVariable
+					-var-name
+					name
+					-var-value
+					with_distance
+			-tee
+				adams.flow.sink.CallableSink
+					-callable
+					DisplayPanelManager
+	-actor
+		adams.flow.transformer.SpreadSheetRowFilter
+			-finder
+				adams.data.spreadsheet.rowfinder.ByNumericValue
+					-minimum
+					NaN
+					-maximum
+					50000.0
+					-maximum-included
+					true
+	-actor
+		adams.flow.control.Tee
+			-name
+			max distance
+			-tee
+				adams.flow.transformer.SetVariable
+					-var-name
+					name
+					-var-value
+					max_distance
+			-tee
+				adams.flow.sink.CallableSink
+					-callable
+					DisplayPanelManager
+	-flow-execution-listener
+		adams.flow.execution.NullListener
+

@@ -1,0 +1,72 @@
+# Project: adams
+# Date: 2014-01-23 15:29:07
+# User: fracpete
+#
+adams.flow.control.Flow
+	-annotation
+	Loads a spreadsheet with four columns (two pairs of long/lat)\nand adds a column with a formula that calculates the distance\nbetween the two pairs of positions.
+	-actor
+		adams.flow.standalone.CallableActors
+			-actor
+				adams.flow.sink.DisplayPanelManager
+					-width
+					740
+					-provider
+						adams.flow.sink.SpreadSheetDisplay
+					-entry-name-variable
+					name
+	-actor
+		adams.flow.source.FileSupplier
+			-file
+			${EXAMPLE_FLOWS}/data/gps.csv
+	-actor
+		adams.flow.transformer.SpreadSheetFileReader
+			-reader
+				adams.data.io.input.CsvSpreadSheetReader
+					-spreadsheet-type
+						adams.data.spreadsheet.SpreadSheet
+	-actor
+		adams.flow.control.Tee
+			-tee
+				adams.flow.transformer.SetVariable
+					-var-name
+					name
+					-var-value
+					original
+			-tee
+				adams.flow.sink.CallableSink
+					-callable
+					DisplayPanelManager
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			calculate distance with formula
+			-conversion
+				adams.data.conversion.SpreadSheetAddFormulaColumn
+					-header
+					distance_geotools
+					-formula
+					=f_distance_wgs84(cellobj(A@),cellobj(B@),cellobj(C@),cellobj(D@))
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			materialize formulas
+			-conversion
+				adams.data.conversion.SpreadSheetMaterializeFormulas
+					-finder
+						adams.data.spreadsheet.cellfinder.CellRange
+							-columns
+							last
+	-actor
+		adams.flow.transformer.SetVariable
+			-var-name
+			name
+			-var-value
+			with_distance
+	-actor
+		adams.flow.sink.CallableSink
+			-callable
+			DisplayPanelManager
+	-flow-execution-listener
+		adams.flow.execution.NullListener
+

@@ -1,0 +1,24 @@
+# Configuration file listing the superclasses and the packages in which to
+# look for derived classes.
+#
+# Format:
+# class.name=package1,package2,...
+#
+# Author:  FracPete (fracpete at waikato dot ac dot nz)
+# Version: $Revision$
+
+# the GeoTools feature generator classes
+adams.data.conversion.feature.AbstractFeatureGenerator=\
+  adams.data.conversion.feature
+
+# the container readers
+adams.data.io.input.AbstractGeoToolsLayerReader=\
+  adams.data.io.input
+
+# the container writers
+adams.data.io.output.AbstractGeoToolsLayerWriter=\
+  adams.data.io.output
+  
+# the info tools suppliers
+adams.flow.sink.infotool.InfoToolSupplier=\
+  adams.flow.sink.infotool

@@ -1,0 +1,208 @@
+# Project: adams
+# Date: 2014-01-23 15:28:49
+# User: fracpete
+#
+adams.flow.control.Flow
+	-annotation
+	Flow to demonstrate how to display based on data from a spreadsheet.\nThis flow draws circles relative in their size to the population of a state,\ncentered around the capital of that country.
+	-actor
+		adams.flow.standalone.CallableActors
+			-actor
+				adams.flow.sink.DisplayPanelManager
+					-name
+					City locations
+					-width
+					740
+					-x
+					-3
+					-provider
+						adams.flow.sink.SpreadSheetDisplay
+							-name
+							City locations
+							-short-title
+							true
+							-x
+							-3
+					-entry-name-variable
+					name
+			-actor
+				adams.flow.sink.GeoToolsMapDisplay
+					-name
+					Map
+					-short-title
+					true
+					-writer
+						adams.gui.print.NullWriter
+					-background-shape
+					${EXAMPLE_FLOWS}/data/ne_110m_admin_0_countries.shp
+					-fill-color
+					#cccccc
+					-info-tool
+						adams.flow.sink.infotool.DefaultInfoToolSupplier
+			-actor
+				adams.flow.transformer.MathExpression
+					-name
+					scale population
+					-expression
+					X / @{max} * @{radius}
+	-actor
+		adams.flow.standalone.SetVariable
+			-var-name
+			radius
+			-var-value
+			25
+	-actor
+		adams.flow.source.FileSupplier
+			-file
+			${EXAMPLE_FLOWS}/data/cow.csv
+	-actor
+		adams.flow.transformer.SpreadSheetFileReader
+			-reader
+				adams.data.io.input.CsvSpreadSheetReader
+					-spreadsheet-type
+						adams.data.spreadsheet.SpreadSheet
+					-missing
+					
+					-separator
+					;
+	-actor
+		adams.flow.control.Tee
+			-name
+			display original spreadsheet
+			-tee
+				adams.flow.transformer.SetVariable
+					-var-name
+					name
+					-var-value
+					original
+			-tee
+				adams.flow.sink.CallableSink
+					-callable
+					City locations
+	-actor
+		adams.flow.transformer.SpreadSheetRowFilter
+			-name
+			has capital
+			-finder
+				adams.data.spreadsheet.rowfinder.ByNumericValue
+					-att-index
+					HasCapital
+					-minimum
+					1.0
+					-minimum-included
+					true
+					-maximum
+					NaN
+	-actor
+		adams.flow.transformer.SpreadSheetRowFilter
+			-name
+			has population
+			-finder
+				adams.data.spreadsheet.rowfinder.ByNumericValue
+					-att-index
+					population
+					-minimum
+					1.0
+					-minimum-included
+					true
+					-maximum
+					NaN
+	-actor
+		adams.flow.control.Tee
+			-name
+			determine max population
+			-tee
+				adams.flow.transformer.SpreadSheetStatistic
+					-type
+					COLUMN_BY_REGEXP
+					-location
+					population
+					-statistic
+						adams.data.statistics.ArrayMax
+			-tee
+				adams.flow.transformer.SpreadSheetGetCell
+			-tee
+				adams.flow.transformer.SetVariable
+					-var-name
+					max
+	-actor
+		adams.flow.transformer.SpreadSheetTransformCells
+			-finder
+				adams.data.spreadsheet.cellfinder.CellRange
+					-columns
+					population
+			-transformer
+			scale population
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			join LAT and LON
+			-conversion
+				adams.data.conversion.SpreadSheetJoinColumns
+					-columns
+					"UNc_latitude","UNc_longitude"
+					-glue
+					 
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			create GPS object column
+			-conversion
+				adams.data.conversion.SpreadSheetStringColumnToObject
+					-column
+					UNc_latitude UNc_longitude
+					-keep-failed
+					true
+					-handler
+						adams.data.spreadsheet.GPSDecimalDegrees
+	-actor
+		adams.flow.transformer.Convert
+			-conversion
+				adams.data.conversion.RenameSpreadSheetColumn
+					-column
+					UNc_latitude UNc_longitude
+					-new-name
+					LOCATION
+	-actor
+		adams.flow.control.Branch
+			-branch
+				adams.flow.control.Sequence
+					-name
+					map
+					-actor
+						adams.flow.transformer.Convert
+							-name
+							create layer
+							-conversion
+								adams.data.conversion.SpreadSheetToGeoToolsLayer
+									-generator
+										adams.data.conversion.feature.SimpleCircleGenerator
+											-gps
+											LOCATION
+											-radius
+											population
+											-additional-attributes
+											first-last
+											-fill-color
+											#9999ff
+					-actor
+						adams.flow.sink.CallableSink
+							-callable
+							Map
+			-branch
+				adams.flow.control.Sequence
+					-name
+					spreadsheet
+					-actor
+						adams.flow.transformer.SetVariable
+							-var-name
+							name
+							-var-value
+							GPS objects
+					-actor
+						adams.flow.sink.CallableSink
+							-callable
+							City locations
+	-flow-execution-listener
+		adams.flow.execution.NullListener
+

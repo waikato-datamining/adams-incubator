@@ -1,0 +1,190 @@
+# Project: adams
+# Date: 2014-01-23 15:28:52
+# User: fracpete
+#
+adams.flow.control.Flow
+	-annotation
+	Flow to demonstrate how to display lines from GPS locations \nfrom a spreadsheet on a map. At least two GPS locations are\nrequired for displaying a single line segment.\nDisplays the extent of the countries as a line.
+	-actor
+		adams.flow.standalone.CallableActors
+			-actor
+				adams.flow.sink.DisplayPanelManager
+					-name
+					City locations
+					-width
+					740
+					-x
+					-3
+					-provider
+						adams.flow.sink.SpreadSheetDisplay
+							-name
+							City locations
+							-short-title
+							true
+							-x
+							-3
+					-entry-name-variable
+					name
+			-actor
+				adams.flow.sink.GeoToolsMapDisplay
+					-name
+					Map
+					-short-title
+					true
+					-writer
+						adams.gui.print.NullWriter
+					-background-shape
+					${EXAMPLE_FLOWS}/data/ne_110m_admin_0_countries.shp
+					-fill-color
+					#cccccc
+					-info-tool
+						adams.flow.sink.infotool.DefaultInfoToolSupplier
+	-actor
+		adams.flow.source.FileSupplier
+			-file
+			${EXAMPLE_FLOWS}/data/cow.csv
+	-actor
+		adams.flow.transformer.SpreadSheetFileReader
+			-reader
+				adams.data.io.input.CsvSpreadSheetReader
+					-spreadsheet-type
+						adams.data.spreadsheet.SpreadSheet
+					-missing
+					
+					-separator
+					;
+	-actor
+		adams.flow.control.Tee
+			-name
+			display original spreadsheet
+			-tee
+				adams.flow.transformer.SetVariable
+					-var-name
+					name
+					-var-value
+					original
+			-tee
+				adams.flow.sink.CallableSink
+					-callable
+					City locations
+	-actor
+		adams.flow.transformer.SpreadSheetRowFilter
+			-name
+			has capital
+			-finder
+				adams.data.spreadsheet.rowfinder.ByNumericValue
+					-att-index
+					HasCapital
+					-minimum
+					1.0
+					-minimum-included
+					true
+					-maximum
+					NaN
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			join max LAT and LON
+			-conversion
+				adams.data.conversion.SpreadSheetJoinColumns
+					-columns
+					maxlatitude,maxlongitude
+					-glue
+					 
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			join min LAT and LON
+			-conversion
+				adams.data.conversion.SpreadSheetJoinColumns
+					-columns
+					minlatitude,minlongitude
+					-glue
+					 
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			create max GPS object column
+			-conversion
+				adams.data.conversion.SpreadSheetStringColumnToObject
+					-column
+					maxlatitude maxlongitude
+					-keep-failed
+					true
+					-handler
+						adams.data.spreadsheet.GPSDecimalDegrees
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			create min GPS object column
+			-conversion
+				adams.data.conversion.SpreadSheetStringColumnToObject
+					-column
+					minlatitude minlongitude
+					-keep-failed
+					true
+					-handler
+						adams.data.spreadsheet.GPSDecimalDegrees
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			rename max
+			-conversion
+				adams.data.conversion.RenameSpreadSheetColumn
+					-column
+					maxlatitude maxlongitude
+					-new-name
+					MAXLOCATION
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			rename min
+			-conversion
+				adams.data.conversion.RenameSpreadSheetColumn
+					-column
+					minlatitude minlongitude
+					-new-name
+					MINLOCATION
+	-actor
+		adams.flow.control.Branch
+			-branch
+				adams.flow.control.Sequence
+					-name
+					map
+					-actor
+						adams.flow.transformer.Convert
+							-name
+							create layer
+							-conversion
+								adams.data.conversion.SpreadSheetToGeoToolsLayer
+									-generator
+										adams.data.conversion.feature.SimpleLineGenerator
+											-featuretype-name
+											Country extent
+											-gps
+											MAXLOCATION,MINLOCATION
+											-additional-attributes
+											first-last
+											-fill-color
+											#9999ff
+					-actor
+						adams.flow.sink.CallableSink
+							-callable
+							Map
+			-branch
+				adams.flow.control.Sequence
+					-name
+					spreadsheet
+					-actor
+						adams.flow.transformer.SetVariable
+							-var-name
+							name
+							-var-value
+							GPS objects
+					-actor
+						adams.flow.sink.CallableSink
+							-callable
+							City locations
+	-flow-execution-listener
+		adams.flow.execution.NullListener
+
