@@ -96,13 +96,6 @@
       <version>0.4.5-SNAPSHOT</version>
     </dependency>
 
-    <!-- javacv -->
-    <dependency>
-      <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-javacv</artifactId>
-      <version>0.4.5-SNAPSHOT</version>
-    </dependency>
-
     <!-- jooq -->
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
@@ -121,13 +114,6 @@
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
       <artifactId>adams-nlp</artifactId>
-      <version>0.4.5-SNAPSHOT</version>
-    </dependency>
-
-    <!-- sphinx -->
-    <dependency>
-      <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-sphinx</artifactId>
       <version>0.4.5-SNAPSHOT</version>
     </dependency>
   </dependencies>
