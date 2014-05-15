@@ -71,13 +71,13 @@
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
       <artifactId>adams-addons-all</artifactId>
-      <version>0.4.6-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
       <artifactId>adams-addons-all</artifactId>
-      <version>0.4.6-SNAPSHOT</version>
+      <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
@@ -86,35 +86,35 @@
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
       <artifactId>adams-geonet</artifactId>
-      <version>0.4.6-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- geotools -->
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
       <artifactId>adams-geotools</artifactId>
-      <version>0.4.6-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- jooq -->
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
       <artifactId>adams-jooq</artifactId>
-      <version>0.4.6-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- openml -->
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
       <artifactId>adams-openml</artifactId>
-      <version>0.4.6-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
 
     <!-- nlp -->
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
       <artifactId>adams-nlp</artifactId>
-      <version>0.4.6-SNAPSHOT</version>
+      <version>${project.version}</version>
     </dependency>
   </dependencies>
 
