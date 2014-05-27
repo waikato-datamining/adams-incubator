@@ -17,6 +17,9 @@ adams-meka.MekaClassifierSetup=\
 adams-meka.MekaCrossValidationEvaluator1=\
   IF AFTER adams.flow.transformer.MekaPrepareData THEN adams.flow.transformer.MekaCrossValidationEvaluator
 
+adams-meka.MekaTrainClassifier1=\
+  IF AFTER adams.flow.transformer.MekaPrepareData THEN adams.flow.transformer.MekaTrainClassifier
+
 adams-meka.MekaEvaluationSummary1=\
   IF AFTER adams.flow.transformer.MekaCrossValidationEvaluator THEN adams.flow.transformer.MekaResultSummary
 
