@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2014-05-27 13:44:23
+# Date: 2014-05-27 15:25:46
 # User: fracpete
 #
 adams.flow.control.Flow
@@ -12,7 +12,12 @@ adams.flow.control.Flow
 					-classifier
 						meka.classifiers.multilabel.BR
 							-W
-							weka.classifiers.rules.ZeroR
+							weka.classifiers.trees.J48
+							--
+							-C
+							0.25
+							-M
+							2
 	-actor
 		adams.flow.source.FileSupplier
 			-file
