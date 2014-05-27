@@ -45,7 +45,7 @@
 \center
 \begin{table}[b]
 	\begin{tabular}{c l l}
-		\parbox[c][2cm]{2cm}{\copyright 2013} &
+		\parbox[c][2cm]{2cm}{\copyright 2014} &
 		\parbox[c][2cm]{5cm}{\includegraphics[width=5cm]{images/coat_of_arms.pdf}} \\
 	\end{tabular}
 	\includegraphics[width=12cm]{images/cc.png} \\
@@ -59,11 +59,28 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Introduction}
-TODO
+The \textit{adams-meka} module integrates the MEKA \cite{meka} multi-label
+and multi-target software suite in ADAMS.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Flow}
-TODO
+The following source actors are available:
+\begin{tight_itemize}
+	\item \textit{MekaClassifierSetup} -- outputs a MEKA classifier setup.
+\end{tight_itemize}
+The following transformers are available:
+\begin{tight_itemize}
+	\item \textit{MekaCrossValidationEvaluator} -- cross-validates a MEKA 
+	classifier on the incoming dataset.
+	\item \textit{MekaPrepareData} -- prepares Instances objects for the 
+	use with MEKA classifiers.
+	\item \textit{MekaResultSummary} -- turns the collected statistics from
+	a MEKA evaluation run into a string.
+	\item \textit{MekaTrainClassifier} -- builds a MEKA classifier on the
+	incoming dataset.
+	\item \textit{MekaTrainTestSetEvaluator} -- evaluates a MEKA classifier
+	on the incoming train/test split.
+\end{tight_itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{bibliography}

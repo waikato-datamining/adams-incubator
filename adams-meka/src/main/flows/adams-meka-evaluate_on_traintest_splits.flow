@@ -1,0 +1,46 @@
+# Project: adams
+# Date: 2014-05-27 14:00:02
+# User: fracpete
+#
+adams.flow.control.Flow
+	-annotation
+	Shows how to output the result for each \ncross-validation fold of a Meka classifier.
+	-actor
+		adams.flow.standalone.CallableActors
+			-actor
+				adams.flow.source.MekaClassifierSetup
+					-classifier
+						meka.classifiers.multilabel.BR
+							-W
+							weka.classifiers.rules.ZeroR
+	-actor
+		adams.flow.source.FileSupplier
+			-file
+			${EXAMPLE_FLOWS}/data/Music.arff
+	-actor
+		adams.flow.transformer.WekaFileReader
+			-loader
+				weka.core.converters.ArffLoader
+	-actor
+		adams.flow.transformer.MekaPrepareData
+	-actor
+		adams.flow.transformer.WekaCrossValidationSplit
+	-actor
+		adams.flow.control.ContainerValuePicker
+			-tee
+				adams.flow.transformer.SetVariable
+					-var-name
+					fold
+			-value
+			FoldNumber
+	-actor
+		adams.flow.transformer.MekaTrainTestSetEvaluator
+	-actor
+		adams.flow.transformer.MekaResultSummary
+	-actor
+		adams.flow.sink.HistoryDisplay
+			-entry-name-variable
+			fold
+	-flow-execution-listener
+		adams.flow.execution.NullListener
+
