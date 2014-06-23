@@ -6,10 +6,11 @@
   <parent>
     <groupId>nz.ac.waikato.cms.adams</groupId>
     <artifactId>adams-pom</artifactId>
-    <version>0.4.6-SNAPSHOT</version>
+    <version>0.4.7-SNAPSHOT</version>
   </parent>
 
   <artifactId>adams-incubator-pom</artifactId>
+  <version>0.4.7-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>adams-incubator-pom</name>
@@ -19,6 +20,11 @@
     <name>University of Waikato, Hamilton, NZ</name>
     <url>http://www.waikato.ac.nz/</url>
   </organization>
+
+  <properties>
+    <adams.version>0.4.7-SNAPSHOT</adams.version>
+    <adams-addons.version>0.4.7-SNAPSHOT</adams-addons.version>
+  </properties>
 
   <modules>
     <module>adams-incubator-all</module>
