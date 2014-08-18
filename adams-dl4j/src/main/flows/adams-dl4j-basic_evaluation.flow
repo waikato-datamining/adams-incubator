@@ -1,0 +1,38 @@
+# Project: adams
+# Date: 2014-08-18 17:19:17
+# User: fracpete
+#
+adams.flow.control.Flow
+	-actor
+		adams.flow.source.FileSupplier
+			-file
+			${EXAMPLE_FLOWS}/data/iris.csv
+	-actor
+		adams.flow.transformer.SpreadSheetFileReader
+			-reader
+				adams.data.io.input.CsvSpreadSheetReader
+					-spreadsheet-type
+						adams.data.spreadsheet.SpreadSheet
+	-actor
+		adams.flow.transformer.Convert
+			-name
+			Convert-1
+			-conversion
+				adams.data.conversion.SpreadSheetToDataset
+					-class-attribute
+					last
+	-actor
+		adams.flow.transformer.Convert
+			-conversion
+				adams.data.conversion.DatasetToDL4JDataset
+	-actor
+		adams.flow.transformer.DL4JEvaluate
+	-actor
+		adams.flow.transformer.DL4JEvaluationValues
+	-actor
+		adams.flow.sink.SpreadSheetDisplay
+			-writer
+				adams.data.io.output.NullWriter
+	-flow-execution-listener
+		adams.flow.execution.NullListener
+
