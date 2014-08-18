@@ -29,18 +29,29 @@ import org.jblas.DoubleMatrix;
 
 import adams.flow.core.Token;
 
-
 /**
- * TODO: what this class does
- * 
+ <!-- globalinfo-start -->
+ <!-- globalinfo-end -->
+ *
+ <!-- flow-summary-start -->
+ <!-- flow-summary-end -->
+ *
+ <!-- options-start -->
+ <!-- options-end -->
+ *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
 public class DL4JEvaluate
   extends AbstractTransformer {
 
-  /* (non-Javadoc)
-   * @see adams.core.option.AbstractOptionHandler#globalInfo()
+  /** for serialization. */
+  private static final long serialVersionUID = -5699857965056336060L;
+
+  /**
+   * Returns a string describing the object.
+   *
+   * @return 			a description suitable for displaying in the gui
    */
   @Override
   public String globalInfo() {
@@ -48,24 +59,30 @@ public class DL4JEvaluate
     return null;
   }
 
-  /* (non-Javadoc)
-   * @see adams.flow.core.InputConsumer#accepts()
+  /**
+   * Returns the class that the consumer accepts.
+   * 
+   * @return		the Class of objects that can be processed
    */
   @Override
   public Class[] accepts() {
     return new Class[]{DataSet.class};
   }
 
-  /* (non-Javadoc)
-   * @see adams.flow.core.OutputProducer#generates()
+  /**
+   * Returns the class of objects that it generates.
+   *
+   * @return		the Class of the generated tokens
    */
   @Override
   public Class[] generates() {
     return new Class[]{Evaluation.class};
   }
 
-  /* (non-Javadoc)
-   * @see adams.flow.core.AbstractActor#doExecute()
+  /**
+   * Executes the flow item.
+   *
+   * @return		null if everything is fine, otherwise error message
    */
   @Override
   protected String doExecute() {

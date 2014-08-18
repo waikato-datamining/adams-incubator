@@ -14,12 +14,14 @@
  */
 
 /**
- * DatasetToDL4JDataset.java
+ * SpreadSheetToDL4JDataset.java
  * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
  */
 package adams.data.conversion;
 
 import adams.data.ml.DL4JHelper;
+import adams.data.spreadsheet.SpreadSheet;
+import adams.data.spreadsheet.SpreadSheetColumnIndex;
 
 /**
  <!-- globalinfo-start -->
@@ -31,11 +33,14 @@ import adams.data.ml.DL4JHelper;
  * @author  fracpete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class DatasetToDL4JDataset
+public class SpreadSheetToDL4JDataset
   extends AbstractConversion {
 
   /** for serialization. */
   private static final long serialVersionUID = -8659472246354986321L;
+
+  /** the attribute to use as class attribute. */
+  protected SpreadSheetColumnIndex m_ClassAttribute;
 
   /**
    * Returns a string describing the object.
@@ -44,7 +49,48 @@ public class DatasetToDL4JDataset
    */
   @Override
   public String globalInfo() {
-    return "Generates a DL4J dataset from the ADAMS dataset.";
+    return "Generates a DL4J dataset from the spreadsheet.";
+  }
+
+  /**
+   * Adds options to the internal list of options.
+   */
+  @Override
+  public void defineOptions() {
+    super.defineOptions();
+
+    m_OptionManager.add(
+	    "class-attribute", "classAttribute",
+	    new SpreadSheetColumnIndex("last"));
+  }
+
+  /**
+   * Sets the column to use as class attributes.
+   *
+   * @param value	the index
+   */
+  public void setClassAttribute(SpreadSheetColumnIndex value) {
+    m_ClassAttribute = value;
+    reset();
+  }
+
+  /**
+   * Returns the colum that identify a rowx
+   *
+   * @return		the index
+   */
+  public SpreadSheetColumnIndex getClassAttribute() {
+    return m_ClassAttribute;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String classAttributeTipText() {
+    return "The columns to use as class attributes.";
   }
 
   /**
@@ -54,7 +100,7 @@ public class DatasetToDL4JDataset
    */
   @Override
   public Class accepts() {
-    return adams.ml.data.Dataset.class;
+    return SpreadSheet.class;
   }
 
   /**
@@ -75,6 +121,11 @@ public class DatasetToDL4JDataset
    */
   @Override
   protected Object doConvert() throws Exception {
-    return DL4JHelper.spreadsheetToDataSet((adams.ml.data.Dataset) m_Input);
+    SpreadSheet		input;
+    
+    input = (SpreadSheet) m_Input;
+    m_ClassAttribute.setData(input);
+
+    return DL4JHelper.spreadsheetToDataSet(input, m_ClassAttribute.getIntIndex());
   }
 }

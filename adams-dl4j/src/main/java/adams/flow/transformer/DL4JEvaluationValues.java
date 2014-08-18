@@ -25,43 +25,89 @@ import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.flow.core.Token;
 
-
 /**
- * TODO: what this class does
- * 
+ <!-- globalinfo-start -->
+ <!-- globalinfo-end -->
+ *
+ <!-- flow-summary-start -->
+ <!-- flow-summary-end -->
+ *
+ <!-- options-start -->
+ <!-- options-end -->
+ *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
 public class DL4JEvaluationValues
   extends AbstractTransformer {
 
-  /* (non-Javadoc)
-   * @see adams.core.option.AbstractOptionHandler#globalInfo()
+  /** for serialization. */
+  private static final long serialVersionUID = -7213972179879592883L;
+
+  /**
+   * Returns a string describing the object.
+   *
+   * @return 			a description suitable for displaying in the gui
    */
   @Override
   public String globalInfo() {
-    // TODO
-    return null;
+    return "Turns a " + Evaluation.class.getName() + " object into a spreadsheet, listing all the statistics.";
   }
 
-  /* (non-Javadoc)
-   * @see adams.flow.core.InputConsumer#accepts()
+  /**
+   * Returns the class that the consumer accepts.
+   * 
+   * @return		the Class of objects that can be processed
    */
   @Override
   public Class[] accepts() {
     return new Class[]{Evaluation.class};
   }
 
-  /* (non-Javadoc)
-   * @see adams.flow.core.OutputProducer#generates()
+  /**
+   * Returns the class of objects that it generates.
+   *
+   * @return		the Class of the generated tokens
    */
   @Override
   public Class[] generates() {
     return new Class[]{SpreadSheet.class};
   }
 
-  /* (non-Javadoc)
-   * @see adams.flow.core.AbstractActor#doExecute()
+  /**
+   * Adds the numeric statistic.
+   * 
+   * @param sheet	the sheet to add it to
+   * @param name	the name of the statistic
+   * @param value	the value of the statistic
+   */
+  protected void addRow(SpreadSheet sheet, String name, double value) {
+    Row 	row;
+    
+    row = sheet.addRow();
+    row.addCell("N").setContent(name);
+    row.addCell("V").setContent(value);
+  }
+
+  /**
+   * Adds the string statistic.
+   * 
+   * @param sheet	the sheet to add it to
+   * @param name	the name of the statistic
+   * @param value	the value of the statistic
+   */
+  protected void addRow(SpreadSheet sheet, String name, String value) {
+    Row 	row;
+    
+    row = sheet.addRow();
+    row.addCell("N").setContent(name);
+    row.addCell("V").setContent(value);
+  }
+  
+  /**
+   * Executes the flow item.
+   *
+   * @return		null if everything is fine, otherwise error message
    */
   @Override
   protected String doExecute() {
@@ -78,33 +124,15 @@ public class DL4JEvaluationValues
     row.addCell("V").setContent("Value");
     
     // data
-    row = stats.addRow();
-    row.addCell("N").setContent("Accuracy");
-    row.addCell("V").setContent(eval.accuracy());
-    row = stats.addRow();
-    row.addCell("N").setContent("Positive");
-    row.addCell("V").setContent(eval.positive());
-    row = stats.addRow();
-    row.addCell("N").setContent("Negative");
-    row.addCell("V").setContent(eval.negative());
-    row = stats.addRow();
-    row.addCell("N").setContent("Precision");
-    row.addCell("V").setContent(eval.precision());
-    row = stats.addRow();
-    row.addCell("N").setContent("Recall");
-    row.addCell("V").setContent(eval.recall());
-    row = stats.addRow();
-    row.addCell("N").setContent("False positive");
-    row.addCell("V").setContent(eval.falsePositive());
-    row = stats.addRow();
-    row.addCell("N").setContent("True negatives");
-    row.addCell("V").setContent(eval.trueNegatives());
-    row = stats.addRow();
-    row.addCell("N").setContent("F1");
-    row.addCell("V").setContent(eval.f1());
-    row = stats.addRow();
-    row.addCell("N").setContent("Stats");
-    row.addCell("V").setContent(eval.stats());
+    addRow(stats, "Accuracy", eval.accuracy());
+    addRow(stats, "Positive", eval.positive());
+    addRow(stats, "Negative", eval.negative());
+    addRow(stats, "Precision", eval.precision());
+    addRow(stats, "Recall", eval.recall());
+    addRow(stats, "False positive", eval.falsePositive());
+    addRow(stats, "True negatives", eval.trueNegatives());
+    addRow(stats, "F1", eval.f1());
+    addRow(stats, "Stats", eval.stats());
 
     m_OutputToken = new Token(stats);
     
