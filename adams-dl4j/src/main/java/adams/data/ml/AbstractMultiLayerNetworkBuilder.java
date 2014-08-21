@@ -17,8 +17,9 @@
  * AbstractMultiLayerNetworkBuilder.java
  * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
  */
-package adams.flow.source.nnbuilder;
+package adams.data.ml;
 
+import org.deeplearning4j.datasets.DataSet;
 import org.deeplearning4j.nn.BaseMultiLayerNetwork;
 import org.deeplearning4j.nn.BaseMultiLayerNetwork.Builder;
 import org.deeplearning4j.nn.activation.ActivationFunction;
@@ -176,9 +177,11 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
    * <p/>
    * Default implementation ensures that at least one hidden layer is defined
    * and that the hidden layers have at least 1 node each.
+   * 
+   * @param data	the data to train with
    */
   @Override
-  protected void check() {
+  protected void check(DataSet data) {
     int		i;
     
     if (m_HiddenLayerSizes.length == 0)
@@ -193,15 +196,18 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
   /**
    * Performs the actual configuration.
    * 
+   * @param data	the data to train with
    * @return		the configured builder
    */
   @Override
-  protected Builder<T> doConfigureNetwork() {
+  protected Builder<T> doConfigureNetwork(DataSet data) {
     Builder<T>	result;
     
     result = newBuilder();
 
     result.hiddenLayerSizes(hiddenLayerSizes());
+    result.numberOfInputs(data.getFirst().getColumns());
+    result.numberOfOutPuts(data.getSecond().getColumns());
     
     if (!(m_ActivationFunction instanceof org.deeplearning4j.nn.activation.Null))
       result.withActivation(m_ActivationFunction);
@@ -220,22 +226,24 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
   /**
    * Configures the builder.
    * 
+   * @param data	the data to train with
    * @return		the builder
    */
   @Override
-  public Builder<T> configureNetwork() {
-    check();
-    return doConfigureNetwork();
+  public Builder<T> configureNetwork(DataSet data) {
+    check(data);
+    return doConfigureNetwork(data);
   }
   
   /**
    * Performs the actual generation of the network.
    * 
    * @param builder	the builder to use
+   * @param data	the data to train with
    * @return		the generated network
    */
   @Override
-  protected T doGenerateNetwork(Builder<T> builder) {
+  protected T doGenerateNetwork(Builder<T> builder, DataSet data) {
     return builder.build();
   }
 }

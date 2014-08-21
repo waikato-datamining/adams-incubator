@@ -8,8 +8,8 @@
 # Version: $Revision$
 
 # the neural network builders
-adams.flow.source.nnbuilder.AbstractNetworkBuilder=\
-  adams.flow.source.nnbuilder
+adams.data.ml.AbstractNetworkBuilder=\
+  adams.data.ml
 
 # the activation functions
 org.deeplearning4j.nn.activation.ActivationFunction=\

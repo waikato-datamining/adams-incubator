@@ -17,7 +17,9 @@
  * AbstractNetworkBuilder.java
  * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
  */
-package adams.flow.source.nnbuilder;
+package adams.data.ml;
+
+import org.deeplearning4j.datasets.DataSet;
 
 import adams.core.option.AbstractOptionHandler;
 import adams.data.random.CommonsRandomNumberGenerator;
@@ -85,8 +87,10 @@ public abstract class AbstractNetworkBuilder<B, N>
    * Performs checks before configuring the builder.
    * <p/>
    * Default implementation does nothing.
+   * 
+   * @param data	the data to train with
    */
-  protected void check() {
+  protected void check(DataSet data) {
   }
 
   /**
@@ -99,35 +103,58 @@ public abstract class AbstractNetworkBuilder<B, N>
   /**
    * Performs the actual configuration.
    * 
+   * @param data	the data to train with
    * @return		the configured builder
    */
-  protected abstract B doConfigureNetwork();
+  protected abstract B doConfigureNetwork(DataSet data);
   
   /**
    * Configures the builder.
    * 
+   * @param data	the data to train with
    * @return		the builder
    */
-  public B configureNetwork() {
-    check();
-    return doConfigureNetwork();
+  public B configureNetwork(DataSet data) {
+    check(data);
+    return doConfigureNetwork(data);
   }
   
   /**
    * Performs the actual generation of the network.
    * 
    * @param builder	the builder to use
+   * @param data	the data to train with
    * @return		the generated network
    */
-  protected abstract N doGenerateNetwork(B builder);
+  protected abstract N doGenerateNetwork(B builder, DataSet data);
   
   /**
    * Generates the network.
    * 
+   * @param data	the data to train with
    * @return		the generated network
    */
-  public N generateNetwork() {
-    return doGenerateNetwork(configureNetwork());
+  public N generateNetwork(DataSet data) {
+    return doGenerateNetwork(configureNetwork(data), data);
+  }
+  
+  /**
+   * Performs the actual training of the network.
+   * 
+   * @param network	the network to train
+   * @param data	the data to train with
+   * @return		the trained network
+   */
+  protected abstract N doTrainNetwork(N network, DataSet data);
+  
+  /**
+   * Trains the network.
+   * 
+   * @param data	the data to train with
+   * @return		the trained network
+   */
+  public N trainNetwork(DataSet data) {
+    return doTrainNetwork(generateNetwork(data), data);
   }
   
   /**

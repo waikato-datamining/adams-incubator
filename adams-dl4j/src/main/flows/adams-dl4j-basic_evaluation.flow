@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2014-08-18 17:19:17
+# Date: 2014-08-21 19:07:15
 # User: fracpete
 #
 adams.flow.control.Flow
@@ -26,7 +26,17 @@ adams.flow.control.Flow
 			-conversion
 				adams.data.conversion.DatasetToDL4JDataset
 	-actor
-		adams.flow.transformer.DL4JEvaluate
+		adams.flow.transformer.DL4JTrainNetwork
+			-builder
+				adams.data.ml.DBNBuilder
+					-random-number-generator
+						adams.data.random.MersenneTwister
+					-activation-function
+						org.deeplearning4j.nn.activation.Null
+					-output-activation-function
+						org.deeplearning4j.nn.activation.SoftMaxRows
+	-actor
+		adams.flow.transformer.DL4JEvaluateNetwork
 	-actor
 		adams.flow.transformer.DL4JEvaluationValues
 	-actor

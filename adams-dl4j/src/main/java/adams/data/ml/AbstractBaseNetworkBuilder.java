@@ -17,8 +17,9 @@
  * AbstractNeuralNetworkBuilder.java
  * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
  */
-package adams.flow.source.nnbuilder;
+package adams.data.ml;
 
+import org.deeplearning4j.datasets.DataSet;
 import org.deeplearning4j.nn.BaseNeuralNetwork;
 import org.deeplearning4j.nn.BaseNeuralNetwork.Builder;
 
@@ -38,10 +39,11 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
   /**
    * Performs the actual configuration.
    * 
+   * @param data	the data to train with
    * @return		the configured builder
    */
   @Override
-  protected Builder<T> doConfigureNetwork() {
+  protected Builder<T> doConfigureNetwork(DataSet data) {
     Builder<T>	result;
     
     result = newBuilder();
@@ -49,6 +51,7 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
     if (!(m_RandomNumberGenerator instanceof adams.data.random.Null))
       result.withRandom(m_RandomNumberGenerator.getRandomGenerator());
     
+    // TODO visible? hidden?
     // TODO parameters
     
     return result;
@@ -57,22 +60,24 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
   /**
    * Configures the builder.
    * 
+   * @param data	the data to train with
    * @return		the builder
    */
   @Override
-  public Builder<T> configureNetwork() {
-    check();
-    return doConfigureNetwork();
+  public Builder<T> configureNetwork(DataSet data) {
+    check(data);
+    return doConfigureNetwork(data);
   }
   
   /**
    * Performs the actual generation of the network.
    * 
    * @param builder	the builder to use
+   * @param data	the data to train with
    * @return		the generated network
    */
   @Override
-  protected T doGenerateNetwork(Builder<T> builder) {
+  protected T doGenerateNetwork(Builder<T> builder, DataSet data) {
     return builder.build();
   }
 }
