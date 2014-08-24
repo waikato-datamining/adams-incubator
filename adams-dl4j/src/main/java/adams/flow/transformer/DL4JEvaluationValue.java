@@ -22,7 +22,6 @@ package adams.flow.transformer;
 import org.deeplearning4j.eval.Evaluation;
 
 import adams.core.QuickInfoHelper;
-import adams.data.ml.DBNBuilder;
 import adams.flow.core.DL4JEvaluationStatistic;
 import adams.flow.core.Token;
 
@@ -66,8 +65,8 @@ public class DL4JEvaluationValue
     super.defineOptions();
 
     m_OptionManager.add(
-	    "builder", "builder",
-	    new DBNBuilder());
+	    "statistic", "statistic",
+	    DL4JEvaluationStatistic.ACCURACY);
   }
 
   /**
