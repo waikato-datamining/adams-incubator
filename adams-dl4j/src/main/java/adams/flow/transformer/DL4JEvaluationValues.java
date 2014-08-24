@@ -21,6 +21,7 @@ package adams.flow.transformer;
 
 import org.deeplearning4j.eval.Evaluation;
 
+import adams.core.QuickInfoHelper;
 import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.flow.core.Token;
@@ -44,6 +45,9 @@ public class DL4JEvaluationValues
   /** for serialization. */
   private static final long serialVersionUID = -7213972179879592883L;
 
+  /** whether to include the statistics string as well. */
+  protected boolean m_IncludeStats;
+  
   /**
    * Returns a string describing the object.
    *
@@ -52,6 +56,61 @@ public class DL4JEvaluationValues
   @Override
   public String globalInfo() {
     return "Turns a " + Evaluation.class.getName() + " object into a spreadsheet, listing all the statistics.";
+  }
+
+  /**
+   * Adds options to the internal list of options.
+   */
+  @Override
+  public void defineOptions() {
+    super.defineOptions();
+
+    m_OptionManager.add(
+	    "include-stats", "includeStats",
+	    false);
+  }
+
+  /**
+   * Sets whether to include textual stats.
+   *
+   * @param value	true if to include textual stats
+   */
+  public void setIncludeStats(boolean value) {
+    m_IncludeStats = value;
+    reset();
+  }
+
+  /**
+   * Returns whether to include the textual stats.
+   *
+   * @return		true if to include stats string
+   */
+  public boolean getIncludeStats() {
+    return m_IncludeStats;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String includeStatsTipText() {
+    return "If enabled, the textual statistics get included as well.";
+  }
+
+  /**
+   * Returns a quick info about the actor, which will be displayed in the GUI.
+   *
+   * @return		null if no info available, otherwise short string
+   */
+  @Override
+  public String getQuickInfo() {
+    String	result;
+
+    result  = QuickInfoHelper.toString(this, "includeStats", m_IncludeStats, "incl stats");
+    
+    return result;
   }
 
   /**
@@ -132,7 +191,8 @@ public class DL4JEvaluationValues
     addRow(stats, "False positive", eval.falsePositive());
     addRow(stats, "True negatives", eval.trueNegatives());
     addRow(stats, "F1", eval.f1());
-    addRow(stats, "Stats", eval.stats());
+    if (m_IncludeStats)
+      addRow(stats, "Stats", eval.stats());
 
     m_OutputToken = new Token(stats);
     
