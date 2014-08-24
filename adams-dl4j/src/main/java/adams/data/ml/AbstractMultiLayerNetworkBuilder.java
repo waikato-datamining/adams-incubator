@@ -45,6 +45,12 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
   /** for serialization. */
   private static final long serialVersionUID = 3279279215595856579L;
 
+  /** the learning rate (fine tune). */
+  protected double m_FineTuneLearningRate;
+
+  /** the number of eqochs (fine tune). */
+  protected int m_FineTuneNumEpochs;
+
   /** the sizes of the hidden layers. */
   protected BaseInteger[] m_HiddenLayerSizes;
 
@@ -66,6 +72,14 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
   @Override
   public void defineOptions() {
     super.defineOptions();
+
+    m_OptionManager.add(
+	    "fine-tune-learning-rate", "fineTuneLearningRate",
+	    getDefaultFineTuneLearningRate());
+
+    m_OptionManager.add(
+	    "fine-tune-num-epochs", "fineTuneNumEpochs",
+	    getDefaultFineTuneNumEpochs());
 
     m_OptionManager.add(
 	    "activation-function", "activationFunction",
@@ -96,6 +110,102 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
   @Override
   protected double getDefaultMomentum() {
     return 0.1;
+  }
+
+  /**
+   * Returns the default learning rate.
+   *
+   * @return		the default
+   */
+  @Override
+  protected double getDefaultLearningRate() {
+    return 0.001;
+  }
+
+  /**
+   * Returns the default momentum.
+   *
+   * @return		the default
+   */
+  @Override
+  protected int getDefaultNumEpochs() {
+    return 1000;
+  }
+
+  /**
+   * Returns the default learning rate (fine tune).
+   *
+   * @return		the default
+   */
+  protected double getDefaultFineTuneLearningRate() {
+    return 0.001;
+  }
+
+  /**
+   * Sets the learning rate (fine tune).
+   *
+   * @param value	the learning rate
+   */
+  public void setFineTuneLearningRate(double value) {
+    m_FineTuneLearningRate = value;
+    reset();
+  }
+
+  /**
+   * Returns the learning rate (fine tune).
+   *
+   * @return		the learning rate
+   */
+  public double getFineTuneLearningRate() {
+    return m_FineTuneLearningRate;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String fineTuneLearningRateTipText() {
+    return "The learning rate (fine tune).";
+  }
+
+  /**
+   * Returns the default number of iterations.
+   *
+   * @return		the default
+   */
+  protected int getDefaultFineTuneNumEpochs() {
+    return 1000;
+  }
+
+  /**
+   * Sets the number of iterations (fine tune).
+   *
+   * @param value	the number of iterations
+   */
+  public void setFineTuneNumEpochs(int value) {
+    m_FineTuneNumEpochs = value;
+    reset();
+  }
+
+  /**
+   * Returns the number of iterations (fine tune).
+   *
+   * @return		the number of iterations
+   */
+  public int getFineTuneNumEpochs() {
+    return m_FineTuneNumEpochs;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String fineTuneNumEpochsTipText() {
+    return "The number of iterations to perform (fine tune).";
   }
 
   /**

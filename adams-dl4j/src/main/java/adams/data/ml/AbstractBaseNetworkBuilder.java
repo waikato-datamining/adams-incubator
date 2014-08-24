@@ -76,6 +76,26 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
   }
 
   /**
+   * Returns the default learning rate.
+   *
+   * @return		the default
+   */
+  @Override
+  protected double getDefaultLearningRate() {
+    return 0.001;
+  }
+
+  /**
+   * Returns the default momentum.
+   *
+   * @return		the default
+   */
+  @Override
+  protected int getDefaultNumEpochs() {
+    return 1000;
+  }
+
+  /**
    * Sets the number of hidden neurons.
    *
    * @param value	the number

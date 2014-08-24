@@ -39,6 +39,9 @@ public class DBNBuilder
   /** for serialization. */
   private static final long serialVersionUID = 8804661387146021377L;
 
+  /** the K parameter. */
+  protected int m_K;
+  
   /**
    * Returns a string describing the object.
    *
@@ -47,6 +50,47 @@ public class DBNBuilder
   @Override
   public String globalInfo() {
     return "Builder for Deep Belief Networks (DBN).";
+  }
+
+  /**
+   * Adds options to the internal list of options.
+   */
+  @Override
+  public void defineOptions() {
+    super.defineOptions();
+
+    m_OptionManager.add(
+	    "k", "k",
+	    1);
+  }
+
+  /**
+   * Sets the K parameter.
+   *
+   * @param value	the K
+   */
+  public void setK(int value) {
+    m_K = value;
+    reset();
+  }
+
+  /**
+   * Returns the K parameter.
+   *
+   * @return		the K
+   */
+  public int getK() {
+    return m_K;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String KTipText() {
+    return "The K parameter.";
   }
 
   /**
@@ -69,8 +113,8 @@ public class DBNBuilder
   @Override
   protected DBN doTrainNetwork(DBN network, DataSet data) {
     network.setInput(data.getFeatureMatrix());
-    network.pretrain(data.getFirst(),1,1e-1,100);  // TODO
-    network.finetune(data.getSecond(),1e-1,100);  // TODO
+    network.pretrain(data.getFirst(), m_K, m_LearningRate, m_NumEpochs);
+    network.finetune(data.getSecond(), m_FineTuneLearningRate, m_FineTuneNumEpochs);
     
     return network;
   }

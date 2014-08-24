@@ -14,13 +14,13 @@
  */
 
 /**
- * AutoEncoderBuilder.java
+ * DeepAutoEncoderBuilder.java
  * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
  */
 package adams.data.ml;
 
-import org.deeplearning4j.autoencoder.AutoEncoder;
-import org.deeplearning4j.autoencoder.AutoEncoder.Builder;
+import org.deeplearning4j.autoencoder.DeepAutoEncoder;
+import org.deeplearning4j.autoencoder.DeepAutoEncoder.Builder;
 import org.deeplearning4j.datasets.DataSet;
 
 /**
@@ -33,8 +33,8 @@ import org.deeplearning4j.datasets.DataSet;
  * @author  fracpete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class AutoEncoderBuilder
-  extends AbstractBaseNetworkBuilder<AutoEncoder> {
+public class DeepAutoEncoderBuilder
+  extends AbstractMultiLayerNetworkBuilder<DeepAutoEncoder> {
 
   /** for serialization. */
   private static final long serialVersionUID = 8804661387146021377L;
@@ -46,7 +46,7 @@ public class AutoEncoderBuilder
    */
   @Override
   public String globalInfo() {
-    return "Builder for Autoencoder.";
+    return "Builder for Deep Autoencoder.";
   }
 
   /**
@@ -67,9 +67,9 @@ public class AutoEncoderBuilder
    * @return		the trained network
    */
   @Override
-  protected AutoEncoder doTrainNetwork(AutoEncoder network, DataSet data) {
+  protected DeepAutoEncoder doTrainNetwork(DeepAutoEncoder network, DataSet data) {
     network.setInput(data.getFeatureMatrix());
-    network.trainTillConvergence(data.getFeatureMatrix(), m_LearningRate, new Object[]{1, m_LearningRate, m_NumEpochs});  // TODO 1?
+    network.finetune(data.getSecond(), m_FineTuneLearningRate, m_FineTuneNumEpochs);
     
     return network;
   }
@@ -81,6 +81,6 @@ public class AutoEncoderBuilder
    */
   @Override
   public Class generates() {
-    return AutoEncoder.class;
+    return DeepAutoEncoder.class;
   }
 }

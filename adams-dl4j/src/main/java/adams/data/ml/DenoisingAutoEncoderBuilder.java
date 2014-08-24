@@ -14,13 +14,13 @@
  */
 
 /**
- * AutoEncoderBuilder.java
+ * DenoisingAutoEncoderBuilder.java
  * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
  */
 package adams.data.ml;
 
-import org.deeplearning4j.autoencoder.AutoEncoder;
-import org.deeplearning4j.autoencoder.AutoEncoder.Builder;
+import org.deeplearning4j.da.DenoisingAutoEncoder;
+import org.deeplearning4j.da.DenoisingAutoEncoder.Builder;
 import org.deeplearning4j.datasets.DataSet;
 
 /**
@@ -33,12 +33,15 @@ import org.deeplearning4j.datasets.DataSet;
  * @author  fracpete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class AutoEncoderBuilder
-  extends AbstractBaseNetworkBuilder<AutoEncoder> {
+public class DenoisingAutoEncoderBuilder
+  extends AbstractBaseNetworkBuilder<DenoisingAutoEncoder> {
 
   /** for serialization. */
   private static final long serialVersionUID = 8804661387146021377L;
 
+  /** the corruption level. */
+  protected double m_CorruptionLevel;
+  
   /**
    * Returns a string describing the object.
    *
@@ -46,7 +49,48 @@ public class AutoEncoderBuilder
    */
   @Override
   public String globalInfo() {
-    return "Builder for Autoencoder.";
+    return "Builder for denoising Autoencoder.";
+  }
+
+  /**
+   * Adds options to the internal list of options.
+   */
+  @Override
+  public void defineOptions() {
+    super.defineOptions();
+
+    m_OptionManager.add(
+	    "corruption-level", "corruptionLevel",
+	    0.01);
+  }
+
+  /**
+   * Sets the corruption level.
+   *
+   * @param value	the level
+   */
+  public void setCorruptionLevel(double value) {
+    m_CorruptionLevel = value;
+    reset();
+  }
+
+  /**
+   * Returns the corruption level.
+   *
+   * @return		the level
+   */
+  public double getCorruptionLevel() {
+    return m_CorruptionLevel;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String corruptionLevelTipText() {
+    return "The corruption level.";
   }
 
   /**
@@ -67,9 +111,9 @@ public class AutoEncoderBuilder
    * @return		the trained network
    */
   @Override
-  protected AutoEncoder doTrainNetwork(AutoEncoder network, DataSet data) {
+  protected DenoisingAutoEncoder doTrainNetwork(DenoisingAutoEncoder network, DataSet data) {
     network.setInput(data.getFeatureMatrix());
-    network.trainTillConvergence(data.getFeatureMatrix(), m_LearningRate, new Object[]{1, m_LearningRate, m_NumEpochs});  // TODO 1?
+    network.trainTillConvergence(data.getFeatureMatrix(), m_LearningRate, new Object[]{m_CorruptionLevel, m_LearningRate, m_NumEpochs});
     
     return network;
   }
@@ -81,6 +125,6 @@ public class AutoEncoderBuilder
    */
   @Override
   public Class generates() {
-    return AutoEncoder.class;
+    return DenoisingAutoEncoder.class;
   }
 }

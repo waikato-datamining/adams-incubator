@@ -50,6 +50,12 @@ public abstract class AbstractNetworkBuilder<B, N>
   /** the momentum. */
   protected double m_Momentum;
 
+  /** the learning rate. */
+  protected double m_LearningRate;
+
+  /** the number of eqochs. */
+  protected int m_NumEpochs;
+
   /** the distribution. */
   protected AbstractRealDistribution m_Distribution;
 
@@ -71,6 +77,14 @@ public abstract class AbstractNetworkBuilder<B, N>
     m_OptionManager.add(
 	    "momentum", "momentum",
 	    getDefaultMomentum());
+
+    m_OptionManager.add(
+	    "learning-rate", "learningRate",
+	    getDefaultLearningRate());
+
+    m_OptionManager.add(
+	    "num-epochs", "numEpochs",
+	    getDefaultNumEpochs());
 
     m_OptionManager.add(
 	    "distribution", "distribution",
@@ -169,6 +183,78 @@ public abstract class AbstractNetworkBuilder<B, N>
    */
   public String momentumTipText() {
     return "The momentum.";
+  }
+
+  /**
+   * Returns the default learning rate.
+   *
+   * @return		the default
+   */
+  protected abstract double getDefaultLearningRate();
+
+  /**
+   * Sets the learning rate.
+   *
+   * @param value	the learning rate
+   */
+  public void setLearningRate(double value) {
+    m_LearningRate = value;
+    reset();
+  }
+
+  /**
+   * Returns the learning rate.
+   *
+   * @return		the learning rate
+   */
+  public double getLearningRate() {
+    return m_LearningRate;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String learningRateTipText() {
+    return "The learning rate.";
+  }
+
+  /**
+   * Returns the default number of iterations.
+   *
+   * @return		the default
+   */
+  protected abstract int getDefaultNumEpochs();
+
+  /**
+   * Sets the number of iterations.
+   *
+   * @param value	the number of iterations
+   */
+  public void setNumEpochs(int value) {
+    m_NumEpochs = value;
+    reset();
+  }
+
+  /**
+   * Returns the number of iterations.
+   *
+   * @return		the number of iterations
+   */
+  public int getNumEpochs() {
+    return m_NumEpochs;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String numEpochsTipText() {
+    return "The number of iterations to perform.";
   }
 
   /**
