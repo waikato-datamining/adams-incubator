@@ -90,7 +90,7 @@ public class RBMBuilder
    * 			displaying in the GUI or for listing the options.
    */
   public String KTipText() {
-    return "The K parameter.";
+    return "The K parameter, how often contrastive convergence is run.";
   }
 
   /**
