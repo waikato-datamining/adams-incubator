@@ -25,7 +25,12 @@ import org.deeplearning4j.nn.BaseMultiLayerNetwork;
 import org.deeplearning4j.nn.BaseNeuralNetwork;
 import org.jblas.DoubleMatrix;
 
+import adams.core.QuickInfoHelper;
 import adams.flow.container.DL4JModelContainer;
+import adams.flow.core.AbstractActor;
+import adams.flow.core.CallableActorHelper;
+import adams.flow.core.CallableActorReference;
+import adams.flow.core.OutputProducer;
 import adams.flow.core.Token;
 
 /**
@@ -47,6 +52,12 @@ public class DL4JEvaluateNetwork
   /** for serialization. */
   private static final long serialVersionUID = -7213972179879592883L;
 
+  /** the callable actor for obtaining the test set. */
+  protected CallableActorReference m_Test;
+
+  /** the helper class. */
+  protected CallableActorHelper m_Helper;
+  
   /**
    * Returns a string describing the object.
    *
@@ -55,6 +66,73 @@ public class DL4JEvaluateNetwork
   @Override
   public String globalInfo() {
     return "Evaluates the model from the container on the dataset in the container.";
+  }
+
+  /**
+   * Adds options to the internal list of options.
+   */
+  @Override
+  public void defineOptions() {
+    super.defineOptions();
+
+    m_OptionManager.add(
+	    "test", "test",
+	    new CallableActorReference("test"));
+  }
+
+  /**
+   * Initializes the members.
+   */
+  @Override
+  protected void initialize() {
+    super.initialize();
+
+    m_Helper = new CallableActorHelper();
+  }
+
+  /**
+   * Sets the name of the callable actor providing the test data.
+   *
+   * @param value	the name
+   */
+  public void setTest(CallableActorReference value) {
+    m_Test = value;
+    reset();
+  }
+
+  /**
+   * Returns the name of the callable actor providing the test data.
+   *
+   * @return		the name
+   */
+  public CallableActorReference getTest() {
+    return m_Test;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String testTipText() {
+    return 
+	"The name of the callable actor for retrieving the test data; if "
+	+ "not available, the training data in the received model container is used.";
+  }
+
+  /**
+   * Returns a quick info about the actor, which will be displayed in the GUI.
+   *
+   * @return		null if no info available, otherwise short string
+   */
+  @Override
+  public String getQuickInfo() {
+    String	result;
+
+    result  = QuickInfoHelper.toString(this, "test", m_Test);
+    
+    return result;
   }
 
   /**
@@ -90,11 +168,30 @@ public class DL4JEvaluateNetwork
     DoubleMatrix 	predict;
     Object		model;
     DataSet		data;
+    AbstractActor	source;
 
     result  = null;
     cont    = (DL4JModelContainer) m_InputToken.getPayload();
     model   = cont.getValue(DL4JModelContainer.VALUE_MODEL);
     data    = (DataSet) cont.getValue(DL4JModelContainer.VALUE_DATASET);
+    source  = m_Helper.findCallableActorRecursive(this, m_Test);
+    if (source != null) {
+      if (isLoggingEnabled())
+	getLogger().info("Callable actor '" + m_Test + "' found, trying to obtain test data");
+      result  = source.execute();
+      if (result == null) {
+	data = ((DataSet) ((OutputProducer) source).output().getPayload());
+	if (data == null)
+	  result = "Failed to obtain training data from '" + m_Test + "'!";
+	else if (isLoggingEnabled())
+	  getLogger().info("Using test data from '" + m_Test + "'");
+      }
+    }
+    else {
+      if (isLoggingEnabled())
+	getLogger().info("Callable actor '" + m_Test + "' not found, using training data for evaluation");
+    }
+    
     eval    = new Evaluation();
     predict = null;
     if (model instanceof BaseNeuralNetwork)
