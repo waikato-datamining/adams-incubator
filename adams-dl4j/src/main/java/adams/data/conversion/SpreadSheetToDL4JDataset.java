@@ -21,7 +21,7 @@ package adams.data.conversion;
 
 import adams.data.ml.DL4JHelper;
 import adams.data.spreadsheet.SpreadSheet;
-import adams.data.spreadsheet.SpreadSheetColumnIndex;
+import adams.data.spreadsheet.SpreadSheetColumnRange;
 
 /**
  <!-- globalinfo-start -->
@@ -39,8 +39,8 @@ public class SpreadSheetToDL4JDataset
   /** for serialization. */
   private static final long serialVersionUID = -8659472246354986321L;
 
-  /** the attribute to use as class attribute. */
-  protected SpreadSheetColumnIndex m_ClassAttribute;
+  /** the attribute(s) to use as class attribute. */
+  protected SpreadSheetColumnRange m_ClassAttribute;
 
   /**
    * Returns a string describing the object.
@@ -61,7 +61,7 @@ public class SpreadSheetToDL4JDataset
 
     m_OptionManager.add(
 	    "class-attribute", "classAttribute",
-	    new SpreadSheetColumnIndex("last"));
+	    new SpreadSheetColumnRange("last"));
   }
 
   /**
@@ -69,7 +69,7 @@ public class SpreadSheetToDL4JDataset
    *
    * @param value	the index
    */
-  public void setClassAttribute(SpreadSheetColumnIndex value) {
+  public void setClassAttribute(SpreadSheetColumnRange value) {
     m_ClassAttribute = value;
     reset();
   }
@@ -79,7 +79,7 @@ public class SpreadSheetToDL4JDataset
    *
    * @return		the index
    */
-  public SpreadSheetColumnIndex getClassAttribute() {
+  public SpreadSheetColumnRange getClassAttribute() {
     return m_ClassAttribute;
   }
 
@@ -90,7 +90,7 @@ public class SpreadSheetToDL4JDataset
    * 			displaying in the GUI or for listing the options.
    */
   public String classAttributeTipText() {
-    return "The columns to use as class attributes.";
+    return "The column(s) to use as class attributes.";
   }
 
   /**
@@ -126,6 +126,6 @@ public class SpreadSheetToDL4JDataset
     input = (SpreadSheet) m_Input;
     m_ClassAttribute.setData(input);
 
-    return DL4JHelper.spreadsheetToDataSet(input, m_ClassAttribute.getIntIndex());
+    return DL4JHelper.spreadsheetToDataSet(input, m_ClassAttribute.getIntIndices());
   }
 }
