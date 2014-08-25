@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2014-08-24 21:47:50
+# Date: 2014-08-25 14:14:56
 # User: fracpete
 #
 adams.flow.control.Flow
@@ -18,19 +18,15 @@ adams.flow.control.Flow
 							-reader
 								adams.data.io.input.CsvSpreadSheetReader
 									-spreadsheet-type
-										adams.data.spreadsheet.SpreadSheet
+										adams.ml.data.Dataset
 					-actor
 						adams.flow.transformer.SpreadSheetRemoveRow
 							-position
 							inv(1-10,51-60,101-110)
 					-actor
-						adams.flow.transformer.Convert
-							-name
-							convert to ML dataset
-							-conversion
-								adams.data.conversion.SpreadSheetToDataset
-									-class-attribute
-									last
+						adams.flow.transformer.ClassSelector
+							-override
+							true
 					-actor
 						adams.flow.transformer.Convert
 							-name
@@ -46,19 +42,15 @@ adams.flow.control.Flow
 			-reader
 				adams.data.io.input.CsvSpreadSheetReader
 					-spreadsheet-type
-						adams.data.spreadsheet.SpreadSheet
+						adams.ml.data.Dataset
 	-actor
 		adams.flow.transformer.SpreadSheetRemoveRow
 			-position
 			1-10,51-60,101-110
 	-actor
-		adams.flow.transformer.Convert
-			-name
-			convert to ML dataset
-			-conversion
-				adams.data.conversion.SpreadSheetToDataset
-					-class-attribute
-					last
+		adams.flow.transformer.ClassSelector
+			-override
+			true
 	-actor
 		adams.flow.transformer.Convert
 			-name
