@@ -19,8 +19,6 @@
  */
 package adams.data.ml;
 
-import java.util.List;
-
 import org.deeplearning4j.datasets.DataSet;
 import org.jblas.DoubleMatrix;
 
@@ -47,10 +45,10 @@ public class DL4JHelper {
     int[]	classes;
     
     classes = sheet.getClassAttributeIndices();
-    if (classes.length != 1)
-      throw new IllegalStateException("Requires one class attribute, found: " + classes.length);
+    if (classes.length < 1)
+      throw new IllegalStateException("Requires at least one class attribute!");
     
-    return spreadsheetToDataSet(sheet, classes[0]);
+    return spreadsheetToDataSet(sheet, classes);
   }
 
   /**
@@ -60,61 +58,45 @@ public class DL4JHelper {
    * @param classIndex	the classIndex to use
    * @return		the converted dataset
    */
-  public static DataSet spreadsheetToDataSet(SpreadSheet sheet, int classIndex) {
-    String		prefix;
-    List<String>	labels;
+  public static DataSet spreadsheetToDataSet(SpreadSheet sheet, int[] classIndex) {
     SpreadSheetBinarize	binarize;
     String		msg;
     int			i;
     int			n;
     Dataset		data;
-    String		label;
-    int			index;
     SpreadSheet		inputs;
     SpreadSheet		outputs;
     DoubleMatrix	inputMatrix;
     DoubleMatrix	outputMatrix;
     
-    prefix = sheet.getColumnName(classIndex);
-    if (sheet.isNumeric(classIndex))
-      labels = null;
-    else
-      labels = sheet.getCellValues(classIndex);
-    
-    // binarize
-    binarize = new SpreadSheetBinarize();
-    binarize.setInput(sheet);
-    msg = binarize.convert();
-    if (msg != null)
-      throw new IllegalStateException("Failed to binarize spreadsheet: " + msg);
-    sheet = (SpreadSheet) binarize.getOutput();
     if (sheet instanceof Dataset)
       data = (Dataset) sheet;
     else
       data = new Dataset(sheet);
+    for (int clsIndex: classIndex)
+      data.setClassAttribute(clsIndex, true);
     
-    // set class attributes
-    if (labels == null) {
-      label = prefix;
-      index = data.getHeaderRow().indexOfContent(label);
-      if (index > -1)
-	data.setClassAttribute(index, true);
-      else
-	System.err.println("Failed to locate: " + label);
-    }
-    else {
-      for (i = 0; i < labels.size(); i++) {
-	label = prefix + SpreadSheetBinarize.SEPARATOR + labels.get(i);
-	index = data.getHeaderRow().indexOfContent(label);
-	if (index > -1)
-	  data.setClassAttribute(index, true);
-	else
-	  System.err.println("Failed to locate: " + label);
-      }
-    }
+    inputs  = data.getInputs();
+    outputs = data.getOutputs();
+    
+    // binarize
+    binarize = new SpreadSheetBinarize();
+
+    binarize.setInput(inputs);
+    msg = binarize.convert();
+    if (msg != null)
+      throw new IllegalStateException("Failed to binarize inputs: " + msg);
+    inputs = (SpreadSheet) binarize.getOutput();
+
+    binarize.setInput(outputs);
+    msg = binarize.convert();
+    if (msg != null)
+      throw new IllegalStateException("Failed to binarize outputs: " + msg);
+    outputs = (SpreadSheet) binarize.getOutput();
+
+    binarize.cleanUp();
     
     // input matrix
-    inputs      = data.getInputs();
     inputMatrix = new DoubleMatrix(inputs.getRowCount(), inputs.getColumnCount());
     for (n = 0; n < inputs.getRowCount(); n++) {
       for (i = 0; i < inputs.getColumnCount(); i++) {
@@ -123,7 +105,6 @@ public class DL4JHelper {
     }
     
     // output matrix
-    outputs      = data.getOutputs();
     outputMatrix = new DoubleMatrix(outputs.getRowCount(), outputs.getColumnCount());
     for (n = 0; n < outputs.getRowCount(); n++) {
       for (i = 0; i < outputs.getColumnCount(); i++) {
