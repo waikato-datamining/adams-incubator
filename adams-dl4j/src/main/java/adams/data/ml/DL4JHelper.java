@@ -19,14 +19,12 @@
  */
 package adams.data.ml;
 
-import gnu.trove.list.array.TIntArrayList;
-
-import java.util.HashMap;
 import java.util.List;
 
 import org.deeplearning4j.datasets.DataSet;
 import org.jblas.DoubleMatrix;
 
+import adams.data.conversion.SpreadSheetBinarize;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.ml.data.Dataset;
 
@@ -63,48 +61,73 @@ public class DL4JHelper {
    * @return		the converted dataset
    */
   public static DataSet spreadsheetToDataSet(SpreadSheet sheet, int classIndex) {
-    int					i;
-    int					n;
-    DoubleMatrix			inputMatrix;
-    DoubleMatrix			outputMatrix;
-    List<String>			labels;
-    HashMap<String,Integer>		labelLookup;
-    TIntArrayList			inputCols;
+    String		prefix;
+    List<String>	labels;
+    SpreadSheetBinarize	binarize;
+    String		msg;
+    int			i;
+    int			n;
+    Dataset		data;
+    String		label;
+    int			index;
+    SpreadSheet		inputs;
+    SpreadSheet		outputs;
+    DoubleMatrix	inputMatrix;
+    DoubleMatrix	outputMatrix;
+    
+    prefix = sheet.getColumnName(classIndex);
+    if (sheet.isNumeric(classIndex))
+      labels = null;
+    else
+      labels = sheet.getCellValues(classIndex);
+    
+    // binarize
+    binarize = new SpreadSheetBinarize();
+    binarize.setInput(sheet);
+    msg = binarize.convert();
+    if (msg != null)
+      throw new IllegalStateException("Failed to binarize spreadsheet: " + msg);
+    sheet = (SpreadSheet) binarize.getOutput();
+    if (sheet instanceof Dataset)
+      data = (Dataset) sheet;
+    else
+      data = new Dataset(sheet);
+    
+    // set class attributes
+    if (labels == null) {
+      label = prefix;
+      index = data.getHeaderRow().indexOfContent(label);
+      if (index > -1)
+	data.setClassAttribute(index, true);
+      else
+	System.err.println("Failed to locate: " + label);
+    }
+    else {
+      for (i = 0; i < labels.size(); i++) {
+	label = prefix + SpreadSheetBinarize.SEPARATOR + labels.get(i);
+	index = data.getHeaderRow().indexOfContent(label);
+	if (index > -1)
+	  data.setClassAttribute(index, true);
+	else
+	  System.err.println("Failed to locate: " + label);
+      }
+    }
     
     // input matrix
-    inputCols = new TIntArrayList();
-    for (i = 0; i < sheet.getColumnCount(); i++) {
-      if (i == classIndex)
-	continue;
-      if (sheet.isNumeric(i))
-	inputCols.add(i);
-      else
-	System.err.println("Skipping column #" + (i+1) + ": " + sheet.getColumnName(i));
-    }
-    if (inputCols.size() == 0)
-      throw new IllegalStateException("No numeric columns found!");
-    inputMatrix = new DoubleMatrix(sheet.getRowCount(), inputCols.size());
-    for (n = 0; n < sheet.getRowCount(); n++) {
-      for (i = 0; i < inputCols.size(); i++) {
-	inputMatrix.put(n, inputCols.get(i), sheet.getRow(n).getCell(inputCols.get(i)).toDouble());
+    inputs      = data.getInputs();
+    inputMatrix = new DoubleMatrix(inputs.getRowCount(), inputs.getColumnCount());
+    for (n = 0; n < inputs.getRowCount(); n++) {
+      for (i = 0; i < inputs.getColumnCount(); i++) {
+	inputMatrix.put(n, i, inputs.getRow(n).getCell(i).toDouble());
       }
     }
     
     // output matrix
-    if (sheet.isNumeric(classIndex)) {
-      outputMatrix = new DoubleMatrix(sheet.getRowCount(), 1);
-      for (n = 0; n < sheet.getRowCount(); n++) {
-	outputMatrix.put(n, 0, sheet.getRow(n).getCell(classIndex).toDouble());
-      }
-    }
-    else {
-      labels = sheet.getCellValues(classIndex);
-      labelLookup = new HashMap<String,Integer>();
-      for (i = 0; i < labels.size(); i++)
-	labelLookup.put(labels.get(i), i);
-      outputMatrix = new DoubleMatrix(sheet.getRowCount(), labels.size());
-      for (n = 0; n < sheet.getRowCount(); n++) {
-	outputMatrix.put(n, labelLookup.get(sheet.getRow(n).getContent(classIndex)), 1.0);
+    outputs      = data.getOutputs();
+    outputMatrix = new DoubleMatrix(outputs.getRowCount(), outputs.getColumnCount());
+    for (n = 0; n < outputs.getRowCount(); n++) {
+      for (i = 0; i < outputs.getColumnCount(); i++) {
+	outputMatrix.put(n, i, outputs.getRow(n).getCell(i).toDouble());
       }
     }
     
