@@ -15,7 +15,7 @@
 
 /**
  * SpreadSheetInfoToolSupplier.java
- * Copyright (C) 2013 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2014 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.sink.infotool;
 
@@ -39,8 +39,8 @@ import org.geotools.swing.tool.InfoToolResult;
 import weka.core.Utils;
 import adams.core.License;
 import adams.core.annotation.MixedCopyright;
-import adams.data.spreadsheet.DataRowType;
 import adams.data.spreadsheet.Row;
+import adams.data.spreadsheet.SparseDataRow;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.gui.core.BaseMultiPagePane;
 import adams.gui.core.BaseScrollPane;
@@ -152,7 +152,7 @@ public class SpreadSheetInfoToolSupplier
 	  try {
 	    result    = helper.getInfo(pos);
 	    sheet     = new SpreadSheet();
-	    sheet.setDataRowClass(DataRowType.SPARSE.getRowClass());
+	    sheet.setDataRowClass(SparseDataRow.class);
 	    headerRow = sheet.getHeaderRow();
 	    headerRow.addCell("id").setContent("ID");
 	    for (n = 0; n < result.getNumFeatures(); n++) {
