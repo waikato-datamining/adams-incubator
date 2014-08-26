@@ -24,7 +24,8 @@ import java.sql.ResultSet;
 import org.jooq.Result;
 
 import adams.core.QuickInfoHelper;
-import adams.data.spreadsheet.DataRowType;
+import adams.data.spreadsheet.DataRow;
+import adams.data.spreadsheet.DenseDataRow;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.data.spreadsheet.SqlUtils.Reader;
 
@@ -40,9 +41,9 @@ import adams.data.spreadsheet.SqlUtils.Reader;
  * &nbsp;&nbsp;&nbsp;default: WARNING
  * </pre>
  * 
- * <pre>-data-row-type &lt;DENSE|SPARSE&gt; (property: dataRowType)
+ * <pre>-data-row-type &lt;adams.data.spreadsheet.DataRow&gt; (property: dataRowType)
  * &nbsp;&nbsp;&nbsp;The type of row to use for the data.
- * &nbsp;&nbsp;&nbsp;default: DENSE
+ * &nbsp;&nbsp;&nbsp;default: adams.data.spreadsheet.DenseDataRow
  * </pre>
  * 
  <!-- options-end -->
@@ -57,7 +58,7 @@ public class JOOQResultToSpreadSheet
   private static final long serialVersionUID = -1978448247862661404L;
 
   /** the data row type to use. */
-  protected DataRowType m_DataRowType;
+  protected DataRow m_DataRowType;
 
   /** the reader currently in use. */
   protected Reader m_Reader;
@@ -81,7 +82,7 @@ public class JOOQResultToSpreadSheet
 
     m_OptionManager.add(
 	    "data-row-type", "dataRowType",
-	    DataRowType.DENSE);
+	    new DenseDataRow());
   }
 
   /**
@@ -99,7 +100,7 @@ public class JOOQResultToSpreadSheet
    *
    * @param value	the type
    */
-  public void setDataRowType(DataRowType value) {
+  public void setDataRowType(DataRow value) {
     m_DataRowType = value;
     reset();
   }
@@ -109,7 +110,7 @@ public class JOOQResultToSpreadSheet
    *
    * @return		the type
    */
-  public DataRowType getDataRowType() {
+  public DataRow getDataRowType() {
     return m_DataRowType;
   }
 
@@ -157,7 +158,7 @@ public class JOOQResultToSpreadSheet
     
     jooq     = (Result) m_Input;
     rs       = jooq.intoResultSet();
-    m_Reader = new Reader(m_DataRowType.getRowClass());
+    m_Reader = new Reader(m_DataRowType.getClass());
     result   = m_Reader.read(rs);
     m_Reader = null;
     
