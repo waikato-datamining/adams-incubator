@@ -26,6 +26,8 @@ import java.util.List;
 
 import org.deeplearning4j.datasets.DataSet;
 
+import adams.data.ml.AbstractNetworkBuilder;
+
 /**
  * A container for models (e.g., network) and an optional
  * training set dataset.
@@ -44,6 +46,9 @@ public class DL4JModelContainer
 
   /** the identifier for the full dataset. */
   public final static String VALUE_DATASET = "Dataset";
+
+  /** the identifier for the network builder. */
+  public final static String VALUE_BUILDER = "Builder";
 
   /**
    * Initializes the container.
@@ -70,10 +75,22 @@ public class DL4JModelContainer
    * @param data	the data to use
    */
   public DL4JModelContainer(Object model, DataSet data) {
+    this(model, data, null);
+  }
+
+  /**
+   * Initializes the container with model, training set and builder setup.
+   *
+   * @param model	the model to use
+   * @param data	the data to use
+   * @param builder	the builder setup used
+   */
+  public DL4JModelContainer(Object model, DataSet data, AbstractNetworkBuilder builder) {
     super();
 
-    store(VALUE_MODEL, model);
+    store(VALUE_MODEL,   model);
     store(VALUE_DATASET, data);
+    store(VALUE_BUILDER, builder);
   }
 
   /**
