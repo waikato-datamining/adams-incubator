@@ -21,7 +21,9 @@ package adams.data.ml;
 
 import org.deeplearning4j.datasets.DataSet;
 
+import adams.core.ShallowCopySupporter;
 import adams.core.option.AbstractOptionHandler;
+import adams.core.option.OptionUtils;
 import adams.data.distribution.AbstractRealDistribution;
 import adams.data.distribution.Normal;
 import adams.data.random.CommonsRandomNumberGenerator;
@@ -36,7 +38,8 @@ import adams.data.random.MersenneTwister;
  * @param <N> the generated network
  */
 public abstract class AbstractNetworkBuilder<B, N>
-  extends AbstractOptionHandler {
+  extends AbstractOptionHandler
+  implements ShallowCopySupporter<AbstractNetworkBuilder<B, N>> {
 
   /** for serialization. */
   private static final long serialVersionUID = 3279279215595856579L;
@@ -366,4 +369,23 @@ public abstract class AbstractNetworkBuilder<B, N>
    * @return		the network class
    */
   public abstract Class generates();
+
+  /**
+   * Returns a shallow copy of itself, i.e., based on the commandline options.
+   *
+   * @return		the shallow copy
+   */
+  public AbstractNetworkBuilder<B, N> shallowCopy() {
+    return shallowCopy(false);
+  }
+
+  /**
+   * Returns a shallow copy of itself, i.e., based on the commandline options.
+   *
+   * @param expand	whether to expand variables to their current values
+   * @return		the shallow copy
+   */
+  public AbstractNetworkBuilder<B, N> shallowCopy(boolean expand) {
+    return (AbstractNetworkBuilder<B, N>) OptionUtils.shallowCopy(this, expand);
+  }
 }
