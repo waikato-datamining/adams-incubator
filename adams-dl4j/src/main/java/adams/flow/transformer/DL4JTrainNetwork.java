@@ -147,7 +147,7 @@ public class DL4JTrainNetwork
     result  = null;
     
     data          = (DataSet) m_InputToken.getPayload();
-    m_OutputToken = new Token(new DL4JModelContainer(m_Builder.trainNetwork(data), data));
+    m_OutputToken = new Token(new DL4JModelContainer(m_Builder.trainNetwork(data), data, m_Builder.shallowCopy(true)));
     
     return result;
   }
