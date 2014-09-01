@@ -1,42 +1,10 @@
 # Project: adams
-# Date: 2014-09-01 12:34:34
+# Date: 2014-09-01 12:34:11
 # User: fracpete
 #
 adams.flow.control.Flow
 	-annotation
-	Trains a Deep Belief Network and then evaluates it on a test set.
-	-actor
-		adams.flow.standalone.CallableActors
-			-actor
-				adams.flow.source.SequenceSource
-					-name
-					test
-					-actor
-						adams.flow.source.FileSupplier
-							-file
-							${EXAMPLE_FLOWS}/data/iris.csv
-					-actor
-						adams.flow.transformer.SpreadSheetFileReader
-							-reader
-								adams.data.io.input.CsvSpreadSheetReader
-									-data-row-type
-										adams.data.spreadsheet.DenseDataRow
-									-spreadsheet-type
-										adams.ml.data.Dataset
-					-actor
-						adams.flow.transformer.SpreadSheetRemoveRow
-							-position
-							inv(1-10,51-60,101-110)
-					-actor
-						adams.flow.transformer.ClassSelector
-							-override
-							true
-					-actor
-						adams.flow.transformer.Convert
-							-name
-							convert to DL4J dataset
-							-conversion
-								adams.data.conversion.DatasetToDL4JDataset
+	Trains a Deep Belief Network on the UCI dataset iris.
 	-actor
 		adams.flow.source.FileSupplier
 			-file
@@ -49,10 +17,6 @@ adams.flow.control.Flow
 						adams.data.spreadsheet.DenseDataRow
 					-spreadsheet-type
 						adams.ml.data.Dataset
-	-actor
-		adams.flow.transformer.SpreadSheetRemoveRow
-			-position
-			1-10,51-60,101-110
 	-actor
 		adams.flow.transformer.ClassSelector
 			-override
