@@ -22,6 +22,8 @@ package adams.data.ml;
 import org.deeplearning4j.datasets.DataSet;
 import org.deeplearning4j.nn.BaseNeuralNetwork;
 import org.deeplearning4j.nn.BaseNeuralNetwork.Builder;
+import org.deeplearning4j.nn.NeuralNetwork;
+import org.deeplearning4j.nn.gradient.NeuralNetworkGradient;
 
 /**
  * Ancestor for neural network builder setups.
@@ -258,4 +260,12 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
   protected T doGenerateNetwork(Builder<T> builder, DataSet data) {
     return builder.build();
   }
+  
+  /**
+   * Returns the network gradient.
+   * 
+   * @param network	the network to extract the gradient from
+   * @return		the gradient
+   */
+  public abstract NeuralNetworkGradient getGradient(NeuralNetwork network);
 }

@@ -22,6 +22,8 @@ package adams.data.ml;
 import org.deeplearning4j.da.DenoisingAutoEncoder;
 import org.deeplearning4j.da.DenoisingAutoEncoder.Builder;
 import org.deeplearning4j.datasets.DataSet;
+import org.deeplearning4j.nn.NeuralNetwork;
+import org.deeplearning4j.nn.gradient.NeuralNetworkGradient;
 
 /**
  <!-- globalinfo-start -->
@@ -126,5 +128,16 @@ public class DenoisingAutoEncoderBuilder
   @Override
   public Class generates() {
     return DenoisingAutoEncoder.class;
+  }
+  
+  /**
+   * Returns the network gradient.
+   * 
+   * @param network	the network to extract the gradient from
+   * @return		the gradient
+   */
+  @Override
+  public NeuralNetworkGradient getGradient(NeuralNetwork network) {
+    return network.getGradient(new Object[]{getCorruptionLevel(), getLearningRate(), getNumEpochs()});
   }
 }

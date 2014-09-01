@@ -20,6 +20,8 @@
 package adams.data.ml;
 
 import org.deeplearning4j.datasets.DataSet;
+import org.deeplearning4j.nn.NeuralNetwork;
+import org.deeplearning4j.nn.gradient.NeuralNetworkGradient;
 import org.deeplearning4j.rbm.RBM;
 import org.deeplearning4j.rbm.RBM.Builder;
 
@@ -126,5 +128,16 @@ public class RBMBuilder
   @Override
   public Class generates() {
     return RBM.class;
+  }
+  
+  /**
+   * Returns the network gradient.
+   * 
+   * @param network	the network to extract the gradient from
+   * @return		the gradient
+   */
+  @Override
+  public NeuralNetworkGradient getGradient(NeuralNetwork network) {
+    return network.getGradient(new Object[]{getK(), getLearningRate(), null});
   }
 }

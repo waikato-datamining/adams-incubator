@@ -23,6 +23,7 @@ import org.deeplearning4j.datasets.DataSet;
 import org.jblas.DoubleMatrix;
 
 import adams.data.conversion.SpreadSheetBinarize;
+import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.ml.data.Dataset;
 
@@ -113,5 +114,46 @@ public class DL4JHelper {
     }
     
     return new DataSet(inputMatrix, outputMatrix);
+  }
+  
+  /**
+   * Converts the double matrix into a spreadsheet.
+   * 
+   * @param matrix	the matrix to convert
+   * @return		the spreadsheet 
+   */
+  public static SpreadSheet doubleMatrixToSpreadSheet(DoubleMatrix matrix) {
+    return doubleMatrixToSpreadSheet(matrix, null);
+  }
+  
+  /**
+   * Converts the double matrix into a spreadsheet.
+   * 
+   * @param matrix	the matrix to convert
+   * @param name	the name for the spreadsheet
+   * @return		the spreadsheet 
+   */
+  public static SpreadSheet doubleMatrixToSpreadSheet(DoubleMatrix matrix, String name) {
+    SpreadSheet	result;
+    Row		row;
+    int		i;
+    int		n;
+    
+    result = new SpreadSheet();
+    result.setName(name);
+    
+    // header
+    row = result.getHeaderRow();
+    for (i = 0; i < matrix.getColumns(); i++)
+      row.addCell("" + i).setContent("Col-" + (i+1));
+    
+    // data
+    for (n = 0; n < matrix.getRows(); n++) {
+      row = result.addRow();
+      for (i = 0; i < matrix.getColumns(); i++)
+	row.addCell(i).setContent(matrix.get(n, i));
+    }
+    
+    return result;
   }
 }
