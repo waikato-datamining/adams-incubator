@@ -42,9 +42,6 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
   /** whether to apply sparsity. */
   protected boolean m_ApplySparsity;
 
-  /** the sparsity. */
-  protected double m_Sparsity;
-
   /**
    * Adds options to the internal list of options.
    */
@@ -59,10 +56,6 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
     m_OptionManager.add(
 	    "apply-sparsity", "applySparsity",
 	    false);
-
-    m_OptionManager.add(
-	    "sparsity", "sparsity",
-	    0);
   }
 
   /**
@@ -93,6 +86,26 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
   @Override
   protected int getDefaultNumEpochs() {
     return 1000;
+  }
+
+  /**
+   * Returns the default l2.
+   *
+   * @return		the default
+   */
+  @Override
+  protected double getDefaultL2() {
+    return 0.1;
+  }
+  
+  /**
+   * Returns the default loss function.
+   * 
+   * @return		the loss function
+   */
+  @Override
+  protected org.deeplearning4j.nn.NeuralNetwork.LossFunction getDefaultLossFunction() {
+    return org.deeplearning4j.nn.NeuralNetwork.LossFunction.RECONSTRUCTION_CROSSENTROPY;
   }
 
   /**
@@ -158,6 +171,7 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
    *
    * @param value	the sparsity
    */
+  @Override
   public void setSparsity(double value) {
     m_Sparsity = value;
     reset();
@@ -168,6 +182,7 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
    *
    * @return		the sparsity
    */
+  @Override
   public double getSparsity() {
     return m_Sparsity;
   }
@@ -178,6 +193,7 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
    * @return 		tip text for this property suitable for
    * 			displaying in the GUI or for listing the options.
    */
+  @Override
   public String sparsityTipText() {
     return "The sparsity.";
   }
@@ -200,7 +216,13 @@ public abstract class AbstractBaseNetworkBuilder<T extends BaseNeuralNetwork>
     result.applySparsity(m_ApplySparsity);
     result.withSparsity(m_Sparsity);
     result.withDistribution(m_Distribution.getRealDistribution());
-
+    result.withLossFunction(m_LossFunction);
+    result.withOptmizationAlgo(m_OptimizationAlgorithm.getOptimizationAlgorithm());
+    result.withL2(m_L2);
+    result.useRegularization(m_UseRegularization);
+    result.withSparsity(m_Sparsity);
+    result.withDropOut(m_DropOut);
+    
     // input
     result.numberOfVisible(data.getFirst().getColumns());
 

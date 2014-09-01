@@ -66,6 +66,9 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
   /** how to initialize the output weights. */
   protected WeightInitialization m_OutputWeightInit;
 
+  /** the loss function for the output. */
+  protected org.deeplearning4j.nn.OutputLayer.LossFunction m_OutputLossFunction;
+  
   /**
    * Adds options to the internal list of options.
    */
@@ -100,6 +103,10 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
     m_OptionManager.add(
 	    "output-activation-function", "outputActivationFunction",
 	    new Null());
+
+    m_OptionManager.add(
+	    "output-loss-function", "outputLossFunction",
+	    org.deeplearning4j.nn.OutputLayer.LossFunction.RMSE_XENT);
   }
 
   /**
@@ -139,6 +146,26 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
    */
   protected double getDefaultFineTuneLearningRate() {
     return 0.001;
+  }
+
+  /**
+   * Returns the default l2.
+   *
+   * @return		the default
+   */
+  @Override
+  protected double getDefaultL2() {
+    return 2e-4;
+  }
+  
+  /**
+   * Returns the default loss function.
+   * 
+   * @return		the loss function
+   */
+  @Override
+  protected org.deeplearning4j.nn.NeuralNetwork.LossFunction getDefaultLossFunction() {
+    return org.deeplearning4j.nn.NeuralNetwork.LossFunction.RECONSTRUCTION_CROSSENTROPY;
   }
 
   /**
@@ -355,6 +382,35 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
   }
 
   /**
+   * Sets the loss function for the output.
+   *
+   * @param value	the loss function
+   */
+  public void setOutputLossFunction(org.deeplearning4j.nn.OutputLayer.LossFunction value) {
+    m_OutputLossFunction = value;
+    reset();
+  }
+
+  /**
+   * Returns the loss function for the output.
+   *
+   * @return		the loss function
+   */
+  public org.deeplearning4j.nn.OutputLayer.LossFunction getOutputLossFunction() {
+    return m_OutputLossFunction;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String outputLossFunctionTipText() {
+    return "The output loss function for the output.";
+  }
+
+  /**
    * Convencience method for turning the hidden layer sizes into an integer array.
    *
    * @return		the hidden layer sizes as int array
@@ -426,6 +482,13 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
       result.withRng(m_RandomNumberGenerator.getRandomGenerator());
     result.withMomentum(m_Momentum);
     result.withDist(m_Distribution.getRealDistribution());
+    result.withLossFunction(m_LossFunction);
+    result.withOptimizationAlgorithm(m_OptimizationAlgorithm.getOptimizationAlgorithm());
+    result.withOutputLossFunction(m_OutputLossFunction);
+    result.withL2(m_L2);
+    result.useRegularization(m_UseRegularization);
+    result.withSparsity(m_Sparsity);
+    result.withDropOut(m_DropOut);
 
     // input
     result.numberOfInputs(data.getFirst().getColumns());

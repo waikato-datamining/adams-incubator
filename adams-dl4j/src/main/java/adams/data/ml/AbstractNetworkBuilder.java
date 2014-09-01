@@ -20,6 +20,7 @@
 package adams.data.ml;
 
 import org.deeplearning4j.datasets.DataSet;
+import org.deeplearning4j.nn.NeuralNetwork.LossFunction;
 
 import adams.core.ShallowCopySupporter;
 import adams.core.option.AbstractOptionHandler;
@@ -62,6 +63,24 @@ public abstract class AbstractNetworkBuilder<B, N>
   /** the distribution. */
   protected AbstractRealDistribution m_Distribution;
 
+  /** the loss function. */
+  protected LossFunction m_LossFunction;
+  
+  /** the optimization algorithm. */
+  protected OptimizationAlgorithm m_OptimizationAlgorithm;
+
+  /** the l2. */
+  protected double m_L2;
+
+  /** whether to use regularization. */
+  protected boolean m_UseRegularization;
+
+  /** the sparsity. */
+  protected double m_Sparsity;
+
+  /** the drop out. */
+  protected double m_DropOut;
+  
   /**
    * Adds options to the internal list of options.
    */
@@ -92,6 +111,30 @@ public abstract class AbstractNetworkBuilder<B, N>
     m_OptionManager.add(
 	    "distribution", "distribution",
 	    new Normal());
+
+    m_OptionManager.add(
+	    "loss-function", "lossFunction",
+	    getDefaultLossFunction());
+
+    m_OptionManager.add(
+	    "optimization-algorithm", "optimizationAlgorithm",
+	    OptimizationAlgorithm.NONE);
+
+    m_OptionManager.add(
+	    "l2", "L2",
+	    getDefaultL2());
+
+    m_OptionManager.add(
+	    "use-regularization", "useRegularization",
+	    false);
+
+    m_OptionManager.add(
+	    "sparsity", "sparsity",
+	    0.0);
+
+    m_OptionManager.add(
+	    "drop-out", "dropOut",
+	    0.0);
   }
 
   /**
@@ -287,6 +330,194 @@ public abstract class AbstractNetworkBuilder<B, N>
    */
   public String distributionTipText() {
     return "The distribution to use.";
+  }
+  
+  /**
+   * Returns the default loss function.
+   * 
+   * @return		the loss function
+   */
+  protected abstract LossFunction getDefaultLossFunction();
+  
+  /**
+   * Sets the loss function.
+   *
+   * @param value	the loss function
+   */
+  public void setLossFunction(LossFunction value) {
+    m_LossFunction = value;
+    reset();
+  }
+
+  /**
+   * Returns the loss function.
+   *
+   * @return		the loss function
+   */
+  public LossFunction getLossFunction() {
+    return m_LossFunction;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String lossFunctionTipText() {
+    return "The loss function.";
+  }
+
+  /**
+   * Sets the optimization algorithm.
+   *
+   * @param value	the optimization algorithm
+   */
+  public void setOptimizationAlgorithm(OptimizationAlgorithm value) {
+    m_OptimizationAlgorithm = value;
+    reset();
+  }
+
+  /**
+   * Returns the optimization algorithm.
+   *
+   * @return		the algorithm
+   */
+  public OptimizationAlgorithm getOptimizationAlgorithm() {
+    return m_OptimizationAlgorithm;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String optimizationAlgorithmTipText() {
+    return "The optimization algorithm.";
+  }
+
+  /**
+   * Returns the default l2.
+   *
+   * @return		the default
+   */
+  protected abstract double getDefaultL2();
+
+  /**
+   * Sets the l2.
+   *
+   * @param value	the l2
+   */
+  public void setL2(double value) {
+    m_L2 = value;
+    reset();
+  }
+
+  /**
+   * Returns the l2.
+   *
+   * @return		the l2
+   */
+  public double getL2() {
+    return m_L2;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String L2TipText() {
+    return "The l2 parameter.";
+  }
+
+  /**
+   * Sets whether to use regularization.
+   *
+   * @param value	true if to use regularization
+   */
+  public void setUseRegularization(boolean value) {
+    m_UseRegularization = value;
+    reset();
+  }
+
+  /**
+   * Returns whether to use regularization.
+   *
+   * @return		true if to use regularization
+   */
+  public boolean getUseRegularization() {
+    return m_UseRegularization;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String useRegularizationTipText() {
+    return "Whether to use regularization.";
+  }
+
+  /**
+   * Sets the sparsity.
+   *
+   * @param value	the sparsity
+   */
+  public void setSparsity(double value) {
+    m_Sparsity = value;
+    reset();
+  }
+
+  /**
+   * Returns the sparsity.
+   *
+   * @return		the sparsity
+   */
+  public double getSparsity() {
+    return m_Sparsity;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String sparsityTipText() {
+    return "The sparsity.";
+  }
+
+  /**
+   * Sets the drop out.
+   *
+   * @param value	the drop out
+   */
+  public void setDropOut(double value) {
+    m_DropOut = value;
+    reset();
+  }
+
+  /**
+   * Returns the drop out.
+   *
+   * @return		the drop out
+   */
+  public double getDropOut() {
+    return m_DropOut;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String dropOutTipText() {
+    return "The drop out.";
   }
 
   /**
