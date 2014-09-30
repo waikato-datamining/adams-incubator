@@ -22,7 +22,7 @@ package adams.flow.standalone;
 
 import java.util.Date;
 
-import org.openml.apiconnector.io.ApiConnector;
+import org.openml.apiconnector.io.OpenmlConnector;
 import org.openml.apiconnector.settings.Settings;
 import org.openml.apiconnector.xml.Authenticate;
 
@@ -100,7 +100,7 @@ public class OpenMLConnection
   protected String m_URL;
   
   /** the connector instance. */
-  protected ApiConnector m_Connector;
+  protected OpenmlConnector m_Connector;
 
   /** the session object. */
   protected Authenticate m_Session;
@@ -254,7 +254,7 @@ public class OpenMLConnection
     
     try {
       if (m_Connector == null) {
-	m_Connector = new ApiConnector(m_URL);
+	m_Connector = new OpenmlConnector(m_URL);
 	Settings.API_VERBOSE_LEVEL = OpenMLHelper.getVerboseLevel();
       }
       m_Session = m_Connector.openmlAuthenticate(m_User, m_Password.getValue());
@@ -273,7 +273,7 @@ public class OpenMLConnection
    * 
    * @return		the connector, null if not available
    */
-  public ApiConnector getConnector() {
+  public OpenmlConnector getConnector() {
     return m_Connector;
   }
   
