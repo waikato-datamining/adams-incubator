@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2014-04-29 13:39:05
+# Date: 2014-10-28 12:06:36
 # User: fracpete
 #
 adams.flow.control.Flow
@@ -37,6 +37,16 @@ adams.flow.control.Flow
 		adams.flow.control.Tee
 			-name
 			description
+			-tee
+				adams.flow.transformer.SpreadSheetRowFilter
+					-name
+					SpreadSheetRowFilter-1
+					-finder
+						adams.data.spreadsheet.rowfinder.ByValue
+							-att-index
+							name
+							-reg-exp
+							abalone
 			-tee
 				adams.flow.transformer.SpreadSheetGetCell
 			-tee
