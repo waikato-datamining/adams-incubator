@@ -257,7 +257,8 @@ public class OpenMLConnection
 	m_Connector = new OpenmlConnector(m_URL);
 	Settings.API_VERBOSE_LEVEL = OpenMLHelper.getVerboseLevel();
       }
-      m_Session = m_Connector.openmlAuthenticate(m_User, m_Password.getValue());
+      m_Connector.setCredentials(m_User, m_Password.getValue());
+      m_Session = m_Connector.openmlAuthenticate();
       if (isLoggingEnabled())
 	getLogger().info("sessionHash=" + m_Session.getSessionHash() + ", validUntil=" + m_Session.getValidUntil());
     }
