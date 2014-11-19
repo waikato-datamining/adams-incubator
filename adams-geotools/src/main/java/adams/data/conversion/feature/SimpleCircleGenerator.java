@@ -437,7 +437,7 @@ public class SimpleCircleGenerator
 	m_AdditionalAttributesType[i]    = null;
 	continue;
       }
-      if (sheet.isNumeric(m_AdditionalAttributesIndices[i])) {
+      if (sheet.isNumeric(m_AdditionalAttributesIndices[i], true)) {
 	builder.add(sheet.getHeaderRow().getContent(m_AdditionalAttributesIndices[i]), Double.class);
 	m_AdditionalAttributesType[i] = ContentType.DOUBLE;
       }
