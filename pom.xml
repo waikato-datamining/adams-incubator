@@ -32,6 +32,7 @@
     <module>adams-geonet</module>
     <module>adams-geotools</module>
     <module>adams-hadoop</module>
+    <module>adams-javacv</module>
     <module>adams-nlp</module>
     <module>adams-openml</module>
     <module>adams-tumblr</module>
