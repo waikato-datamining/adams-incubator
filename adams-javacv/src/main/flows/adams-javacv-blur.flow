@@ -1,0 +1,52 @@
+# Project: adams
+# Date: 2014-12-16 10:44:20
+# User: fracpete
+#
+adams.flow.control.Flow
+	-actor
+		adams.flow.source.FileSupplier
+			-file
+			${EXAMPLE_FLOWS}/data/3267694739_4981d2f944_z.jpg
+	-actor
+		adams.flow.transformer.ImageReader
+			-reader
+				adams.data.io.input.OpenCVImageReader
+	-actor
+		adams.flow.control.Tee
+			-name
+			original
+			-tee
+				adams.flow.sink.ImageViewer
+					-name
+					original
+					-short-title
+					true
+					-writer
+						adams.gui.print.NullWriter
+					-selection-processor
+						adams.gui.visualization.image.selection.NullProcessor
+					-image-overlay
+						adams.gui.visualization.image.NullOverlay
+	-actor
+		adams.flow.transformer.OpenCVTransformer
+			-transformer
+				adams.data.opencv.transformer.Blur
+					-kernel-size
+					5;5
+	-actor
+		adams.flow.sink.ImageViewer
+			-name
+			blurred
+			-short-title
+			true
+			-x
+			-3
+			-writer
+				adams.gui.print.NullWriter
+			-selection-processor
+				adams.gui.visualization.image.selection.NullProcessor
+			-image-overlay
+				adams.gui.visualization.image.NullOverlay
+	-flow-execution-listener
+		adams.flow.execution.NullListener
+
