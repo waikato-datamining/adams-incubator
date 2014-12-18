@@ -19,11 +19,15 @@
  */
 package adams.data.opencv;
 
+import java.awt.image.BufferedImage;
+
 import org.bytedeco.javacpp.opencv_core.IplImage;
+import org.bytedeco.javacpp.opencv_core.Size;
 
 import adams.data.Notes;
 import adams.data.image.AbstractImageContainer;
 import adams.data.image.BufferedImageContainer;
+import adams.data.image.BufferedImageHelper;
 import adams.data.report.Report;
 
 /**
@@ -70,19 +74,50 @@ public class OpenCVHelper {
     OpenCVImageContainer	result;
     Report			report;
     Notes			notes;
-    IplImage			img;
     
     if (cont instanceof OpenCVImageContainer)
       return (OpenCVImageContainer) cont;
 
     report = cont.getReport().getClone();
     notes  = cont.getNotes().getClone();
-    result = new OpenCVImageContainer();
-    img    = new IplImage();
-    img.copyFrom(cont.toBufferedImage());
-    result.setImage(img);
+    result = toOpenCVImageContainer(cont.toBufferedImage());
     result.setReport(report);
     result.setNotes(notes);
+    
+    return result;
+  }
+  
+  /**
+   * Creates a {@link BufferedImage} to an {@link OpenCVImageContainer}.
+   * 
+   * @param image	the image to convert
+   * @return		the generated container
+   */
+  public static OpenCVImageContainer toOpenCVImageContainer(BufferedImage image) {
+    OpenCVImageContainer	result;
+    
+    result = new OpenCVImageContainer();
+    result.setImage(toOpenCVImage(image));
+    
+    return result;
+  }
+  
+  /**
+   * Creates a {@link BufferedImage} to an {@link IplImage}.
+   * 
+   * @param image	the image to convert
+   * @return		the generated container
+   */
+  public static IplImage toOpenCVImage(BufferedImage image) {
+    IplImage	result;
+    int		bands;
+    
+    bands  = image.getRaster().getNumBands() + (image.getAlphaRaster() == null ? 0 : 1);
+    result = IplImage.create(
+	new Size(image.getWidth(), image.getHeight()).asCvSize(), 
+	BufferedImageHelper.getPixelDepth(image) / bands, 
+	bands);
+    result.copyFrom(image);
     
     return result;
   }
