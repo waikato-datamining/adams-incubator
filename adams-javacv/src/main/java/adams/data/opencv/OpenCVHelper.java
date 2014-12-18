@@ -24,7 +24,6 @@ import org.bytedeco.javacpp.opencv_core.IplImage;
 import adams.data.Notes;
 import adams.data.image.AbstractImageContainer;
 import adams.data.image.BufferedImageContainer;
-import adams.data.imagej.ImagePlusContainer;
 import adams.data.report.Report;
 
 /**
@@ -61,7 +60,7 @@ public class OpenCVHelper {
   }
   
   /**
-   * Creates a {@link ImagePlusContainer} container if necessary, otherwise
+   * Creates a {@link OpenCVImageContainer} container if necessary, otherwise
    * it just casts the object.
    * 
    * @param cont	the cont to cast/convert
