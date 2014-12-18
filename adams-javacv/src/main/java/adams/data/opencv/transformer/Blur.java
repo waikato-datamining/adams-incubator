@@ -27,6 +27,10 @@ import org.bytedeco.javacpp.opencv_core.Point;
 import org.bytedeco.javacpp.opencv_core.Size;
 import org.bytedeco.javacpp.opencv_imgproc;
 
+import adams.core.TechnicalInformation;
+import adams.core.TechnicalInformation.Field;
+import adams.core.TechnicalInformation.Type;
+import adams.core.TechnicalInformationHandler;
 import adams.core.base.BaseDimension;
 import adams.core.base.BasePointInt;
 import adams.data.opencv.BorderType;
@@ -36,9 +40,20 @@ import adams.data.opencv.OpenCVImageContainer;
  <!-- globalinfo-start -->
  * Blurs an image using the normalized box filter.<br/>
  * For more information see:<br/>
- * http:&#47;&#47;docs.opencv.org&#47;modules&#47;imgproc&#47;doc&#47;filtering.html#blur
+ * OpenCV documentation. Blur.
  * <p/>
  <!-- globalinfo-end -->
+ *
+ <!-- technical-bibtex-start -->
+ * <pre>
+ * &#64;misc{missing_id,
+ *    author = {OpenCV documentation},
+ *    title = {Blur},
+ *    HTTP = {http:&#47;&#47;docs.opencv.org&#47;modules&#47;imgproc&#47;doc&#47;filtering.html#blur}
+ * }
+ * </pre>
+ * <p/>
+ <!-- technical-bibtex-end -->
  *
  <!-- options-start -->
  * <pre>-logging-level &lt;OFF|SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST&gt; (property: loggingLevel)
@@ -67,7 +82,8 @@ import adams.data.opencv.OpenCVImageContainer;
  * @version $Revision$
  */
 public class Blur
-  extends AbstractOpenCVTransformer {
+  extends AbstractOpenCVTransformer
+  implements TechnicalInformationHandler {
 
   /** for serialization. */
   private static final long serialVersionUID = 5988488238337756717L;
@@ -91,7 +107,25 @@ public class Blur
     return 
 	"Blurs an image using the normalized box filter.\n"
 	+ "For more information see:\n"
-	+ "http://docs.opencv.org/modules/imgproc/doc/filtering.html#blur";
+	+ getTechnicalInformation();
+  }
+
+  /**
+   * Returns an instance of a TechnicalInformation object, containing
+   * detailed information about the technical background of this class,
+   * e.g., paper reference or book this class is based on.
+   *
+   * @return 		the technical information about this class
+   */
+  public TechnicalInformation getTechnicalInformation() {
+    TechnicalInformation 	result;
+
+    result = new TechnicalInformation(Type.MISC);
+    result.setValue(Field.AUTHOR, "OpenCV documentation");
+    result.setValue(Field.TITLE, "Blur");
+    result.setValue(Field.HTTP, "http://docs.opencv.org/modules/imgproc/doc/filtering.html#blur");
+
+    return result;
   }
 
   /**
@@ -183,7 +217,7 @@ public class Blur
   }
 
   /**
-   * Returns the border typer.
+   * Returns the border type.
    *
    * @return		the border type
    */
