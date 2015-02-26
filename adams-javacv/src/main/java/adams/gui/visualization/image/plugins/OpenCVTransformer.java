@@ -15,17 +15,17 @@
 
 /**
  * OpenCVImageTransformer.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
  */
 package adams.gui.visualization.image.plugins;
-
-import java.awt.image.BufferedImage;
 
 import adams.core.option.OptionUtils;
 import adams.data.opencv.OpenCVHelper;
 import adams.data.opencv.OpenCVImageContainer;
 import adams.data.opencv.transformer.AbstractOpenCVTransformer;
 import adams.data.opencv.transformer.PassThrough;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Allows the user to apply a OpenCV transformer to the selected images in the ImageViewer.
@@ -106,7 +106,7 @@ public class OpenCVTransformer
     result = null;
 
     setLastSetup(m_Editor.getValue());
-    transformer = (AbstractOpenCVTransformer) m_Editor.getValue();
+    transformer = (AbstractOpenCVTransformer) getLastSetup();
     input       = OpenCVHelper.toOpenCVImageContainer(image);
     transformed = transformer.transform(input);
     if (transformed.length == 0)
