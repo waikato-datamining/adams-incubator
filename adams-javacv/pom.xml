@@ -80,7 +80,7 @@
     <dependency>
       <groupId>org.bytedeco</groupId>
       <artifactId>javacv</artifactId>
-      <version>0.9</version>
+      <version>0.10</version>
     </dependency>
   </dependencies>
 
@@ -103,37 +103,43 @@
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>artoolkitplus</artifactId>
           <classifier>linux32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>ffmpeg</artifactId>
           <classifier>linux32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
+        </dependency>
+        <dependency>
+          <groupId>com.github.bytedeco.javacv</groupId>
+          <artifactId>flandmark</artifactId>
+          <classifier>linux32</classifier>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>flycapture</artifactId>
           <classifier>linux32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libdc1394</artifactId>
           <classifier>linux32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libfreenect</artifactId>
           <classifier>linux32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>opencv</artifactId>
           <classifier>linux32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
       </dependencies>
     </profile>
@@ -154,37 +160,43 @@
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>artoolkitplus</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>ffmpeg</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
+        </dependency>
+        <dependency>
+          <groupId>com.github.bytedeco.javacv</groupId>
+          <artifactId>flandmark</artifactId>
+          <classifier>linux64</classifier>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>flycapture</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libdc1394</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libfreenect</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>opencv</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
       </dependencies>
     </profile>
@@ -201,37 +213,43 @@
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>artoolkitplus</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>ffmpeg</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
+        </dependency>
+        <dependency>
+          <groupId>com.github.bytedeco.javacv</groupId>
+          <artifactId>flandmark</artifactId>
+          <classifier>linux64</classifier>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>flycapture</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libdc1394</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libfreenect</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>opencv</artifactId>
           <classifier>linux64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
       </dependencies>
     </profile>
@@ -253,37 +271,43 @@
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>artoolkitplus</artifactId>
           <classifier>windows32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>ffmpeg</artifactId>
           <classifier>windows32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
+        </dependency>
+        <dependency>
+          <groupId>com.github.bytedeco.javacv</groupId>
+          <artifactId>flandmark</artifactId>
+          <classifier>windows32</classifier>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>flycapture</artifactId>
           <classifier>windows32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libfreenect</artifactId>
           <classifier>windows32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>opencv</artifactId>
           <classifier>windows32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>videoinput</artifactId>
           <classifier>windows32</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
       </dependencies>
     </profile>
@@ -304,37 +328,43 @@
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>artoolkitplus</artifactId>
           <classifier>windows64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>ffmpeg</artifactId>
           <classifier>windows64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
+        </dependency>
+        <dependency>
+          <groupId>com.github.bytedeco.javacv</groupId>
+          <artifactId>flandmark</artifactId>
+          <classifier>windows64</classifier>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>flycapture</artifactId>
           <classifier>windows64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libfreenect</artifactId>
           <classifier>windows64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>opencv</artifactId>
           <classifier>windows64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>videoinput</artifactId>
           <classifier>windows64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
       </dependencies>
     </profile>
@@ -356,31 +386,37 @@
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>artoolkitplus</artifactId>
           <classifier>macosx64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>ffmpeg</artifactId>
           <classifier>macosx64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
+        </dependency>
+        <dependency>
+          <groupId>com.github.bytedeco.javacv</groupId>
+          <artifactId>flandmark</artifactId>
+          <classifier>macosx64</classifier>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libdc1394</artifactId>
           <classifier>macosx64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>libfreenect</artifactId>
           <classifier>macosx64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
         <dependency>
           <groupId>com.github.bytedeco.javacv</groupId>
           <artifactId>opencv</artifactId>
           <classifier>macosx64</classifier>
-          <version>0.9</version>
+          <version>0.10</version>
         </dependency>
       </dependencies>
     </profile>
