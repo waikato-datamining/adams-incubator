@@ -15,11 +15,9 @@
 
 /**
  * OpenCVFeatureGenerator.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
  */
 package adams.gui.visualization.image.plugins;
-
-import java.awt.image.BufferedImage;
 
 import adams.core.option.OptionUtils;
 import adams.data.featureconverter.SpreadSheet;
@@ -27,6 +25,8 @@ import adams.data.opencv.OpenCVHelper;
 import adams.data.opencv.OpenCVImageContainer;
 import adams.data.opencv.features.AbstractOpenCVFeatureGenerator;
 import adams.data.spreadsheet.Row;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Allows the user to apply a OpenCV feature generator to an image in the ImageViewer.
@@ -39,6 +39,16 @@ public class OpenCVFeatureGenerator
 
   /** for serialization. */
   private static final long serialVersionUID = -3146372359577147914L;
+
+  /**
+   * Returns the text for the menu to place the plugin beneath.
+   *
+   * @return		the menu
+   */
+  @Override
+  public String getMenu() {
+    return "Features";
+  }
 
   /**
    * Returns the text for the menu item to create.
