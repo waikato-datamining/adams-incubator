@@ -62,11 +62,37 @@
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
-    
+
+    <dependency>
+      <groupId>nz.ac.waikato.cms.adams</groupId>
+      <artifactId>adams-weka</artifactId>
+      <version>${adams.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>nz.ac.waikato.cms.adams</groupId>
+      <artifactId>adams-weka</artifactId>
+      <version>${adams.version}</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+
     <dependency>
       <groupId>edu.stanford.nlp</groupId>
       <artifactId>stanford-parser</artifactId>
-      <version>3.2.0</version>
+      <version>3.4.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.fracpete</groupId>
+      <artifactId>nlp-weka-package</artifactId>
+      <version>2015.3.25</version>
+      <exclusions>
+        <exclusion>
+          <groupId>nz.ac.waikato.cms.weka</groupId>
+          <artifactId>weka-dev</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
