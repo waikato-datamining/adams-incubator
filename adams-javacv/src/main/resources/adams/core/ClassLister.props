@@ -7,10 +7,6 @@
 # Author:  FracPete (fracpete at waikato dot ac dot nz)
 # Version: $Revision: 10248 $
 
-# the BufferedImage feature generators
-adams.data.image.features.AbstractBufferedImageFeatureGenerator=\
-  adams.data.opencv.features
-
 # the OpenCV feature generators
 adams.data.opencv.features.AbstractOpenCVFeatureGenerator=\
   adams.data.opencv.features
@@ -18,3 +14,7 @@ adams.data.opencv.features.AbstractOpenCVFeatureGenerator=\
 # the OpenCV transformers
 adams.data.opencv.transformer.AbstractOpenCVTransformer=\
   adams.data.opencv.transformer
+
+# the buffered image multi-image operations
+adams.data.opencv.multiimageoperation.AbstractOpenCVMultiImageOperation=\
+  adams.data.opencv.multiimageoperation
