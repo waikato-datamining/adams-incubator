@@ -24,6 +24,7 @@
   <properties>
     <adams.version>0.4.9-SNAPSHOT</adams.version>
     <adams-addons.version>0.4.9-SNAPSHOT</adams-addons.version>
+    <javacv.version>0.10</javacv.version>
   </properties>
 
   <modules>
