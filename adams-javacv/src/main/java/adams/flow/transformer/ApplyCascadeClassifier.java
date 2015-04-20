@@ -19,8 +19,10 @@
  */
 package adams.flow.transformer;
 
+import adams.core.QuickInfoHelper;
 import adams.core.io.PlaceholderFile;
 import adams.data.image.AbstractImageContainer;
+import adams.data.opencv.OpenCVHelper;
 import adams.data.opencv.OpenCVImageContainer;
 import adams.data.report.Report;
 import org.bytedeco.javacpp.opencv_core.*;
@@ -29,10 +31,88 @@ import org.bytedeco.javacpp.opencv_objdetect.CascadeClassifier;
 import static org.bytedeco.javacpp.opencv_core.*;
 
 /**
- * <!-- globalinfo-start -->
- * <!-- globalinfo-end -->
- * <!-- options-start -->
- * <!-- options-end -->
+ <!-- globalinfo-start -->
+ * Applies a OpenCV cascade classifier to an image, returning all possible located objects.
+ * <p/>
+ <!-- globalinfo-end -->
+ *
+ <!-- flow-summary-start -->
+ * Input&#47;output:<br/>
+ * - accepts:<br/>
+ * &nbsp;&nbsp;&nbsp;adams.data.image.AbstractImageContainer<br/>
+ * - generates:<br/>
+ * &nbsp;&nbsp;&nbsp;adams.data.image.AbstractImageContainer<br/>
+ * <p/>
+ <!-- flow-summary-end -->
+ *
+ <!-- options-start -->
+ * <pre>-logging-level &lt;OFF|SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST&gt; (property: loggingLevel)
+ * &nbsp;&nbsp;&nbsp;The logging level for outputting errors and debugging output.
+ * &nbsp;&nbsp;&nbsp;default: WARNING
+ * </pre>
+ * 
+ * <pre>-name &lt;java.lang.String&gt; (property: name)
+ * &nbsp;&nbsp;&nbsp;The name of the actor.
+ * &nbsp;&nbsp;&nbsp;default: ApplyCascadeClassifier
+ * </pre>
+ * 
+ * <pre>-annotation &lt;adams.core.base.BaseAnnotation&gt; (property: annotations)
+ * &nbsp;&nbsp;&nbsp;The annotations to attach to this actor.
+ * &nbsp;&nbsp;&nbsp;default: 
+ * </pre>
+ * 
+ * <pre>-skip &lt;boolean&gt; (property: skip)
+ * &nbsp;&nbsp;&nbsp;If set to true, transformation is skipped and the input token is just forwarded 
+ * &nbsp;&nbsp;&nbsp;as it is.
+ * &nbsp;&nbsp;&nbsp;default: false
+ * </pre>
+ * 
+ * <pre>-stop-flow-on-error &lt;boolean&gt; (property: stopFlowOnError)
+ * &nbsp;&nbsp;&nbsp;If set to true, the flow gets stopped in case this actor encounters an error;
+ * &nbsp;&nbsp;&nbsp; useful for critical actors.
+ * &nbsp;&nbsp;&nbsp;default: false
+ * </pre>
+ * 
+ * <pre>-silent &lt;boolean&gt; (property: silent)
+ * &nbsp;&nbsp;&nbsp;If enabled, then no errors are output in the console.
+ * &nbsp;&nbsp;&nbsp;default: false
+ * </pre>
+ * 
+ * <pre>-output-array &lt;boolean&gt; (property: outputArray)
+ * &nbsp;&nbsp;&nbsp;Outputs the images either one by one or as array.
+ * &nbsp;&nbsp;&nbsp;default: false
+ * </pre>
+ * 
+ * <pre>-classifier &lt;adams.core.io.PlaceholderFile&gt; (property: classifier)
+ * &nbsp;&nbsp;&nbsp;Cascade classifier training data.
+ * &nbsp;&nbsp;&nbsp;default: ${CWD}
+ * </pre>
+ * 
+ * <pre>-scale-factor &lt;double&gt; (property: scaleFactor)
+ * &nbsp;&nbsp;&nbsp;How much the image size is reduced at each image scale.
+ * &nbsp;&nbsp;&nbsp;default: 1.1
+ * &nbsp;&nbsp;&nbsp;minimum: 1.1
+ * </pre>
+ * 
+ * <pre>-min-neighbors &lt;int&gt; (property: minNeighbors)
+ * &nbsp;&nbsp;&nbsp;How many neighbors each candidate rectangle should have to retain it.
+ * &nbsp;&nbsp;&nbsp;default: 1
+ * &nbsp;&nbsp;&nbsp;minimum: 0
+ * </pre>
+ * 
+ * <pre>-min-size &lt;int&gt; (property: minSize)
+ * &nbsp;&nbsp;&nbsp;Minimum possible object size. Objects smaller than that are ignored.
+ * &nbsp;&nbsp;&nbsp;default: 10
+ * &nbsp;&nbsp;&nbsp;minimum: 0
+ * </pre>
+ * 
+ * <pre>-max-size &lt;int&gt; (property: maxSize)
+ * &nbsp;&nbsp;&nbsp;Maximum possible object size. Objects larger than that are ignored.
+ * &nbsp;&nbsp;&nbsp;default: 100
+ * &nbsp;&nbsp;&nbsp;minimum: 0
+ * </pre>
+ * 
+ <!-- options-end -->
  *
  * @author lx51 (lx51 at students dot waikato dot ac dot nz)
  * @version $Revision$
@@ -279,6 +359,16 @@ public class ApplyCascadeClassifier extends AbstractArrayProvider {
   }
 
   /**
+   * Returns a quick info about the object, which can be displayed in the GUI.
+   *
+   * @return		null if no info available, otherwise short string
+   */
+  @Override
+  public String getQuickInfo() {
+    return QuickInfoHelper.toString(this, "classifier", m_Classifier, "classifier: ");
+  }
+
+  /**
    * Returns the class that the consumer accepts.
    *
    * @return the Class of objects that can be processed
@@ -316,8 +406,9 @@ public class ApplyCascadeClassifier extends AbstractArrayProvider {
   @Override
   protected String doExecute() {
     String result = null;
+    OpenCVImageContainer cont = OpenCVHelper.toOpenCVImageContainer((AbstractImageContainer)m_InputToken.getPayload());
     try {
-      IplImage input = ((OpenCVImageContainer) m_InputToken.getPayload()).getImage();
+      IplImage input = cont.getImage();
       m_OutputToken = m_InputToken;
 
       // Init and apply classifier
