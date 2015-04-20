@@ -32,7 +32,7 @@ import static org.bytedeco.javacpp.opencv_core.*;
 
 /**
  <!-- globalinfo-start -->
- * Applies a OpenCV cascade classifier to an image, returning all possible located objects.
+ * Applies an OpenCV cascade classifier to an image, returning all possible located objects.
  * <p/>
  <!-- globalinfo-end -->
  *
@@ -169,6 +169,9 @@ public class ApplyCascadeClassifier extends AbstractArrayProvider {
    */
   protected int m_MaxSize;
 
+  /** the cascade classifier in use. */
+  protected transient CascadeClassifier m_ActualClassifier;
+
   /**
    * Returns a string describing the object.
    *
@@ -176,7 +179,7 @@ public class ApplyCascadeClassifier extends AbstractArrayProvider {
    */
   @Override
   public String globalInfo() {
-    return "Applies a OpenCV cascade classifier to an image, returning all possible located objects.";
+    return "Applies an OpenCV cascade classifier to an image, returning all possible located objects.";
   }
 
   /**
@@ -191,6 +194,16 @@ public class ApplyCascadeClassifier extends AbstractArrayProvider {
     m_OptionManager.add("min-neighbors", "minNeighbors", 1, 0, null);
     m_OptionManager.add("min-size", "minSize", 10, 0, null);
     m_OptionManager.add("max-size", "maxSize", 100, 0, null);
+  }
+
+  /**
+   * Resets the scheme.
+   */
+  @Override
+  protected void reset() {
+    super.reset();
+
+    m_ActualClassifier = null;
   }
 
   /**
@@ -399,6 +412,27 @@ public class ApplyCascadeClassifier extends AbstractArrayProvider {
   }
 
   /**
+   * Initializes the item for flow execution.
+   *
+   * @return		null if everything is fine, otherwise error message
+   */
+  @Override
+  public String setUp() {
+    String      result;
+
+    result = super.setUp();
+
+    if (result == null) {
+      if (m_Classifier.isDirectory())
+        result = "Classifier is pointing to a directory, not a file: " + m_Classifier;
+      else if (!m_Classifier.exists())
+        result = "Classifier file does not exist: " + m_Classifier;
+    }
+
+    return result;
+  }
+
+  /**
    * Executes the flow item.
    *
    * @return null if everything is fine, otherwise error message
@@ -413,8 +447,9 @@ public class ApplyCascadeClassifier extends AbstractArrayProvider {
 
       // Init and apply classifier
       Rect rects = new Rect();
-      CascadeClassifier classifier = new CascadeClassifier(m_Classifier.getAbsolutePath());
-      classifier.detectMultiScale(new Mat(input), rects, m_ScaleFactor, m_MinNeighbors, 0, new Size(m_MinSize, m_MinSize), new Size(m_MaxSize, m_MaxSize));
+      if (m_ActualClassifier == null)
+        m_ActualClassifier = new CascadeClassifier(m_Classifier.getAbsolutePath());
+      m_ActualClassifier.detectMultiScale(new Mat(input), rects, m_ScaleFactor, m_MinNeighbors, 0, new Size(m_MinSize, m_MinSize), new Size(m_MaxSize, m_MaxSize));
 
       // Crop sub images from results and create report
       for (int i = 0; i < rects.capacity(); i++) {
