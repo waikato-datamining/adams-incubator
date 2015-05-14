@@ -16,11 +16,25 @@
 
 /*
  * HadoopGuiRunPanel.java
- * Copyright (C) 2012 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2012-2015 University of Waikato, Hamilton, New Zealand
  */
 
 package weka.gui.experiment;
 
+import adams.core.io.FileUtils;
+import weka.core.SerializedObject;
+import weka.core.Utils;
+import weka.experiment.CSVResultListener;
+import weka.experiment.CrossValidationResultProducer;
+import weka.experiment.Experiment;
+import weka.experiment.RemoteExperiment;
+import weka.hadoop.HadoopExperiment;
+
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -34,7 +48,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
@@ -45,20 +58,6 @@ import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
-
-import javax.swing.BorderFactory;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-import weka.core.SerializedObject;
-import weka.core.Utils;
-import weka.experiment.CSVResultListener;
-import weka.experiment.CrossValidationResultProducer;
-import weka.experiment.Experiment;
-import weka.experiment.RemoteExperiment;
-import weka.hadoop.HadoopExperiment;
 
 
 
@@ -183,13 +182,8 @@ public class HadoopGuiRunPanel
      */
 
     public void run() {
-      try {
-	jarFile= File.createTempFile("hadoopGui", ".jar");
-	jarFile.deleteOnExit();
-      }
-      catch (IOException e1) {
-	e1.printStackTrace();
-      }
+      jarFile= FileUtils.createTempFile("hadoopGui", ".jar");
+      jarFile.deleteOnExit();
       jarname = "";
 
       String currentJar = hadoopHomePath+"/"+jarFile.getName();

@@ -21,6 +21,39 @@
 
 package weka.hadoop;
 
+import adams.core.io.FileUtils;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.Mapper;
+import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.NLineInputFormat;
+import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
+import org.apache.hadoop.util.Tool;
+import org.apache.hadoop.util.ToolRunner;
+import weka.classifiers.Classifier;
+import weka.classifiers.Evaluation;
+import weka.core.AdditionalMeasureProducer;
+import weka.core.Instances;
+import weka.core.Summarizable;
+import weka.core.Utils;
+import weka.core.converters.ArffLoader;
+import weka.core.converters.ConverterUtils.DataSink;
+import weka.core.converters.ConverterUtils.DataSource;
+import weka.experiment.ClassifierSplitEvaluator;
+import weka.experiment.CrossValidationResultProducer;
+import weka.experiment.InstancesResultListener;
+import weka.experiment.RegressionSplitEvaluator;
+
+import javax.swing.DefaultListModel;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -39,40 +72,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
-
-import javax.swing.DefaultListModel;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.conf.Configured;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.LongWritable;
-import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.NLineInputFormat;
-import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
-import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
-import org.apache.hadoop.util.Tool;
-import org.apache.hadoop.util.ToolRunner;
-
-import weka.classifiers.Classifier;
-import weka.classifiers.Evaluation;
-import weka.core.AdditionalMeasureProducer;
-import weka.core.Instances;
-import weka.core.Summarizable;
-import weka.core.Utils;
-import weka.core.converters.ArffLoader;
-import weka.core.converters.ConverterUtils.DataSink;
-import weka.core.converters.ConverterUtils.DataSource;
-import weka.experiment.ClassifierSplitEvaluator;
-import weka.experiment.CrossValidationResultProducer;
-import weka.experiment.InstancesResultListener;
-import weka.experiment.RegressionSplitEvaluator;
 
 
 @SuppressWarnings("deprecation")
@@ -798,7 +797,7 @@ public class HadoopExperiment extends Configured implements Tool{
     
     try{
 
-      fi = File.createTempFile("input", ".tmp");
+      fi = FileUtils.createTempFile("input", ".tmp");
       fi.deleteOnExit();
       tempargs.add(originalArgs[0]);
       tempargs.add(originalArgs[1]);
@@ -830,7 +829,7 @@ public class HadoopExperiment extends Configured implements Tool{
     conf.addResource(new Path(confFolder+"/core-site.xml"));
     FileSystem fs = FileSystem.get(conf);
     fs.copyFromLocalFile(new Path(fi.getPath()), new Path(fi.getName()));
-    File x = File.createTempFile("output", ".tmp");
+    File x = FileUtils.createTempFile("output", ".tmp");
     x.deleteOnExit();
     String foldername = x.getName().substring(0, x.getName().length()-4);
     tempargs.add(foldername);
@@ -845,7 +844,7 @@ public class HadoopExperiment extends Configured implements Tool{
     ArrayList<String> title = new ArrayList<String>();
 
 
-    File fii = File.createTempFile("temp", ".txt");
+    File fii = FileUtils.createTempFile("temp", ".txt");
     fii.deleteOnExit();
  
     fs.copyToLocalFile(new Path(foldername+"/part-r-00000"), new Path(fii.getAbsolutePath()));

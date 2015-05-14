@@ -15,30 +15,26 @@
 
 /*
  *    HadoopGuiSetupPanel.java
- *    Copyright (C) 2002-2012 University of Waikato, Hamilton, New Zealand
+ *    Copyright (C) 2002-2015 University of Waikato, Hamilton, New Zealand
  *
  */
 
 package weka.gui.experiment;
 
-import java.awt.BorderLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.beans.IntrospectionException;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
-import java.beans.PropertyDescriptor;
-import java.io.File;
+import adams.core.io.FileUtils;
+import adams.gui.chooser.DirectoryChooserPanel;
+import adams.gui.chooser.FileChooserPanel;
+import weka.classifiers.Classifier;
+import weka.core.xml.KOML;
+import weka.experiment.CSVResultListener;
+import weka.experiment.ClassifierSplitEvaluator;
+import weka.experiment.CrossValidationResultProducer;
+import weka.experiment.DatabaseResultListener;
+import weka.experiment.Experiment;
+import weka.experiment.PropertyNode;
+import weka.experiment.RegressionSplitEvaluator;
+import weka.experiment.SplitEvaluator;
+import weka.gui.ExtensionFileFilter;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -58,21 +54,24 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileFilter;
-
-import adams.gui.chooser.DirectoryChooserPanel;
-import adams.gui.chooser.FileChooserPanel;
-
-import weka.classifiers.Classifier;
-import weka.core.xml.KOML;
-import weka.experiment.CSVResultListener;
-import weka.experiment.ClassifierSplitEvaluator;
-import weka.experiment.CrossValidationResultProducer;
-import weka.experiment.DatabaseResultListener;
-import weka.experiment.Experiment;
-import weka.experiment.PropertyNode;
-import weka.experiment.RegressionSplitEvaluator;
-import weka.experiment.SplitEvaluator;
-import weka.gui.ExtensionFileFilter;
+import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.IntrospectionException;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
+import java.beans.PropertyDescriptor;
+import java.io.File;
 
 /** 
  * This panel controls the configuration of an experiment.
@@ -967,13 +966,8 @@ public class HadoopGuiSetupPanel
 
       // Use temporary file if no file name is provided
       if (m_destinationFilename.equals("")) {
-	try {
-	    resultsFile = File.createTempFile("weka_experiment", ".csv");
-	    resultsFile.deleteOnExit();
-	} catch (Exception e) {
-	  System.err.println("Cannot create temp file, writing to standard out.");
-	  resultsFile = new File("-");
-	}
+        resultsFile = FileUtils.createTempFile("weka_experiment", ".csv");
+        resultsFile.deleteOnExit();
       } else {
 	  if (!m_destinationFilename.endsWith(".csv")) {
 	    m_destinationFilename += ".csv";
