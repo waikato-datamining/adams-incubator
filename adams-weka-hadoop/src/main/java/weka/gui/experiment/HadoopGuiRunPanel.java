@@ -61,7 +61,7 @@ import java.util.jar.Manifest;
 
 
 
-/** 
+/**
  * This panel controls the running of an experiment using Hadoop.
  *
  */
@@ -92,7 +92,7 @@ public class HadoopGuiRunPanel
   protected String m_hadoopconf ="", m_jarfile = "", m_hadoopJar="",m_hadoopLibjars="";
 
   protected HadoopGuiSetupPanel m_hadoopGuiSetupPanel;
-  
+
   public HadoopGuiSetupPanel getHadoopGuiSetupPanel(){
     return m_hadoopGuiSetupPanel;
   }
@@ -132,10 +132,10 @@ public class HadoopGuiRunPanel
       System.err.println("Reading experiment copy");
       m_ExpCopy = (Experiment) so.getObject();
       System.err.println("Made experiment copy");
-      
+
     }
 
-    /** 
+    /**
      * Aborts experiment.
      */
     public void abortExperiment(){
@@ -159,7 +159,7 @@ public class HadoopGuiRunPanel
       String[] temp2= instruction.toArray(new String[instruction.size()]);
       int i1 = -1, i2=-1;
       Process p2;
-      
+
       try {
 	logMessage("Deleting unnecessary files");
 	p2 = Runtime.getRuntime().exec(temp);
@@ -168,7 +168,7 @@ public class HadoopGuiRunPanel
 	i2 = p2.waitFor();
 	if(i1==0 && i2==0){
 	  m_RunThread=null;
-      	  m_StartBut.setEnabled(true); 
+	  m_StartBut.setEnabled(true);
 	}
       }
       catch (Exception e1) {
@@ -193,44 +193,44 @@ public class HadoopGuiRunPanel
       instruction.add(hadoopHomePath+"/bin/hadoop");
       instruction.add("--config");
       instruction.add(hadoopConfPath);
-      
+
       instruction.add("jar");
       instruction.add(currentJar);
 
       instruction.add("-libjars");
       instruction.add(jarname);
-      
+
       DefaultListModel m_Datasets = m_ExpCopy.getDatasets();
       for(int i=0;i<m_Datasets.size();i++){
-	instruction.add("-dataset");	
+	instruction.add("-dataset");
 	instruction.add(m_Datasets.elementAt(i).toString());
       }
-     
+
       for(int i=0;i<m_ExpCopy.getPropertyArrayLength();i++){
 	instruction.add("-classifier");
 	instruction.add(Utils.toCommandLine(m_ExpCopy.getPropertyArrayValue(i)));
       }
       instruction.add("-runs");
       instruction.add(""+m_ExpCopy.getRunUpper());
-      
+
       instruction.add("-folds");
-      instruction.add(""+((CrossValidationResultProducer) m_ExpCopy.getResultProducer()).getNumFolds()); 
-      
+      instruction.add(""+((CrossValidationResultProducer) m_ExpCopy.getResultProducer()).getNumFolds());
+
       instruction.add("-csv");
       instruction.add(((CSVResultListener)m_ExpCopy.getResultListener()).outputFileName());
-      
+
       instruction.add("-exptype");
       instruction.add(expType);
-      
+
       instruction.add("-classindex");
       instruction.add("last");
-      
+
       instruction.add("-confhome");
       instruction.add(hadoopConfPath);
-      
+
       String[] temp = instruction.toArray(new String[instruction.size()]);
       try{
-	
+
 	logMessage("Started");
 	statusMessage("Running");
 	logMessage("Command line: "+Utils.joinOptions(temp));
@@ -238,16 +238,16 @@ public class HadoopGuiRunPanel
 
 	m_StartBut.setEnabled(false);
 	m_StopBut.setEnabled(true);
-	 
+
 	p = Runtime.getRuntime().exec(temp);
-	 
+
 	BufferedReader m_Stream = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 	String line;
 	while((line=m_Stream.readLine())!=null){
 	  logMsgWithNoTime(line);
 	}
 	int complete = p.waitFor();
-	  
+
 	m_StopBut.setEnabled(false);
 	m_StartBut.setEnabled(true);
 	if(complete==0){
@@ -264,19 +264,19 @@ public class HadoopGuiRunPanel
       }catch(Exception e){
 	e.printStackTrace();
       }
-      
+
     }
   }
 
-  
+
   /**
    * Creates the run panel with input setting of hadoop and jar file.
    */
   public void setHadoop(String hadoopconf) {
     m_hadoopconf = hadoopconf;
-  
+
   }
-  
+
   public void setJar(String jarFile){
     m_jarfile = jarFile;
   }
@@ -328,13 +328,13 @@ public class HadoopGuiRunPanel
    * @param exp a value of type 'Experiment'
    */
   public void setExperiment(Experiment exp) {
-    
+
     m_Exp = exp;
     m_StartBut.setEnabled(m_RunThread == null);
     m_StopBut.setEnabled(m_RunThread != null);
   }
-  
-  
+
+
   public void determineHadoopJar(){
     String classPath = adams.core.management.Java.getClassPath(false);
     StringTokenizer token = new StringTokenizer(classPath,":");
@@ -356,93 +356,94 @@ public class HadoopGuiRunPanel
       }
     }
   }
-  
+
   public void determineHadoopLibJars(){
-    String classPath = adams.core.management.Java.getClassPath(false); 
+    String classPath = adams.core.management.Java.getClassPath(false);
     System.err.println(classPath);
     classPath = classPath.substring(1);
-    
+
     m_hadoopLibjars = classPath.replaceAll(":", ",");
-    
+
   }
-  
+
   /**
    * Create jar file on the fly for current Hadoop experiment
    */
   public void createJar(String path,String jarName){
     try{
-    StringBuilder st = new StringBuilder("");
-    int BUFFER_SIZE = 10240;
-    String classPath = adams.core.management.Java.getClassPath(false);    
-    StringTokenizer token = new StringTokenizer(classPath,":");
-    byte buffer[] = new byte[BUFFER_SIZE];
-      
-    File archiveFile = new File(path+"/"+jarName);
-    FileOutputStream stream = new FileOutputStream(archiveFile);
-    
-    Manifest manifest = new Manifest();
-    Attributes attributes = manifest.getMainAttributes();
-    attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
+      StringBuilder st = new StringBuilder("");
+      int BUFFER_SIZE = 10240;
+      String classPath = adams.core.management.Java.getClassPath(false);
+      StringTokenizer token = new StringTokenizer(classPath,":");
+      byte buffer[] = new byte[BUFFER_SIZE];
 
-    token.nextToken();
-    String value = "";
-    while(token.hasMoreElements()){
-      String currentJarPath = token.nextToken();
-      StringTokenizer rebuildJar = new StringTokenizer(currentJarPath,"/");
-      String currentRebuildJar = "";
-      while(rebuildJar.hasMoreElements()){
-	currentRebuildJar = rebuildJar.nextToken();
+      File archiveFile = new File(path+"/"+jarName);
+      FileOutputStream stream = new FileOutputStream(archiveFile);
+
+      Manifest manifest = new Manifest();
+      Attributes attributes = manifest.getMainAttributes();
+      attributes.put(Attributes.Name.MANIFEST_VERSION, "1.0");
+
+      token.nextToken();
+      String value = "";
+      while(token.hasMoreElements()){
+	String currentJarPath = token.nextToken();
+	StringTokenizer rebuildJar = new StringTokenizer(currentJarPath,"/");
+	String currentRebuildJar = "";
+	while(rebuildJar.hasMoreElements()){
+	  currentRebuildJar = rebuildJar.nextToken();
+	}
+	if(currentRebuildJar.startsWith("._")){
+	  continue;
+	}
+	st.append(currentJarPath);
+	st.append(",");
+
+	value+=("lib/"+currentRebuildJar+" ");
+
       }
-      if(currentRebuildJar.startsWith("._")){
-      	continue;
+      st = st.deleteCharAt(st.length()-1);
+      jarname = st.toString();
+      attributes.put(Attributes.Name.CLASS_PATH, value.trim());
+      attributes.put(Attributes.Name.MAIN_CLASS, HadoopExperiment.class.getName());
+      JarOutputStream out = new JarOutputStream(stream, manifest);
+      token = new StringTokenizer(classPath,":");
+      token.nextToken();
+      while(token.hasMoreElements()){
+	String currentFile = token.nextToken();
+
+	File cf = new File(currentFile);
+	StringTokenizer rebuildFile = new StringTokenizer(currentFile,"/");
+	String currentRebuildFile = "";
+	while(rebuildFile.hasMoreTokens()){
+	  currentRebuildFile = rebuildFile.nextToken();
+	}
+	if(currentRebuildFile.charAt(0)=='.' && currentRebuildFile.charAt(1)=='_'){
+	  continue;
+	}
+	JarEntry jarAdd = new JarEntry("lib/"+currentRebuildFile);
+	jarAdd.setTime(cf.lastModified());
+	out.putNextEntry(jarAdd);
+
+	FileInputStream in = new FileInputStream(cf);
+	while(true){
+	  int nRead = in.read(buffer,0,buffer.length);
+	  if(nRead<=0)
+	    break;
+	  out.write(buffer,0,nRead);
+	}
+	FileUtils.closeQuietly(in);
       }
-      st.append(currentJarPath);
-      st.append(",");
-
-      value+=("lib/"+currentRebuildJar+" ");
-
+      out.flush();
+      FileUtils.closeQuietly(out);
+      FileUtils.closeQuietly(stream);
+      System.out.println("Adding completed OK");
     }
-    st = st.deleteCharAt(st.length()-1);
-    jarname = st.toString();
-    attributes.put(Attributes.Name.CLASS_PATH, value.trim());
-    attributes.put(Attributes.Name.MAIN_CLASS, HadoopExperiment.class.getName());
-    JarOutputStream out = new JarOutputStream(stream, manifest);
-    token = new StringTokenizer(classPath,":");
-    token.nextToken();
-    while(token.hasMoreElements()){
-      String currentFile = token.nextToken();
-     
-      File cf = new File(currentFile);    
-      StringTokenizer rebuildFile = new StringTokenizer(currentFile,"/");
-      String currentRebuildFile = "";
-      while(rebuildFile.hasMoreTokens()){
-	currentRebuildFile = rebuildFile.nextToken();
-      }
-      if(currentRebuildFile.charAt(0)=='.' && currentRebuildFile.charAt(1)=='_'){
-	continue;
-      }
-      JarEntry jarAdd = new JarEntry("lib/"+currentRebuildFile);
-      jarAdd.setTime(cf.lastModified());
-      out.putNextEntry(jarAdd);
-      
-      FileInputStream in = new FileInputStream(cf);
-      while(true){
-	int nRead = in.read(buffer,0,buffer.length);
-	if(nRead<=0)
-	  break;
-	out.write(buffer,0,nRead);
-      }
-      in.close();
-    }
-    out.flush();
-    out.close();
-    stream.close();
-    System.out.println("Adding completed OK");
-    }catch(Exception ex){
+    catch(Exception ex){
       ex.printStackTrace();
     }
   }
-  
+
   /**
    * Controls starting and stopping the experiment.
    *
@@ -464,9 +465,9 @@ public class HadoopGuiRunPanel
 	  m_RunThread.setPriority(Thread.MIN_PRIORITY); // UI has most priority
 	  m_RunThread.start();
 	} catch (Exception ex) {
-          ex.printStackTrace();
+	  ex.printStackTrace();
 	  logMessage("Problem creating experiment copy to run: "
-		     + ex.getMessage());
+	    + ex.getMessage());
 	}
       }
     } else if (e.getSource() == m_StopBut) {
@@ -475,15 +476,15 @@ public class HadoopGuiRunPanel
       logMessage("User aborting experiment. ");
       if (m_Exp instanceof RemoteExperiment) {
 	logMessage("Waiting for remote tasks to "
-		   +"complete...");
+	  +"complete...");
       }
-     
-	((ExperimentRunner)m_RunThread).abortExperiment();
+
+      ((ExperimentRunner)m_RunThread).abortExperiment();
 
       m_RunThread = null;
     }
   }
-  
+
   /**
    * Sends the supplied message to the log panel log area.
    *
@@ -492,7 +493,7 @@ public class HadoopGuiRunPanel
   protected void logMessage(String message) {
     m_Log.logMessage(message);
   }
-  
+
   /**
    * Send the supplied message to log pannel log area
    * @oaram message the message to log
@@ -500,7 +501,7 @@ public class HadoopGuiRunPanel
   protected void logMsgWithNoTime(String message){
     m_Log.logMsgWithNoTime(message);
   }
-  
+
   /**
    * Sends the supplied message to the log panel status line.
    *
@@ -509,7 +510,7 @@ public class HadoopGuiRunPanel
   protected void statusMessage(String message) {
     m_Log.statusMessage(message);
   }
-  
+
   /**
    * Tests out the run panel from the command line.
    *
@@ -527,14 +528,15 @@ public class HadoopGuiRunPanel
       if (readExp) {
 	FileInputStream fi = new FileInputStream(expFile);
 	ObjectInputStream oi = new ObjectInputStream(
-			       new BufferedInputStream(fi));
+	  new BufferedInputStream(fi));
 	Object to = oi.readObject();
 	if (to instanceof RemoteExperiment) {
 	  exp = (RemoteExperiment)to;
 	} else {
 	  exp = (Experiment)to;
 	}
-	oi.close();
+	FileUtils.closeQuietly(oi);
+	FileUtils.closeQuietly(fi);
       } else {
 	exp = new Experiment();
       }
@@ -547,7 +549,7 @@ public class HadoopGuiRunPanel
       jf.addWindowListener(new WindowAdapter() {
 	public void windowClosing(WindowEvent e) {
 	  System.err.println("\nExperiment Configuration\n"
-			     + sp.m_Exp.toString());
+	    + sp.m_Exp.toString());
 	  jf.dispose();
 	  System.exit(0);
 	}
