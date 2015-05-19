@@ -21,7 +21,7 @@
 
 package weka.hadoop;
 
-import adams.core.io.FileUtils;
+import adams.core.io.TempUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -797,7 +797,7 @@ public class HadoopExperiment extends Configured implements Tool{
     
     try{
 
-      fi = FileUtils.createTempFile("input", ".tmp");
+      fi = TempUtils.createTempFile("input", ".tmp");
       fi.deleteOnExit();
       tempargs.add(originalArgs[0]);
       tempargs.add(originalArgs[1]);
@@ -829,7 +829,7 @@ public class HadoopExperiment extends Configured implements Tool{
     conf.addResource(new Path(confFolder+"/core-site.xml"));
     FileSystem fs = FileSystem.get(conf);
     fs.copyFromLocalFile(new Path(fi.getPath()), new Path(fi.getName()));
-    File x = FileUtils.createTempFile("output", ".tmp");
+    File x = TempUtils.createTempFile("output", ".tmp");
     x.deleteOnExit();
     String foldername = x.getName().substring(0, x.getName().length()-4);
     tempargs.add(foldername);
@@ -844,7 +844,7 @@ public class HadoopExperiment extends Configured implements Tool{
     ArrayList<String> title = new ArrayList<String>();
 
 
-    File fii = FileUtils.createTempFile("temp", ".txt");
+    File fii = TempUtils.createTempFile("temp", ".txt");
     fii.deleteOnExit();
  
     fs.copyToLocalFile(new Path(foldername+"/part-r-00000"), new Path(fii.getAbsolutePath()));

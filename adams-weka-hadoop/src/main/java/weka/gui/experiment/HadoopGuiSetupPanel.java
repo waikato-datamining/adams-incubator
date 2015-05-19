@@ -21,7 +21,7 @@
 
 package weka.gui.experiment;
 
-import adams.core.io.FileUtils;
+import adams.core.io.TempUtils;
 import adams.gui.chooser.DirectoryChooserPanel;
 import adams.gui.chooser.FileChooserPanel;
 import weka.classifiers.Classifier;
@@ -966,7 +966,7 @@ public class HadoopGuiSetupPanel
 
       // Use temporary file if no file name is provided
       if (m_destinationFilename.equals("")) {
-        resultsFile = FileUtils.createTempFile("weka_experiment", ".csv");
+        resultsFile = TempUtils.createTempFile("weka_experiment", ".csv");
         resultsFile.deleteOnExit();
       } else {
 	  if (!m_destinationFilename.endsWith(".csv")) {

@@ -22,6 +22,7 @@
 package weka.gui.experiment;
 
 import adams.core.io.FileUtils;
+import adams.core.io.TempUtils;
 import weka.core.SerializedObject;
 import weka.core.Utils;
 import weka.experiment.CSVResultListener;
@@ -182,7 +183,7 @@ public class HadoopGuiRunPanel
      */
 
     public void run() {
-      jarFile= FileUtils.createTempFile("hadoopGui", ".jar");
+      jarFile= TempUtils.createTempFile("hadoopGui", ".jar");
       jarFile.deleteOnExit();
       jarname = "";
 

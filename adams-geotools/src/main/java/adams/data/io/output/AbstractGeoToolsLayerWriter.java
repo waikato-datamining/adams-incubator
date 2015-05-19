@@ -15,11 +15,12 @@
 
 /*
  * AbstractGeoToolsLayerWriter.java
- * Copyright (C) 2013 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2015 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.data.io.output;
 
+import adams.core.io.TempUtils;
 import org.geotools.map.Layer;
 
 import adams.core.ClassLister;
@@ -82,7 +83,7 @@ public abstract class AbstractGeoToolsLayerWriter<T extends Layer>
     m_OptionManager.add(
 	    "output", "output",
 	    new PlaceholderFile(
-		System.getProperty("java.io.tmpdir") + PlaceholderFile.separator + "out." + getDefaultFormatExtension()));
+              TempUtils.createTempFile("out." + getDefaultFormatExtension())));
   }
 
   /**
