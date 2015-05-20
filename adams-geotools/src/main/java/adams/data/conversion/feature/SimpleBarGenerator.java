@@ -47,7 +47,7 @@ import com.vividsolutions.jts.util.GeometricShapeFactory;
 /**
  <!-- globalinfo-start -->
  * Generates a bar feature layer, using the GPS coordinates column in the spreadsheet as base for the bar, the height column for the height of the bar and adds any additionally defined colunms as attributes to the feature points.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

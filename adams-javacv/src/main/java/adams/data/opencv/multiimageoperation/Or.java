@@ -28,9 +28,9 @@ import org.bytedeco.javacpp.opencv_core.Mat;
 
 /**
  <!-- globalinfo-start -->
- * Performs a logical OR on the binary pixels of the images.<br/>
+ * Performs a logical OR on the binary pixels of the images.<br>
  * Converts images automatically to type UNSIGNED_INT_8.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->
@@ -71,7 +71,7 @@ public class Or
 
   /**
    * Checks the images.
-   * <p/>
+   * <br><br>
    * Default implementation only ensures that images are present.
    *
    * @param images	the images to check

@@ -30,16 +30,16 @@ import edu.stanford.nlp.trees.TreebankLanguagePack;
 /**
  <!-- globalinfo-start -->
  * Turns a Stanford parse tree into a grammatical structure.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->
- * Input&#47;output:<br/>
- * - accepts:<br/>
- * &nbsp;&nbsp;&nbsp;edu.stanford.nlp.trees.Tree<br/>
- * - generates:<br/>
- * &nbsp;&nbsp;&nbsp;edu.stanford.nlp.trees.GrammaticalStructure<br/>
- * <p/>
+ * Input&#47;output:<br>
+ * - accepts:<br>
+ * &nbsp;&nbsp;&nbsp;edu.stanford.nlp.trees.Tree<br>
+ * - generates:<br>
+ * &nbsp;&nbsp;&nbsp;edu.stanford.nlp.trees.GrammaticalStructure<br>
+ * <br><br>
  <!-- flow-summary-end -->
  *
  <!-- options-start -->

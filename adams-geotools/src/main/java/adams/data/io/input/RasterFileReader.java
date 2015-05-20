@@ -32,7 +32,7 @@ import adams.data.RasterType;
 /**
  <!-- globalinfo-start -->
  * Reads raster files.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

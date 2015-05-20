@@ -28,7 +28,7 @@ import adams.data.opencv.OpenCVHelper;
 /**
  <!-- globalinfo-start -->
  * Turns an OpenCV container into a BufferedImage one.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

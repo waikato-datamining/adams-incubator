@@ -27,7 +27,7 @@ import edu.stanford.nlp.trees.Tree;
 /**
  <!-- globalinfo-start -->
  * Turns the leaves of a Stanford parse tree into a spreadsheet.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

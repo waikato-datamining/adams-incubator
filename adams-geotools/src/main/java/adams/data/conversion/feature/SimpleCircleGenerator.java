@@ -47,7 +47,7 @@ import com.vividsolutions.jts.util.GeometricShapeFactory;
 /**
  <!-- globalinfo-start -->
  * Generates a circle feature layer, using the GPS coordinates column in the spreadsheet as center for the circle, the radius column for the radius of the circle and adds any additionally defined colunms as attributes to the feature points.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

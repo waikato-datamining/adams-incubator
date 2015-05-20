@@ -34,7 +34,7 @@ import edu.stanford.nlp.util.StringUtils;
 /**
  <!-- globalinfo-start -->
  * Uses Stanford's PTBTokenizer.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

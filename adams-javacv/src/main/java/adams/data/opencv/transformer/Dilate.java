@@ -40,10 +40,10 @@ import adams.data.opencv.OpenCVImageContainer;
 
 /**
  <!-- globalinfo-start -->
- * Dilates an image.<br/>
- * For more information see:<br/>
+ * Dilates an image.<br>
+ * For more information see:<br>
  * OpenCV documentation. Dilate.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- technical-bibtex-start -->
@@ -54,7 +54,7 @@ import adams.data.opencv.OpenCVImageContainer;
  *    HTTP = {http:&#47;&#47;docs.opencv.org&#47;modules&#47;imgproc&#47;doc&#47;filtering.html#dilate}
  * }
  * </pre>
- * <p/>
+ * <br><br>
  <!-- technical-bibtex-end -->
  *
  <!-- options-start -->

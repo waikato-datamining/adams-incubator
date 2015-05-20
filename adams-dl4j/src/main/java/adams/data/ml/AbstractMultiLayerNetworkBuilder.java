@@ -446,7 +446,7 @@ public abstract class AbstractMultiLayerNetworkBuilder<T extends BaseMultiLayerN
 
   /**
    * Performs checks before configuring the builder.
-   * <p/>
+   * <br><br>
    * Default implementation ensures that at least one hidden layer is defined
    * and that the hidden layers have at least 1 node each.
    *

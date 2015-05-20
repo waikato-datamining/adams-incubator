@@ -38,10 +38,10 @@ import adams.data.opencv.OpenCVImageContainer;
 
 /**
  <!-- globalinfo-start -->
- * Blurs an image using the normalized box filter.<br/>
- * For more information see:<br/>
+ * Blurs an image using the normalized box filter.<br>
+ * For more information see:<br>
  * OpenCV documentation. Blur.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- technical-bibtex-start -->
@@ -52,7 +52,7 @@ import adams.data.opencv.OpenCVImageContainer;
  *    HTTP = {http:&#47;&#47;docs.opencv.org&#47;modules&#47;imgproc&#47;doc&#47;filtering.html#blur}
  * }
  * </pre>
- * <p/>
+ * <br><br>
  <!-- technical-bibtex-end -->
  *
  <!-- options-start -->

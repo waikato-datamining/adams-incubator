@@ -32,14 +32,14 @@ import adams.flow.core.Token;
 /**
  <!-- globalinfo-start -->
  * Sends a free-form SQL query to OpenML and returns the result as JSON.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->
- * Input&#47;output:<br/>
- * - generates:<br/>
- * &nbsp;&nbsp;&nbsp;net.minidev.json.JSONAware<br/>
- * <p/>
+ * Input&#47;output:<br>
+ * - generates:<br>
+ * &nbsp;&nbsp;&nbsp;net.minidev.json.JSONAware<br>
+ * <br><br>
  <!-- flow-summary-end -->
  *
  <!-- options-start -->

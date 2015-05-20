@@ -37,7 +37,7 @@ public abstract class AbstractDocumentToSentences
 
   /**
    * Checks the document.
-   * <p/>
+   * <br><br>
    * Default implementation only checks whether a document string was provided.
    * 
    * @param doc		the document to check

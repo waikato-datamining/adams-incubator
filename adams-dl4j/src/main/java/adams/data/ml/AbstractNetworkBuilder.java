@@ -522,7 +522,7 @@ public abstract class AbstractNetworkBuilder<B, N>
 
   /**
    * Performs checks before configuring the builder.
-   * <p/>
+   * <br><br>
    * Default implementation does nothing.
    *
    * @param data	the data to train with

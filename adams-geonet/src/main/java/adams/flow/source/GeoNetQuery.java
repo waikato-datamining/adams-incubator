@@ -33,16 +33,16 @@ import adams.core.base.BaseString;
 
 /**
  <!-- globalinfo-start -->
- * Performs a query on against all files on a CWBQuery or Edge computer.<br/>
+ * Performs a query on against all files on a CWBQuery or Edge computer.<br>
  * Thin wrapper around the GeoNetCWBQuery client.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->
- * Input&#47;output:<br/>
- * - generates:<br/>
- * &nbsp;&nbsp;&nbsp;java.util.ArrayList<br/>
- * <p/>
+ * Input&#47;output:<br>
+ * - generates:<br>
+ * &nbsp;&nbsp;&nbsp;java.util.ArrayList<br>
+ * <br><br>
  <!-- flow-summary-end -->
  *
  <!-- options-start -->

@@ -23,7 +23,7 @@ import org.bytedeco.javacpp.opencv_imgproc;
 
 /**
  * The border types.
- * <p/>
+ * <br><br>
  * See also:
  * <a href="http://docs.opencv.org/modules/imgproc/doc/filtering.html" 
  * target="_blank">http://docs.opencv.org/modules/imgproc/doc/filtering.html</a>

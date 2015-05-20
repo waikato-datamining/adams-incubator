@@ -154,7 +154,7 @@ public abstract class AbstractGeoToolsLayerWriter<T extends Layer>
   /**
    * Compares this object with the specified object for order. Returns a
    * negative integer, zero, or a positive integer as this object is less than,
-   * equal to, or greater than the specified object. <p/> Only compares the
+   * equal to, or greater than the specified object. <br><br> Only compares the
    * commandlines of the two objects.
    *
    * @param o
@@ -174,7 +174,7 @@ public abstract class AbstractGeoToolsLayerWriter<T extends Layer>
   }
 
   /**
-   * Returns whether the two objects are the same. <p/> Only compares the
+   * Returns whether the two objects are the same. <br><br> Only compares the
    * commandlines of the two objects.
    *
    * @param o

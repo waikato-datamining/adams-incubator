@@ -40,16 +40,16 @@ import java.util.List;
 /**
  <!-- globalinfo-start -->
  * Applies a OpenCV multi-image operation to the incoming image(s) and outputs the generated image(s).
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->
- * Input&#47;output:<br/>
- * - accepts:<br/>
- * &nbsp;&nbsp;&nbsp;adams.data.image.AbstractImageContainer[]<br/>
- * - generates:<br/>
- * &nbsp;&nbsp;&nbsp;adams.data.boofcv.OpenCVImageContainer<br/>
- * <p/>
+ * Input&#47;output:<br>
+ * - accepts:<br>
+ * &nbsp;&nbsp;&nbsp;adams.data.image.AbstractImageContainer[]<br>
+ * - generates:<br>
+ * &nbsp;&nbsp;&nbsp;adams.data.boofcv.OpenCVImageContainer<br>
+ * <br><br>
  <!-- flow-summary-end -->
  *
  <!-- options-start -->

@@ -29,7 +29,7 @@ import adams.data.opencv.OpenCVImageContainer;
 /**
  <!-- globalinfo-start -->
  * Applies the specified OpenCV transformers one after the other.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

@@ -33,7 +33,7 @@ import com.jayway.jsonpath.JsonPath;
 /**
  <!-- globalinfo-start -->
  * Converts an OpenML.org JSON result into a spreadsheet.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

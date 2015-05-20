@@ -35,7 +35,7 @@ import adams.core.net.OpenMLHelper;
 /**
  <!-- globalinfo-start -->
  * Provides access to the OpenML.org experiment database.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->

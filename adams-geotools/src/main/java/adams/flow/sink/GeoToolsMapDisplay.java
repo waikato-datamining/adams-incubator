@@ -55,14 +55,14 @@ import adams.gui.visualization.maps.MapDisplayPanel;
 /**
  <!-- globalinfo-start -->
  * Displays the incoming data using the specified raster image or shape files as background. Raster images get added first before shape files.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->
- * Input&#47;output:<br/>
- * - accepts:<br/>
- * &nbsp;&nbsp;&nbsp;org.geotools.map.Layer<br/>
- * <p/>
+ * Input&#47;output:<br>
+ * - accepts:<br>
+ * &nbsp;&nbsp;&nbsp;org.geotools.map.Layer<br>
+ * <br><br>
  <!-- flow-summary-end -->
  *
  <!-- options-start -->

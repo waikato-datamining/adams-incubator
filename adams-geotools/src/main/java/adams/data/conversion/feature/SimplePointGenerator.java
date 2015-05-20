@@ -48,7 +48,7 @@ import com.vividsolutions.jts.geom.Point;
 /**
  <!-- globalinfo-start -->
  * Generates a point feature layer, using the GPS coordinates column in the spreadsheet and adds any additionally defined colunms as attributes to the feature points.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

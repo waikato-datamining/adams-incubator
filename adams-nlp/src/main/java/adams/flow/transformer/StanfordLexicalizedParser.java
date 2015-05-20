@@ -32,17 +32,17 @@ import edu.stanford.nlp.trees.Tree;
 /**
  <!-- globalinfo-start -->
  * Parses a string (= sentence) or string array (= tokenized sentence) using the Stanford LexicalizedParser.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->
- * Input&#47;output:<br/>
- * - accepts:<br/>
- * &nbsp;&nbsp;&nbsp;java.lang.String<br/>
- * &nbsp;&nbsp;&nbsp;java.lang.String[]<br/>
- * - generates:<br/>
- * &nbsp;&nbsp;&nbsp;edu.stanford.nlp.trees.Tree<br/>
- * <p/>
+ * Input&#47;output:<br>
+ * - accepts:<br>
+ * &nbsp;&nbsp;&nbsp;java.lang.String<br>
+ * &nbsp;&nbsp;&nbsp;java.lang.String[]<br>
+ * - generates:<br>
+ * &nbsp;&nbsp;&nbsp;edu.stanford.nlp.trees.Tree<br>
+ * <br><br>
  <!-- flow-summary-end -->
  *
  <!-- options-start -->

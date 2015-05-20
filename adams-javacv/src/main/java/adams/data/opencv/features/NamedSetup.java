@@ -28,7 +28,7 @@ import adams.data.opencv.OpenCVImageContainer;
 /**
  <!-- globalinfo-start -->
  * Applies a OpenCV feature generator that is referenced via its global setup name (see 'NamedSetups').
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

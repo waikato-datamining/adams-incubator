@@ -34,10 +34,10 @@ import adams.data.opencv.OpenCVImageContainer;
 
 /**
  <!-- globalinfo-start -->
- * OpenCV image reader for: jpg, bmp, wbmp, jpeg, png, gif<br/>
- * For more information see:<br/>
+ * OpenCV image reader for: jpg, bmp, wbmp, jpeg, png, gif<br>
+ * For more information see:<br>
  * http:&#47;&#47;opencv.org&#47;
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

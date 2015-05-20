@@ -52,7 +52,7 @@ public class DL4JModelContainer
 
   /**
    * Initializes the container.
-   * <p/>
+   * <br><br>
    * Only used for generating help information.
    */
   public DL4JModelContainer() {

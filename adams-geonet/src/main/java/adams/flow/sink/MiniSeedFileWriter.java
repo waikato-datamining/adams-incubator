@@ -41,14 +41,14 @@ import adams.core.io.PlaceholderDirectory;
 /**
  <!-- globalinfo-start -->
  * Writes a list of MiniSeed containers to disk using the specified outputer format defined in the options ('-t' option).
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->
- * Input&#47;output:<br/>
- * - accepts:<br/>
- * &nbsp;&nbsp;&nbsp;java.util.ArrayList<br/>
- * <p/>
+ * Input&#47;output:<br>
+ * - accepts:<br>
+ * &nbsp;&nbsp;&nbsp;java.util.ArrayList<br>
+ * <br><br>
  <!-- flow-summary-end -->
  *
  <!-- options-start -->

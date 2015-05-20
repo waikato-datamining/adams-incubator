@@ -35,7 +35,7 @@ import org.geotools.map.FeatureLayer;
 /**
  <!-- globalinfo-start -->
  * Writes the feature collection of the layer to a shape file.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

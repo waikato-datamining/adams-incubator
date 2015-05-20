@@ -27,7 +27,7 @@ import edu.stanford.nlp.trees.Tree;
 /**
  <!-- globalinfo-start -->
  * Turns a Stanford parse tree into an XML string.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

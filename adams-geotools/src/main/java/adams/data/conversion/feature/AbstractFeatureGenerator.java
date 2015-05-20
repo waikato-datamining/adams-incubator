@@ -114,7 +114,7 @@ public abstract class AbstractFeatureGenerator<F extends Feature, C extends Feat
 
   /**
    * Checks the spreadsheet and throws an exception if it fails.
-   * <p/>
+   * <br><br>
    * Default implementation only ensures that data is present.
    * 
    * @param sheet	the spreadsheet to check

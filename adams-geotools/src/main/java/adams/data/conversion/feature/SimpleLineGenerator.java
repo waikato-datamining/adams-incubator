@@ -50,9 +50,9 @@ import com.vividsolutions.jts.geom.LineString;
 
 /**
  <!-- globalinfo-start -->
- * Generates a line feature layer, using the GPS coordinates columns in the spreadsheet (at least columns required) and adds any additionally defined colunms as attributes to the feature points.<br/>
+ * Generates a line feature layer, using the GPS coordinates columns in the spreadsheet (at least columns required) and adds any additionally defined colunms as attributes to the feature points.<br>
  * NB: Lines don't have to have the same number of segments (ie GPS locations). Any missing cells get ignored from the defined GPS range.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

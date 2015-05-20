@@ -33,7 +33,7 @@ import adams.core.Utils;
 /**
  <!-- globalinfo-start -->
  * Reads shape files.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->

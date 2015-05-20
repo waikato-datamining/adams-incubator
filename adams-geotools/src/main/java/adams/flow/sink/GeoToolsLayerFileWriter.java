@@ -28,14 +28,14 @@ import adams.data.io.output.ShapeFileWriter;
 /**
  <!-- globalinfo-start -->
  * Writes a layer to a file using the specified write.
- * <p/>
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->
- * Input&#47;output:<br/>
- * - accepts:<br/>
- * &nbsp;&nbsp;&nbsp;org.geotools.map.Layer<br/>
- * <p/>
+ * Input&#47;output:<br>
+ * - accepts:<br>
+ * &nbsp;&nbsp;&nbsp;org.geotools.map.Layer<br>
+ * <br><br>
  <!-- flow-summary-end -->
  *
  <!-- options-start -->
