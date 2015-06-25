@@ -15,14 +15,10 @@
 
 /**
  * OpenMLListDatasets.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.source;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minidev.json.JSONAware;
 import adams.core.QuickInfoHelper;
 import adams.core.base.BaseRegExp;
 import adams.core.net.OpenMLHelper;
@@ -30,6 +26,10 @@ import adams.data.conversion.OpenMLJsonToSpreadSheet;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.db.SQL;
 import adams.flow.core.Token;
+import net.minidev.json.JSONAware;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  <!-- globalinfo-start -->
@@ -194,7 +194,7 @@ public class OpenMLListDatasets
       sql   += " order by name, version";
       if (isLoggingEnabled())
 	getLogger().info("Executing query: " + sql);
-      json   = OpenMLHelper.convertJson(m_Connection.getConnector().openmlFreeQuery(sql));
+      json   = OpenMLHelper.convertJson(m_Connection.getConnector().freeQuery(sql));
       result = checkJSON(json);
       if (result == null) {
 	conv   = new OpenMLJsonToSpreadSheet();

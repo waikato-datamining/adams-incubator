@@ -15,7 +15,7 @@
 
 /**
  * OpenMLDataQualities.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.transformer;
 
@@ -130,7 +130,7 @@ public class OpenMLDataQualities
       m_Connection.getSession();
       if (isLoggingEnabled())
 	getLogger().info("Obtaining data qualities for #" + did);
-      qual  = m_Connection.getConnector().openmlDataQuality(did);
+      qual  = m_Connection.getConnector().dataQualities(did);
       sheet = new SpreadSheet();
       
       // header

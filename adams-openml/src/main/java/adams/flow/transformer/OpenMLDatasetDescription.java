@@ -15,7 +15,7 @@
 
 /**
  * OpenMLDatasetDescription.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.transformer;
 
@@ -130,7 +130,7 @@ public class OpenMLDatasetDescription
       m_Connection.getSession();
       if (isLoggingEnabled())
 	getLogger().info("Obtaining dataset description for #" + did);
-      desc  = m_Connection.getConnector().openmlDataDescription(did);
+      desc  = m_Connection.getConnector().dataDescription(did);
       sheet = new SpreadSheet();
       
       // header

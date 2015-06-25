@@ -15,22 +15,20 @@
 
 /*
  * OpenMLConnection.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.flow.standalone;
-
-import java.util.Date;
-
-import org.openml.apiconnector.io.OpenmlConnector;
-import org.openml.apiconnector.settings.Settings;
-import org.openml.apiconnector.xml.Authenticate;
 
 import adams.core.DateFormat;
 import adams.core.DateUtils;
 import adams.core.QuickInfoHelper;
 import adams.core.base.BasePassword;
 import adams.core.net.OpenMLHelper;
+import org.openml.apiconnector.io.OpenmlConnector;
+import org.openml.apiconnector.xml.Authenticate;
+
+import java.util.Date;
 
 /**
  <!-- globalinfo-start -->
@@ -255,10 +253,10 @@ public class OpenMLConnection
     try {
       if (m_Connector == null) {
 	m_Connector = new OpenmlConnector(m_URL);
-	Settings.API_VERBOSE_LEVEL = OpenMLHelper.getVerboseLevel();
+        m_Connector.setVerboseLevel(OpenMLHelper.getVerboseLevel());
       }
       m_Connector.setCredentials(m_User, m_Password.getValue());
-      m_Session = m_Connector.openmlAuthenticate();
+      m_Session = m_Connector.authenticate();
       if (isLoggingEnabled())
 	getLogger().info("sessionHash=" + m_Session.getSessionHash() + ", validUntil=" + m_Session.getValidUntil());
     }
