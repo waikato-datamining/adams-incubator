@@ -15,22 +15,23 @@
 
 /*
  * GeoToolsLayerFileChooser.java
- * Copyright (C) 2013 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2015 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.gui.chooser;
+
+import adams.core.ClassLister;
+import adams.core.io.PlaceholderFile;
+import adams.core.option.OptionUtils;
+import adams.data.io.input.AbstractGeoToolsLayerReader;
+import adams.data.io.input.ShapeFileReader;
+import adams.data.io.output.AbstractGeoToolsLayerWriter;
+import adams.data.io.output.ShapeFileWriter;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-
-import adams.core.ClassLister;
-import adams.core.io.PlaceholderFile;
-import adams.data.io.input.AbstractGeoToolsLayerReader;
-import adams.data.io.input.ShapeFileReader;
-import adams.data.io.output.AbstractGeoToolsLayerWriter;
-import adams.data.io.output.ShapeFileWriter;
 
 /**
  * A specialized JFileChooser that lists all available file Readers and Writers
@@ -114,6 +115,7 @@ public class GeoToolsLayerFileChooser
 	}
       }
       catch (Exception e) {
+        handleException("Failed to set up: " + classname, e);
 	cls       = null;
 	converter = null;
 	ext       = new String[0];
@@ -223,7 +225,7 @@ public class GeoToolsLayerFileChooser
 	m_CurrentHandler = Class.forName(classname).newInstance();
       }
       catch (Exception e) {
-	e.printStackTrace();
+	handleException("Failed to configure current handler:", e);
 	m_CurrentHandler = null;
       }
 
@@ -249,7 +251,7 @@ public class GeoToolsLayerFileChooser
       }
     }
     catch (Exception e) {
-      e.printStackTrace();
+      handleException("Failed to configure current handler: " + OptionUtils.getCommandLine(m_CurrentHandler), e);
     }
   }
 
@@ -281,8 +283,7 @@ public class GeoToolsLayerFileChooser
 	    result = (AbstractGeoToolsLayerReader) Class.forName(filter.getClassname()).newInstance();
 	  }
 	  catch (Exception e) {
-	    System.err.println("Failed to instantiate reader '" + filter.getClassname() + "':");
-	    e.printStackTrace();
+	    handleException("Failed to instantiate reader: " + filter.getClassname(), e);
 	  }
 	}
       }
@@ -309,8 +310,7 @@ public class GeoToolsLayerFileChooser
 	    result = (AbstractGeoToolsLayerWriter) Class.forName(filter.getClassname()).newInstance();
 	  }
 	  catch (Exception e) {
-	    System.err.println("Failed to instantiate writer '" + filter.getClassname() + "':");
-	    e.printStackTrace();
+	    handleException("Failed to instantiate writer: " + filter.getClassname(), e);
 	  }
 	}
       }
