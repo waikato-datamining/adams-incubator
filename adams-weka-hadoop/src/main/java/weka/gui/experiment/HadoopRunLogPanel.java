@@ -15,12 +15,29 @@
 
 /*
  *    HadoopRunLogPanel.java
- *    Copyright (C) 1999-2012 University of Waikato, Hamilton, New Zealand
+ *    Copyright (C) 1999-2015 University of Waikato, Hamilton, New Zealand
  *
  */
 
 package weka.gui.experiment;
 
+import adams.core.DateUtils;
+import adams.gui.core.BasePopupMenu;
+import weka.gui.Logger;
+import weka.gui.TaskLogger;
+import weka.gui.WekaTaskMonitor;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JViewport;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -33,24 +50,6 @@ import java.awt.event.WindowEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JViewport;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import weka.gui.Logger;
-import weka.gui.TaskLogger;
-import weka.gui.WekaTaskMonitor;
-import adams.core.DateUtils;
 
 /** 
  * This panel allows log and status messages to be posted. Log messages
@@ -264,7 +263,7 @@ public class HadoopRunLogPanel
 	public void mouseClicked(MouseEvent e) {
 	  if (((e.getModifiers() & InputEvent.BUTTON1_MASK)
 	       != InputEvent.BUTTON1_MASK) || e.isAltDown()) {
-	    JPopupMenu gcMenu = new JPopupMenu();
+	    BasePopupMenu gcMenu = new BasePopupMenu();
 	    JMenuItem availMem = new JMenuItem("Memory information");
 	    availMem.addActionListener(new ActionListener() {
 		public void actionPerformed(ActionEvent ee) {
@@ -287,7 +286,7 @@ public class HadoopRunLogPanel
 		}
 	      });
 	    gcMenu.add(runGC);
-	    gcMenu.show(HadoopRunLogPanel.this, e.getX(), e.getY());
+	    gcMenu.showAbsolute(HadoopRunLogPanel.this, e);
 	  }
 	}
       });
