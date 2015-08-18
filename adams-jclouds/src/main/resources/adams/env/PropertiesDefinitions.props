@@ -3,5 +3,4 @@
 # Author: FracPete (fracpete at waikato dot ac dot nz)
 # Version: $Revision: 8629 $
 
-Definitions=\
-  adams.env.TumblrDefinition
+Definitions=
