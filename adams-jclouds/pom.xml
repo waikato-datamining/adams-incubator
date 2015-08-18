@@ -9,11 +9,11 @@
     <version>0.4.11-SNAPSHOT</version>
   </parent>
 
-  <artifactId>adams-openstack</artifactId>
+  <artifactId>adams-jclouds</artifactId>
   <packaging>jar</packaging>
 
-  <name>adams-openstack</name>
-  <description>Module containing support for OpenStack.</description>
+  <name>adams-jclouds</name>
+  <description>Module containing cloud support using JClouds.</description>
   <url>https://adams.cms.waikato.ac.nz/</url>
   <organization>
     <name>University of Waikato, Hamilton, NZ</name>
