@@ -9,11 +9,11 @@
     <version>0.4.11-SNAPSHOT</version>
   </parent>
 
-  <artifactId>adams-jclouds</artifactId>
+  <artifactId>adams-openstack</artifactId>
   <packaging>jar</packaging>
 
-  <name>adams-jclouds</name>
-  <description>Module containing cloud support using JClouds.</description>
+  <name>adams-openstack</name>
+  <description>Module containing Openstack support using JClouds.</description>
   <url>https://adams.cms.waikato.ac.nz/</url>
   <organization>
     <name>University of Waikato, Hamilton, NZ</name>
@@ -55,36 +55,65 @@
 
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-core</artifactId>
+      <artifactId>adams-jclouds</artifactId>
       <version>${adams.version}</version>
     </dependency>
 
-    <dependency>
+    <!--dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-core</artifactId>
+      <artifactId>adams-jclouds</artifactId>
       <version>${adams.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
+    </dependency-->
+    
+    <!-- jclouds OpenStack dependencies -->
+    <dependency>
+      <groupId>org.apache.jclouds.api</groupId>
+      <artifactId>openstack-keystone</artifactId>
+      <version>${jclouds.version}</version>
     </dependency>
 
-    <!-- jclouds dependencies -->
     <dependency>
-      <groupId>org.apache.jclouds.driver</groupId>
-      <artifactId>jclouds-slf4j</artifactId>
+      <groupId>org.apache.jclouds.api</groupId>
+      <artifactId>openstack-nova</artifactId>
       <version>${jclouds.version}</version>
     </dependency>
     
     <dependency>
-      <groupId>org.apache.jclouds.driver</groupId>
-      <artifactId>jclouds-sshj</artifactId>
+      <groupId>org.apache.jclouds.api</groupId>
+      <artifactId>openstack-swift</artifactId>
       <version>${jclouds.version}</version>
     </dependency>
     
-    <!-- 3rd party dependencies -->
     <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>1.0.13</version>
+      <groupId>org.apache.jclouds.api</groupId>
+      <artifactId>openstack-cinder</artifactId>
+      <version>${jclouds.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.jclouds.api</groupId>
+      <artifactId>openstack-trove</artifactId>
+      <version>${jclouds.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.jclouds.labs</groupId>
+      <artifactId>openstack-glance</artifactId>
+      <version>${jclouds.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.jclouds.labs</groupId>
+      <artifactId>openstack-marconi</artifactId>
+      <version>${jclouds.version}</version>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.jclouds.labs</groupId>
+      <artifactId>openstack-neutron</artifactId>
+      <version>${jclouds.version}</version>
     </dependency>
   </dependencies>
 
