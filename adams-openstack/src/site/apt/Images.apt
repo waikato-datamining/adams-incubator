@@ -1,0 +1,9 @@
+Images
+
+  * Create image
+
+    {{http://docs.openstack.org/image-guide/content/ubuntu-image.html}}
+
+  * Update image
+
+    {{http://docs.openstack.org/image-guide/content/ch_modifying_images.html}}
