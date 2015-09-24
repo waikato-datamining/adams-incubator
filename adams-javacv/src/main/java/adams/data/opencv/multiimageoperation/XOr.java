@@ -20,7 +20,6 @@
 
 package adams.data.opencv.multiimageoperation;
 
-import adams.data.boofcv.BoofCVImageType;
 import adams.data.opencv.OpenCVImageContainer;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.IplImage;
@@ -55,8 +54,7 @@ public class XOr
   @Override
   public String globalInfo() {
     return
-      "Performs a logical XOR on the binary pixels of the images.\n"
-	+ "Converts images automatically to type " + BoofCVImageType.UNSIGNED_INT_8 + ".";
+      "Performs a logical XOR on the binary pixels of the images.";
   }
 
   /**
