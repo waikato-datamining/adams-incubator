@@ -65,7 +65,7 @@ public class HadoopExperimenter
    * @return 		the title
    */
   public String getTitle() {
-    return "[Weka] Hadoop Experimenter";
+    return "WEKA Hadoop Experimenter";
   }
 
   /**
