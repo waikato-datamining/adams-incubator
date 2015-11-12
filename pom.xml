@@ -25,6 +25,8 @@
     <adams.version>0.4.11-SNAPSHOT</adams.version>
     <adams-addons.version>0.4.11-SNAPSHOT</adams-addons.version>
     <javacv.version>0.10</javacv.version>
+    <timestamp>${maven.build.timestamp}</timestamp>
+    <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
   </properties>
 
   <modules>
