@@ -1,4 +1,4 @@
-% Copyright (c) 2013 by the University of Waikato, Hamilton, NZ. 
+% Copyright (c) 2013-2015 by the University of Waikato, Hamilton, NZ.
 % This work is made available under the terms of the 
 % Creative Commons Attribution-ShareAlike 3.0 license, 
 % http://creativecommons.org/licenses/by-sa/3.0/. 
@@ -45,7 +45,7 @@
 \center
 \begin{table}[b]
 	\begin{tabular}{c l l}
-		\parbox[c][2cm]{2cm}{\copyright 2013} &
+		\parbox[c][2cm]{2cm}{\copyright 2013-2015} &
 		\parbox[c][2cm]{5cm}{\includegraphics[width=5cm]{images/coat_of_arms.pdf}} \\
 	\end{tabular}
 	\includegraphics[width=12cm]{images/cc.png} \\
@@ -83,7 +83,10 @@ The same parse tree in graphical representation:
 \chapter{Flow}
 The following actors are available:
 \begin{tight_itemize}
-	\item \textit{DocumentToSentences} -- transformer for splitting document 
+	\item \textit{CoNLLFileReader} -- transformer parsing text files in
+	CoNLL format with one or more token sequences and turning them into
+	spreadsheets.
+	\item \textit{DocumentToSentences} -- transformer for splitting document
 	strings into sentences using a specified
 	splitter/tokenizer.\footnote{adams-nlp-split\_document\_and\_parse.flow}
 	\item \textit{StanfordGrammaticalStructure} -- transformer for generating a 
