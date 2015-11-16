@@ -78,6 +78,20 @@
     </dependency>
 
     <dependency>
+      <groupId>nz.ac.waikato.cms.adams</groupId>
+      <artifactId>adams-twitter</artifactId>
+      <version>${adams.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>nz.ac.waikato.cms.adams</groupId>
+      <artifactId>adams-twitter</artifactId>
+      <version>${adams.version}</version>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
+
+    <dependency>
       <groupId>edu.stanford.nlp</groupId>
       <artifactId>stanford-parser</artifactId>
       <version>3.4.1</version>
@@ -99,6 +113,12 @@
           <artifactId>weka-dev</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+
+    <dependency>
+      <groupId>edu.cmu.cs</groupId>
+      <artifactId>ark-tweet-nlp</artifactId>
+      <version>0.3.2</version>
     </dependency>
   </dependencies>
 

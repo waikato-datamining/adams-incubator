@@ -20,3 +20,7 @@ edu.stanford.nlp.trees.TreebankLanguagePack=\
 # for splitting documents into sentences
 adams.flow.transformer.splitter.AbstractDocumentToSentences=\
   adams.flow.transformer.splitter
+
+# for tokenizing strings
+adams.flow.transformer.tokenizer.AbstractTokenizer=\
+  adams.flow.transformer.tokenizer

@@ -84,7 +84,7 @@ The same parse tree in graphical representation:
 The following actors are available:
 \begin{tight_itemize}
 	\item \textit{DocumentToSentences} -- transformer for splitting document 
-	strings into sentences using a specified 
+	strings into sentences using a specified
 	splitter/tokenizer.\footnote{adams-nlp-split\_document\_and\_parse.flow}
 	\item \textit{StanfordGrammaticalStructure} -- transformer for generating a 
 	grammatical structure from a parse tree.\footnote{adams-nlp-parse.flow}
@@ -92,6 +92,8 @@ The following actors are available:
 	parse tree from a string.\footnote{adams-nlp-parse.flow}
 	\item \textit{StanfordParseTreeDisplay} -- sink for displaying a parse 
 	tree.\footnote{adams-nlp-parse.flow}
+	\item \textit{Tokenize} -- transformer for splitting strings
+	into words.
 \end{tight_itemize}
 The following conversions are available:
 \begin{tight_itemize}

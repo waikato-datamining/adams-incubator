@@ -17,15 +17,15 @@
  * StanfordPTBTokenizer.java
  * Copyright (C) 2013-2015 University of Waikato, Hamilton, New Zealand
  */
-package adams.flow.transformer.splitter;
+package adams.flow.transformer.tokenizer;
 
 import adams.core.License;
 import adams.core.annotation.MixedCopyright;
+import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
-import edu.stanford.nlp.process.DocumentPreprocessor;
 import edu.stanford.nlp.process.PTBTokenizer;
+import edu.stanford.nlp.process.Tokenizer;
 import edu.stanford.nlp.process.TokenizerFactory;
-import edu.stanford.nlp.util.StringUtils;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -46,9 +46,9 @@ import java.util.List;
  * &nbsp;&nbsp;&nbsp;default: WARNING
  * </pre>
  * 
- * <pre>-splitter-options &lt;java.lang.String&gt; (property: splitterOptions)
- * &nbsp;&nbsp;&nbsp;The splitter options to use.
- * &nbsp;&nbsp;&nbsp;default: normalizeParentheses=false,normalizeOtherBrackets=false,invertible=true
+ * <pre>-tokenizer-options &lt;java.lang.String&gt; (property: tokenizerOptions)
+ * &nbsp;&nbsp;&nbsp;The tokenizer options to use.
+ * &nbsp;&nbsp;&nbsp;default: americanize=false,unicodeQuotes=true,unicodeEllipsis=true
  * </pre>
  * 
  <!-- options-end -->
@@ -63,13 +63,13 @@ import java.util.List;
     url = "http://stackoverflow.com/a/19464001"
 )
 public class StanfordPTBTokenizer
-  extends AbstractDocumentToSentences {
+  extends AbstractTokenizer {
 
   /** for serialization. */
   private static final long serialVersionUID = 4043221889853222507L;
 
-  /** the options for the splitter. */
-  protected String m_SplitterOptions;
+  /** the options for the tokenizer. */
+  protected String m_TokenizerOptions;
 
   /** the tokenizer factory to use. */
   protected transient TokenizerFactory m_TokenizerFactory;
@@ -95,8 +95,8 @@ public class StanfordPTBTokenizer
     super.defineOptions();
 
     m_OptionManager.add(
-	    "splitter-options", "splitterOptions",
-	    "normalizeParentheses=false,normalizeOtherBrackets=false,invertible=true");
+	    "tokenizer-options", "tokenizerOptions",
+	    "americanize=false,unicodeQuotes=true,unicodeEllipsis=true");
   }
 
   /**
@@ -110,22 +110,22 @@ public class StanfordPTBTokenizer
   }
 
   /**
-   * Sets the splitter options to use.
+   * Sets the tokenizer options to use.
    *
    * @param value	the options
    */
-  public void setSplitterOptions(String value) {
-    m_SplitterOptions = value;
+  public void setTokenizerOptions(String value) {
+    m_TokenizerOptions = value;
     reset();
   }
 
   /**
-   * Returns the splitter options to use.
+   * Returns the tokenizer options to use.
    *
    * @return		the options
    */
-  public String getSplitterOptions() {
-    return m_SplitterOptions;
+  public String getTokenizerOptions() {
+    return m_TokenizerOptions;
   }
 
   /**
@@ -134,8 +134,8 @@ public class StanfordPTBTokenizer
    * @return 		tip text for this property suitable for
    * 			displaying in the GUI or for listing the options.
    */
-  public String splitterOptionsTipText() {
-    return "The splitter options to use.";
+  public String tokenizerOptionsTipText() {
+    return "The tokenizer options to use.";
   }
 
   /**
@@ -147,30 +147,30 @@ public class StanfordPTBTokenizer
     if (m_TokenizerFactory == null) {
       m_TokenizerFactory = PTBTokenizer.factory(
 	  new CoreLabelTokenFactory(),
-          m_SplitterOptions);
+          m_TokenizerOptions);
     }
     return m_TokenizerFactory;
   }
   
   /**
-   * Performs the actual splitting.
+   * Performs the actual tokenization.
    * 
-   * @param doc		the document to split
-   * @return		the list of sentence strings
+   * @param str		the string to tokenize
+   * @return		the list of sentence words
    */
   @Override
-  protected List<String> doSplit(String doc) {
+  protected List<String> doTokenize(String str) {
     List<String>		result;
-    DocumentPreprocessor	preProcessor;
-    
-    result = new ArrayList<String>();
-    
-    preProcessor = new DocumentPreprocessor(new StringReader(doc));
-    preProcessor.setTokenizerFactory(getTokenizerFactory());
+    StringReader		reader;
+    Tokenizer<CoreLabel> 	tokenizer;
 
-    for (List sentence: preProcessor)
-      result.add(StringUtils.joinWithOriginalWhiteSpace(sentence));
-    
+    result = new ArrayList<String>();
+
+    reader = new StringReader(str);
+    tokenizer = getTokenizerFactory().getTokenizer(reader);
+    while (tokenizer.hasNext())
+      result.add(tokenizer.next().value());
+
     return result;
   }
 }
