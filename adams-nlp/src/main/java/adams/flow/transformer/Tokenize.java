@@ -20,6 +20,7 @@
 package adams.flow.transformer;
 
 
+import adams.core.QuickInfoHelper;
 import adams.flow.transformer.tokenizer.AbstractTokenizer;
 import adams.flow.transformer.tokenizer.StanfordPTBTokenizer;
 
@@ -152,6 +153,16 @@ public class Tokenize
    */
   public String tokenizerTipText() {
     return "The tokenizer to use for generating words from strings.";
+  }
+
+  /**
+   * Returns a quick info about the actor, which will be displayed in the GUI.
+   *
+   * @return		null if no info available, otherwise short string
+   */
+  @Override
+  public String getQuickInfo() {
+    return QuickInfoHelper.toString(this, "tokenizer", m_Tokenizer, "tokenizer: ");
   }
 
   /**

@@ -19,10 +19,11 @@
  */
 package adams.flow.transformer;
 
-import java.util.List;
-
+import adams.core.QuickInfoHelper;
 import adams.flow.transformer.splitter.AbstractDocumentToSentences;
 import adams.flow.transformer.splitter.StanfordPTBTokenizer;
+
+import java.util.List;
 
 /**
  <!-- globalinfo-start -->
@@ -151,6 +152,16 @@ public class DocumentToSentences
    */
   public String splitterTipText() {
     return "The splitter to use for generating sentence strings from document strings.";
+  }
+
+  /**
+   * Returns a quick info about the actor, which will be displayed in the GUI.
+   *
+   * @return		null if no info available, otherwise short string
+   */
+  @Override
+  public String getQuickInfo() {
+    return QuickInfoHelper.toString(this, "splitter", m_Splitter, "splitter: ");
   }
 
   /**
