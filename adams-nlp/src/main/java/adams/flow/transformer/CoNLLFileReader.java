@@ -161,6 +161,13 @@ public class CoNLLFileReader
       result = "Unhandled input type: " + Utils.classToString(m_InputToken.getPayload().getClass());
 
     if (result == null) {
+      if (!file.exists())
+        result = "File does not exist: " + file;
+      else if (file.isDirectory())
+        result = "File points to a directory: " + file;
+    }
+
+    if (result == null) {
       m_Queue.clear();
       lines = FileUtils.loadFromFile(file);
       lines = CoNLLHelper.group(lines);
