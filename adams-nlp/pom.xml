@@ -94,7 +94,7 @@
     <dependency>
       <groupId>edu.stanford.nlp</groupId>
       <artifactId>stanford-parser</artifactId>
-      <version>3.4.1</version>
+      <version>3.5.2</version>
     </dependency>
 
     <dependency>
@@ -119,6 +119,12 @@
       <groupId>edu.cmu.cs</groupId>
       <artifactId>ark-tweet-nlp</artifactId>
       <version>0.3.2</version>
+      <exclusions>
+        <exclusion>
+          <groupId>edu.stanford.nlp</groupId>
+          <artifactId>stanford-corenlp</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
