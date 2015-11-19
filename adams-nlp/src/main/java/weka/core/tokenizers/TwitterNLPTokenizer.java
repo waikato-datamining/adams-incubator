@@ -22,9 +22,16 @@ package weka.core.tokenizers;
 
 import cmu.arktweetnlp.Twokenize;
 import weka.core.RevisionUtils;
+import weka.core.Utils;
+import weka.core.WekaOptionUtils;
+import weka.core.tokenizers.cleaners.PassThrough;
+import weka.core.tokenizers.cleaners.TokenCleaner;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Tokenizer using TweetNLP's Twokenize.
@@ -37,8 +44,18 @@ public class TwitterNLPTokenizer extends Tokenizer {
 
   private static final long serialVersionUID = 4352757127093531518L;
 
+  public static final String CLEANER = "cleaner";
+
+  public static final String USE_LOWER_CASE = "use-lower-case";
+
   /** the iterator for the tokens. */
   protected transient Iterator<String> m_TokenIterator;
+
+  /** whether to lower-case the tweet. */
+  protected boolean m_UseLowerCase = false;
+
+  /** the cleaner to use. */
+  protected TokenCleaner m_Cleaner = getDefaultCleaner();
 
   /**
    * Returns a string describing the tokenizer.
@@ -53,6 +70,114 @@ public class TwitterNLPTokenizer extends Tokenizer {
       + "http://www.ark.cs.cmu.edu/TweetNLP/\n\n"
       + "Original code from:\n"
       + "https://github.com/felipebravom/SentimentDomain/blob/master/src/weka/core/tokenizers/TwitterNLPTokenizer.java";
+  }
+
+  /**
+   * Returns an enumeration describing the available options.
+   *
+   * @return an enumeration of all the available options.
+   */
+  @Override
+  public Enumeration listOptions() {
+    Vector result = new Vector();
+    WekaOptionUtils.addFlag(result, useLowerCaseTipText(), USE_LOWER_CASE);
+    WekaOptionUtils.addOption(result, cleanerTipText(), getDefaultCleaner().getClass().getName(), CLEANER);
+    WekaOptionUtils.add(result, super.listOptions());
+    return WekaOptionUtils.toEnumeration(result);
+  }
+
+  /**
+   * Sets the OptionHandler's options using the given list. All options
+   * will be set (or reset) during this call (i.e. incremental setting
+   * of options is not possible).
+   *
+   * @param options the list of options as an array of strings
+   * @throws Exception if an option is not supported
+   */
+  @Override
+  public void setOptions(String[] options) throws Exception {
+    setUseLowerCase(Utils.getFlag(USE_LOWER_CASE, options));
+    setCleaner((TokenCleaner) WekaOptionUtils.parse(options, CLEANER, getDefaultCleaner()));
+    super.setOptions(options);
+  }
+
+  /**
+   * Gets the current option settings for the OptionHandler.
+   *
+   * @return the list of current option settings as an array of strings
+   */
+  @Override
+  public String[] getOptions() {
+    List<String> result = new ArrayList<>();
+    WekaOptionUtils.add(result, USE_LOWER_CASE, getUseLowerCase());
+    WekaOptionUtils.add(result, CLEANER, getCleaner());
+    WekaOptionUtils.add(result, super.getOptions());
+    return WekaOptionUtils.toArray(result);
+  }
+
+  /**
+   * Sets whether to use lower case.
+   *
+   * @param value	true if to use lower case
+   */
+  public void setUseLowerCase(boolean value) {
+    m_UseLowerCase = value;
+  }
+
+  /**
+   * Returns whether to use lower case.
+   *
+   * @return		true if to use lower case
+   */
+  public boolean getUseLowerCase() {
+    return m_UseLowerCase;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String useLowerCaseTipText() {
+    return "If enabled, the tweet is converted to lower case before tokenized.";
+  }
+
+  /**
+   * Returns the default token cleaner.
+   *
+   * @return		the default
+   */
+  protected TokenCleaner getDefaultCleaner() {
+    return new PassThrough();
+  }
+
+  /**
+   * Sets the token cleaner to use.
+   *
+   * @param value	the cleaner
+   */
+  public void setCleaner(TokenCleaner value) {
+    m_Cleaner = value;
+  }
+
+  /**
+   * Returns the token cleaner to use.
+   *
+   * @return		the cleaner
+   */
+  public TokenCleaner getCleaner() {
+    return m_Cleaner;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String cleanerTipText() {
+    return "The token cleaner to use (after optional lower case).";
   }
 
   /**
@@ -84,7 +209,18 @@ public class TwitterNLPTokenizer extends Tokenizer {
    */
   @Override
   public void tokenize(String s) {
+    if (m_UseLowerCase)
+      s = s.toLowerCase();
     List<String> words = Twokenize.tokenizeRawTweetText(s);
+    if (!(m_Cleaner instanceof PassThrough)) {
+      List<String> clean = new ArrayList<>();
+      for (String word: words) {
+	word = m_Cleaner.clean(word);
+	if (word != null)
+	  clean.add(word);
+      }
+      words = clean;
+    }
     m_TokenIterator = words.iterator();
   }
 

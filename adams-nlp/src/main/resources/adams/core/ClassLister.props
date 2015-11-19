@@ -24,3 +24,7 @@ adams.flow.transformer.splitter.AbstractDocumentToSentences=\
 # for tokenizing strings
 adams.flow.transformer.tokenizer.AbstractTokenizer=\
   adams.flow.transformer.tokenizer
+
+# for cleaning token sequences
+weka.core.tokenizers.cleaners.TokenCleaner=\
+  weka.core.tokenizers.cleaners
