@@ -32,7 +32,6 @@ import weka.core.SparseInstance;
 import weka.core.Utils;
 import weka.core.WekaException;
 import weka.core.WekaOptionUtils;
-import weka.filters.SimpleBatchFilter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -50,18 +49,14 @@ import java.util.Vector;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class TwitterNLPPos extends SimpleBatchFilter {
+public class TwitterNLPPos
+  extends AbstractTweetContentFilter {
 
-  private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = -6908047935900687249L;
 
   public static final String MODEL = "model";
 
-  public static final String ATT_NAME = "att-name";
-
   public static final String POS_PREFIX = "POS-";
-
-  /** the name of the string attribute to process. */
-  protected String m_AttributeName = getDefaultAttributeName();
 
   /** the model to use. */
   protected File m_Model = getDefaultModel();
@@ -96,7 +91,6 @@ public class TwitterNLPPos extends SimpleBatchFilter {
   @Override
   public Enumeration listOptions() {
     Vector result = new Vector();
-    WekaOptionUtils.addOption(result, attributeNameTipText(), getDefaultAttributeName(), ATT_NAME);
     WekaOptionUtils.addOption(result, modelTipText(), "" + getDefaultModel(), MODEL);
     WekaOptionUtils.add(result, super.listOptions());
     return WekaOptionUtils.toEnumeration(result);
@@ -112,7 +106,6 @@ public class TwitterNLPPos extends SimpleBatchFilter {
    */
   @Override
   public void setOptions(String[] options) throws Exception {
-    setAttributeName(WekaOptionUtils.parse(options, ATT_NAME, getDefaultAttributeName()));
     setModel(WekaOptionUtils.parse(options, MODEL, getDefaultModel()));
     super.setOptions(options);
   }
@@ -125,7 +118,6 @@ public class TwitterNLPPos extends SimpleBatchFilter {
   @Override
   public String[] getOptions() {
     List<String> result = new ArrayList<>();
-    WekaOptionUtils.add(result, ATT_NAME, getAttributeName());
     WekaOptionUtils.add(result, MODEL, getModel());
     WekaOptionUtils.add(result, super.getOptions());
     return WekaOptionUtils.toArray(result);
@@ -140,44 +132,6 @@ public class TwitterNLPPos extends SimpleBatchFilter {
 
     m_Tagger     = null;
     m_Vocabulary = null;
-  }
-
-  /**
-   * Returns the default attribute name.
-   *
-   * @return		the default
-   */
-  protected String getDefaultAttributeName() {
-    return "content";
-  }
-
-  /**
-   * Sets the name of the string attribute to process.
-   *
-   * @param value	the name
-   */
-  public void setAttributeName(String value) {
-    m_AttributeName = value;
-    reset();
-  }
-
-  /**
-   * Returns the name of the string attribute to process.
-   *
-   * @return		the name
-   */
-  public String getAttributeName() {
-    return m_AttributeName;
-  }
-
-  /**
-   * Returns the tip text for this property.
-   *
-   * @return 		tip text for this property suitable for
-   * 			displaying in the GUI or for listing the options.
-   */
-  public String attributeNameTipText() {
-    return "The name of the string attribute to process.";
   }
 
   /**
@@ -261,8 +215,7 @@ public class TwitterNLPPos extends SimpleBatchFilter {
    */
   @Override
   protected Instances determineOutputFormat(Instances inputFormat) throws Exception {
-    if (inputFormat.attribute(m_AttributeName) == null)
-      throw new WekaException("String attribute not found: " + m_AttributeName);
+    checkInputFormat(inputFormat);
 
     if (this.m_Tagger == null) {
       if (!m_Model.exists())
