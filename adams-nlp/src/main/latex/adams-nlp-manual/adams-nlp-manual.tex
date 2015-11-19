@@ -1,5 +1,4 @@
-% Copyright (c) 2013-2015 by the University of Waikato, Hamilton, NZ.
-% This work is made available under the terms of the 
+% This work is made available under the terms of the
 % Creative Commons Attribution-ShareAlike 3.0 license, 
 % http://creativecommons.org/licenses/by-sa/3.0/. 
 %
@@ -104,10 +103,20 @@ The following actors are available:
 \end{tight_itemize}
 The following conversions are available:
 \begin{tight_itemize}
-    \item \textit{StanfordParseTreeToSpreadSheet} -- turns the leaves of a
-    parse tree into a spreadsheet.
-	\item \textit{StanfordParseTreeToXML} -- turns a parse tree into an 
+   	\item \textit{StanfordParseTreeToSpreadSheet} -- turns the leaves of a
+   	parse tree into a spreadsheet.
+	\item \textit{StanfordParseTreeToXML} -- turns a parse tree into an
 	XML string.\footnote{adams-nlp-parse.flow}
+\end{tight_itemize}
+The following Weka tokenizers are available:
+\begin{tight_itemize}
+	\item \textit{TwitterNLPTokenizer} -- uses TwitterNLP's Twokenize.
+\end{tight_itemize}
+The following Weka filters are available:
+\begin{tight_itemize}
+	\item \textit{unsupervised.attribute.TwitterNLPPos} -- batch filter
+	that adds frequencies of tag terms as determined by the TwitterNLP
+	POS tagger.
 \end{tight_itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
