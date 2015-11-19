@@ -219,9 +219,9 @@ public class TwitterNLPPos
 
     if (this.m_Tagger == null) {
       if (!m_Model.exists())
-        throw new WekaException("Mode file does not exist: " + m_Model);
+        throw new WekaException("Model file does not exist: " + m_Model);
       if (m_Model.isDirectory())
-        throw new WekaException("Mode file points to a directory: " + m_Model);
+        throw new WekaException("Model file points to a directory: " + m_Model);
       m_Tagger = new Tagger();
       m_Tagger.loadModel(m_Model.getAbsolutePath());
       // build vocabulary
