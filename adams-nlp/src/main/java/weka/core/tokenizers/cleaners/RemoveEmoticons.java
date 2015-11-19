@@ -21,6 +21,7 @@
 package weka.core.tokenizers.cleaners;
 
 import adams.core.io.FileUtils;
+import weka.core.Utils;
 import weka.core.WekaOptionUtils;
 
 import java.io.File;
@@ -33,6 +34,7 @@ import java.util.Vector;
 
 /**
  * Removes emoticons, based on a provided lists of emoticon strings.
+ * Matching sense can be inverted, i.e., only emoticons get returned.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
@@ -44,8 +46,13 @@ public class RemoveEmoticons
 
   public static final String MODEL = "model";
 
+  public static final String INVERT = "invert";
+
   /** the model to use. */
   protected File m_Model = getDefaultModel();
+
+  /** whether to invert the matching sense. */
+  protected boolean m_Invert = false;
 
   /** the vocabulary. */
   protected transient Set<String> m_Vocabulary;
@@ -57,7 +64,8 @@ public class RemoveEmoticons
    *         gui
    */
   public String globalInfo() {
-    return "Removes emoticons, based on a provided lists of emoticon strings.";
+    return "Removes emoticons, based on a provided lists of emoticon strings.\n"
+      + "Matching sense can be inverted, i.e., only emoticons get returned.";
   }
 
   /**
@@ -69,6 +77,7 @@ public class RemoveEmoticons
   public Enumeration listOptions() {
     Vector result = new Vector();
     WekaOptionUtils.addOption(result, modelTipText(), "" + getDefaultModel(), MODEL);
+    WekaOptionUtils.addOption(result, invertTipText(), "no", INVERT);
     WekaOptionUtils.add(result, super.listOptions());
     return WekaOptionUtils.toEnumeration(result);
   }
@@ -84,6 +93,7 @@ public class RemoveEmoticons
   @Override
   public void setOptions(String[] options) throws Exception {
     setModel(WekaOptionUtils.parse(options, MODEL, getDefaultModel()));
+    setInvert(Utils.getFlag(INVERT, options));
     super.setOptions(options);
   }
 
@@ -96,6 +106,7 @@ public class RemoveEmoticons
   public String[] getOptions() {
     List<String> result = new ArrayList<>();
     WekaOptionUtils.add(result, MODEL, getModel());
+    WekaOptionUtils.add(result, INVERT, getInvert());
     WekaOptionUtils.add(result, super.getOptions());
     return WekaOptionUtils.toArray(result);
   }
@@ -149,6 +160,37 @@ public class RemoveEmoticons
   }
 
   /**
+   * Sets whether to invert the matching sense, ie keep only the emoticons
+   * rather than removing them.
+   *
+   * @param value	true if to invert
+   */
+  public void setInvert(boolean value) {
+    m_Invert = value;
+    reset();
+  }
+
+  /**
+   * Returns whether to invert the matching sense, ie keep only the emoticons
+   * rather than removing them.
+   *
+   * @return		true if to invert
+   */
+  public boolean getInvert() {
+    return m_Invert;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String invertTipText() {
+    return "If enabled, the emoticons are the only tokens not removed.";
+  }
+
+  /**
    * Determines whether a token is clean or not.
    *
    * @param token	the token to check
@@ -167,7 +209,9 @@ public class RemoveEmoticons
 	m_Vocabulary.add(line.replaceAll("\t.*", ""));
     }
 
-    if (m_Vocabulary.contains(token))
+    if (m_Invert && !m_Vocabulary.contains(token))
+      return null;
+    else if (!m_Invert  && m_Vocabulary.contains(token))
       return null;
     else
       return token;
