@@ -117,13 +117,6 @@
       <version>${project.version}</version>
     </dependency-->
 
-    <!-- nlp -->
-    <dependency>
-      <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-nlp</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
     <!-- openml -->
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
