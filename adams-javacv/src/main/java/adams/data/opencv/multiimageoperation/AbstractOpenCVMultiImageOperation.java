@@ -15,7 +15,7 @@
 
 /*
  * AbstractOpenCVMultiImageOperation.java
- * Copyright (C) 2015 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2015-2016 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.data.opencv.multiimageoperation;
@@ -24,7 +24,7 @@ import adams.data.image.AbstractMultiImageOperation;
 import adams.data.opencv.OpenCVImageContainer;
 
 /**
- * Abstract base class for operations that require multiple images of type BufferedImage.
+ * Abstract base class for operations that require multiple images of type OpenCVImageContainer.
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
  * @version $Revision: 10552 $
@@ -32,4 +32,5 @@ import adams.data.opencv.OpenCVImageContainer;
 public abstract class AbstractOpenCVMultiImageOperation
   extends AbstractMultiImageOperation<OpenCVImageContainer> {
 
+  private static final long serialVersionUID = -5964582898717539897L;
 }
