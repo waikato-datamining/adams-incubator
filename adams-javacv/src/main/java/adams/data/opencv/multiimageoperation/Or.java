@@ -80,21 +80,18 @@ public class Or
 
   /**
    * Checks the images.
-   * <br><br>
-   * Default implementation only ensures that images are present.
    *
    * @param images	the images to check
    */
   @Override
   protected void check(OpenCVImageContainer[] images) {
+    String	msg;
+
     super.check(images);
 
-    if (!checkSameDimensions(images[0], images[1]))
-      throw new IllegalStateException(
-	"Both images need to have the same dimensions: "
-	  + images[0].getWidth() + "x" + images[0].getHeight()
-	  + " != "
-	  + images[1].getWidth() + "x" + images[1].getHeight());
+    msg = checkSameDimensions(images);
+    if (msg != null)
+      throw new IllegalStateException(msg);
   }
 
   /**
