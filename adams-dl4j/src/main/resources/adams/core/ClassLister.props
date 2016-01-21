@@ -6,11 +6,3 @@
 #
 # Author:  FracPete (fracpete at waikato dot ac dot nz)
 # Version: $Revision$
-
-# the neural network builders
-adams.data.ml.AbstractNetworkBuilder=\
-  adams.data.ml
-
-# the activation functions
-org.deeplearning4j.nn.activation.ActivationFunction=\
-  org.deeplearning4j.nn.activation
