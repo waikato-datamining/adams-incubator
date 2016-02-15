@@ -15,17 +15,16 @@
 
 /**
  * InfoToolSupplier.java
- * Copyright (C) 2013 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.sink.infotool;
-
-import org.geotools.swing.tool.CursorTool;
 
 import adams.core.CleanUpHandler;
 import adams.core.ShallowCopySupporter;
 import adams.core.option.OptionHandler;
-import adams.flow.core.AbstractActor;
+import adams.flow.core.Actor;
 import adams.gui.visualization.maps.MapDisplayPanel;
+import org.geotools.swing.tool.CursorTool;
 
 /**
  * Ancestor for classes that provide {@link CursorTool} instances used in the
@@ -57,7 +56,7 @@ public interface InfoToolSupplier
    * 
    * @param actor	the actor to use for lookin up database connection
    */
-  public void updateDatabaseConnection(AbstractActor actor);
+  public void updateDatabaseConnection(Actor actor);
 
   /**
    * Cleans up data structures, frees up memory.

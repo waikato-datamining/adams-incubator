@@ -15,18 +15,17 @@
 
 /**
  * AbstractInfoToolSupplier.java
- * Copyright (C) 2013 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.sink.infotool;
-
-import org.geotools.swing.tool.CursorTool;
 
 import adams.core.CleanUpHandler;
 import adams.core.option.AbstractOptionHandler;
 import adams.core.option.OptionUtils;
-import adams.flow.core.AbstractActor;
+import adams.flow.core.Actor;
 import adams.flow.core.ActorUtils;
 import adams.gui.visualization.maps.MapDisplayPanel;
+import org.geotools.swing.tool.CursorTool;
 
 /**
  * Ancestor for classes that provide {@link CursorTool} instances used in the
@@ -105,7 +104,7 @@ public abstract class AbstractInfoToolSupplier
    * @param actor	the actor to use for lookin up database connection
    * @return		the database connection to use
    */
-  protected adams.db.AbstractDatabaseConnection getDatabaseConnection(AbstractActor actor) {
+  protected adams.db.AbstractDatabaseConnection getDatabaseConnection(Actor actor) {
     return ActorUtils.getDatabaseConnection(
 	  actor,
 	  adams.flow.standalone.DatabaseConnection.class,
@@ -117,9 +116,9 @@ public abstract class AbstractInfoToolSupplier
    * actor as starting point.
    * 
    * @param actor	the actor to use for lookin up database connection
-   * @see		#getDatabaseConnection(AbstractActor)
+   * @see		#getDatabaseConnection(Actor)
    */
-  public void updateDatabaseConnection(AbstractActor actor) {
+  public void updateDatabaseConnection(Actor actor) {
     m_DatabaseConnection = getDatabaseConnection(actor);
   }
 

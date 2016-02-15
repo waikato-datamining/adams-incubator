@@ -15,7 +15,7 @@
 
 /*
  * Tumblr.java
- * Copyright (C) 2013 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2016 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.core.net;
@@ -25,9 +25,9 @@ import adams.core.base.BasePassword;
 import adams.env.Environment;
 import adams.env.TumblrDefinition;
 import adams.flow.core.AbstractActor;
+import adams.flow.core.Actor;
 import adams.flow.core.ActorUtils;
 import adams.flow.standalone.TumblrConnection;
-
 import com.tumblr.jumblr.JumblrClient;
 
 /**
@@ -142,7 +142,7 @@ public class TumblrHelper {
    * @param actor	the actor start the search from (towards the root)
    * @return		the TumblrConnection actor, or null if none found
    */
-  protected static TumblrConnection getTumblrConnectionActor(AbstractActor actor) {
+  protected static TumblrConnection getTumblrConnectionActor(Actor actor) {
     return (TumblrConnection) ActorUtils.findClosestType(actor, TumblrConnection.class, true);
   }
 
@@ -167,7 +167,7 @@ public class TumblrHelper {
    * @param actor	the actor to start the search from
    * @return		the connection, default client if no TumblrConnection actor found
    */
-  public static JumblrClient getTumblrClient(AbstractActor actor) {
+  public static JumblrClient getTumblrClient(Actor actor) {
     JumblrClient	result;
     TumblrConnection	conn;
 
