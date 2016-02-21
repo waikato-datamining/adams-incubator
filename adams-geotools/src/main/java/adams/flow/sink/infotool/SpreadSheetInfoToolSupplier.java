@@ -15,30 +15,13 @@
 
 /**
  * SpreadSheetInfoToolSupplier.java
- * Copyright (C) 2013-2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.sink.infotool;
 
-import java.awt.BorderLayout;
-import java.awt.Dialog;
-import java.awt.Dialog.ModalityType;
-import java.util.Map;
-import java.util.logging.Level;
-
-import javax.swing.JPanel;
-
-import org.geotools.geometry.DirectPosition2D;
-import org.geotools.map.Layer;
-import org.geotools.map.MapContent;
-import org.geotools.swing.event.MapMouseEvent;
-import org.geotools.swing.tool.CursorTool;
-import org.geotools.swing.tool.FeatureLayerHelper;
-import org.geotools.swing.tool.InfoToolHelper;
-import org.geotools.swing.tool.InfoToolResult;
-
-import weka.core.Utils;
 import adams.core.License;
 import adams.core.annotation.MixedCopyright;
+import adams.data.spreadsheet.DefaultSpreadSheet;
 import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SparseDataRow;
 import adams.data.spreadsheet.SpreadSheet;
@@ -50,6 +33,22 @@ import adams.gui.core.SpreadSheetTable;
 import adams.gui.dialog.ApprovalDialog;
 import adams.gui.event.SearchEvent;
 import adams.gui.event.SearchListener;
+import org.geotools.geometry.DirectPosition2D;
+import org.geotools.map.Layer;
+import org.geotools.map.MapContent;
+import org.geotools.swing.event.MapMouseEvent;
+import org.geotools.swing.tool.CursorTool;
+import org.geotools.swing.tool.FeatureLayerHelper;
+import org.geotools.swing.tool.InfoToolHelper;
+import org.geotools.swing.tool.InfoToolResult;
+import weka.core.Utils;
+
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Dialog;
+import java.awt.Dialog.ModalityType;
+import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * SpreadSheet-based tool supplier.
@@ -151,7 +150,7 @@ public class SpreadSheetInfoToolSupplier
 
 	  try {
 	    result    = helper.getInfo(pos);
-	    sheet     = new SpreadSheet();
+	    sheet     = new DefaultSpreadSheet();
 	    sheet.setDataRowClass(SparseDataRow.class);
 	    headerRow = sheet.getHeaderRow();
 	    headerRow.addCell("id").setContent("ID");

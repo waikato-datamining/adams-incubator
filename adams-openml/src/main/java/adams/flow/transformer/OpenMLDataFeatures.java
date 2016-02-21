@@ -15,16 +15,16 @@
 
 /**
  * OpenMLDataFeatures.java
- * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.transformer;
 
-import org.openml.apiconnector.xml.DataFeature;
-import org.openml.apiconnector.xml.DataFeature.Feature;
-
+import adams.data.spreadsheet.DefaultSpreadSheet;
 import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.flow.core.Token;
+import org.openml.apiconnector.xml.DataFeature;
+import org.openml.apiconnector.xml.DataFeature.Feature;
 
 /**
  <!-- globalinfo-start -->
@@ -131,7 +131,7 @@ public class OpenMLDataFeatures
       if (isLoggingEnabled())
 	getLogger().info("Obtaining data features for #" + did);
       feat  = m_Connection.getConnector().dataFeatures(did);
-      sheet = new SpreadSheet();
+      sheet = new DefaultSpreadSheet();
       
       // header
       row = sheet.getHeaderRow();
