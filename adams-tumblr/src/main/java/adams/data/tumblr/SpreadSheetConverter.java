@@ -25,6 +25,7 @@ import adams.data.spreadsheet.DefaultSpreadSheet;
 import adams.data.spreadsheet.DenseDataRow;
 import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;
+import adams.data.spreadsheet.SpreadSheetTypeHandler;
 
 import java.util.Hashtable;
 
@@ -61,7 +62,8 @@ import java.util.Hashtable;
  * @version $Revision$
  */
 public class SpreadSheetConverter
-  extends AbstractTumblrPostConverter<SpreadSheet> {
+  extends AbstractTumblrPostConverter<SpreadSheet>
+  implements SpreadSheetTypeHandler {
 
   /** for serialization. */
   private static final long serialVersionUID = -4932470309464987225L;
