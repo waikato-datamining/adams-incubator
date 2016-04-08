@@ -15,15 +15,10 @@
 
 /*
  * OpenCVTransformer.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.flow.transformer;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Hashtable;
-import java.util.List;
 
 import adams.core.QuickInfoHelper;
 import adams.data.image.AbstractImageContainer;
@@ -36,6 +31,11 @@ import adams.flow.provenance.Provenance;
 import adams.flow.provenance.ProvenanceContainer;
 import adams.flow.provenance.ProvenanceInformation;
 import adams.flow.provenance.ProvenanceSupporter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  <!-- globalinfo-start -->
@@ -251,11 +251,13 @@ public class OpenCVTransformer
     result = null;
 
     try {
+      m_TransformAlgorithm.setFlowContext(this);
       img = OpenCVHelper.toOpenCVImageContainer((AbstractImageContainer) m_InputToken.getPayload());
 
       m_CurrentImages = new ArrayList<OpenCVImageContainer>(
 	  Arrays.asList(
 	      m_TransformAlgorithm.transform(img)));
+      m_TransformAlgorithm.setFlowContext(null);
     }
     catch (Exception e) {
       result = handleException("Failed to transform image: ", e);
