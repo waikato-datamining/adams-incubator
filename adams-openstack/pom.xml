@@ -43,7 +43,7 @@
   </developers>
 
   <properties>
-    <jclouds.version>1.9.1</jclouds.version>
+    <jclouds.version>1.9.2</jclouds.version>
   </properties>
 
   <dependencies>
