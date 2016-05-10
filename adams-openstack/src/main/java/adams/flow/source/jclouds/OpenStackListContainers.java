@@ -14,20 +14,22 @@
  */
 
 /**
- * ListRegions.java
+ * OpenStackListServers.java
  * Copyright (C) 2016 University of Waikato, Hamilton, NZ
  */
 
 package adams.flow.source.jclouds;
 
-import org.jclouds.openstack.nova.v2_0.NovaApi;
+import org.jclouds.openstack.swift.v1.SwiftApi;
+import org.jclouds.openstack.swift.v1.domain.Container;
+import org.jclouds.openstack.swift.v1.features.ContainerApi;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  <!-- globalinfo-start -->
- * Lists the configured org.jclouds.openstack.nova.v2_0.NovaApi regions.
+ * Lists the stored containers in the specified region.
  * <br><br>
  <!-- globalinfo-end -->
  *
@@ -37,17 +39,25 @@ import java.util.List;
  * &nbsp;&nbsp;&nbsp;default: WARNING
  * </pre>
  * 
+ * <pre>-region &lt;java.lang.String&gt; (property: region)
+ * &nbsp;&nbsp;&nbsp;The region to use.
+ * &nbsp;&nbsp;&nbsp;default: 
+ * </pre>
+ * 
  <!-- options-end -->
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class ListRegions
+public class OpenStackListContainers
   extends AbstractJCloudsSourceAction {
 
   private static final long serialVersionUID = -6630288063048110072L;
 
-  /** the regions. */
+  /** the region. */
+  protected String m_Region;
+
+  /** the servers. */
   protected List<String> m_Items;
 
   /**
@@ -57,7 +67,19 @@ public class ListRegions
    */
   @Override
   public String globalInfo() {
-    return "Lists the configured " + NovaApi.class.getName() + " regions.";
+    return "Lists the stored containers in the specified region.";
+  }
+
+  /**
+   * Adds options to the internal list of options.
+   */
+  @Override
+  public void defineOptions() {
+    super.defineOptions();
+
+    m_OptionManager.add(
+      "region", "region",
+      "");
   }
 
   /**
@@ -70,12 +92,41 @@ public class ListRegions
   }
 
   /**
+   * Sets the region to use.
+   *
+   * @param value	the region
+   */
+  public void setRegion(String value) {
+    m_Region = value;
+    reset();
+  }
+
+  /**
+   * Returns the region to use.
+   *
+   * @return		the region
+   */
+  public String getRegion() {
+    return m_Region;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String regionTipText() {
+    return "The region to use.";
+  }
+
+  /**
    * Returns the provider that this action requires.
    *
    * @return		the provider
    */
   public String getProvider() {
-    return "openstack-nova";
+    return "openstack-swift";
   }
 
   /**
@@ -95,9 +146,24 @@ public class ListRegions
    */
   @Override
   protected String doExecute() {
-    m_Items.clear();
-    m_Items.addAll(((NovaApi) m_Connection.buildAPI(NovaApi.class)).getConfiguredRegions());
-    return null;
+    String		result;
+    SwiftApi 		swiftApi;
+    ContainerApi 	containerApi;
+
+    result = null;
+
+    if (m_Region.isEmpty())
+      result = "No region provided!";
+
+    if (result == null) {
+      swiftApi = (SwiftApi) m_Connection.buildAPI(SwiftApi.class);
+      containerApi = swiftApi.getContainerApi(m_Region);
+      m_Items.clear();
+      for (Container container : containerApi.list().toSet())
+	m_Items.add(container.getName());
+    }
+
+    return result;
   }
 
   /**

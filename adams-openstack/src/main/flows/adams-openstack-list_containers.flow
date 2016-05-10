@@ -1,18 +1,19 @@
 # Project: adams
-# Date: 2016-05-10 17:11:49
+# Date: 2016-05-10 17:13:33
 # User: fracpete
 # Charset: UTF-8
-adams.flow.control.Flow -annotation "Lists the servers in all regions." -flow-execution-listener adams.flow.execution.NullListener
+adams.flow.control.Flow -annotation "Lists the containers in all regions." -flow-execution-listener adams.flow.execution.NullListener
  adams.flow.standalone.CallableActors
   adams.flow.sink.Display -writer adams.data.io.output.NullWriter
- adams.flow.standalone.JCloudsConnection -provider openstack-nova
+ adams.flow.standalone.JCloudsConnection -name "JCloudsConnection - nova" -provider openstack-nova
+ adams.flow.standalone.JCloudsConnection -name "JCloudsConnection - swift" -provider openstack-swift
  adams.flow.source.JCloudsSource -action adams.flow.source.jclouds.OpenStackListRegions
  adams.flow.transformer.ArrayToSequence
  adams.flow.transformer.SetVariable -var-name region
  adams.flow.control.Tee -name "output region"
   adams.flow.transformer.StringInsert -position first -value "--> "
   adams.flow.sink.CallableSink -callable Display
- adams.flow.control.Trigger -name "list servers for region"
-  adams.flow.source.JCloudsSource -action "adams.flow.source.jclouds.OpenStackListServers -region @{region}"
+ adams.flow.control.Trigger -name "list containers for region"
+  adams.flow.source.JCloudsSource -action "adams.flow.source.jclouds.OpenStackListContainers -region @{region}"
   adams.flow.transformer.ArrayToSequence
   adams.flow.sink.CallableSink -callable Display

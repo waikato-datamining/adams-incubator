@@ -14,22 +14,22 @@
  */
 
 /**
- * ListServers.java
+ * OpenStackListServers.java
  * Copyright (C) 2016 University of Waikato, Hamilton, NZ
  */
 
 package adams.flow.source.jclouds;
 
-import org.jclouds.openstack.swift.v1.SwiftApi;
-import org.jclouds.openstack.swift.v1.domain.Container;
-import org.jclouds.openstack.swift.v1.features.ContainerApi;
+import org.jclouds.openstack.nova.v2_0.NovaApi;
+import org.jclouds.openstack.nova.v2_0.domain.Server;
+import org.jclouds.openstack.nova.v2_0.features.ServerApi;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  <!-- globalinfo-start -->
- * Lists the stored containers in the specified region.
+ * Lists the servers from the specified region.
  * <br><br>
  <!-- globalinfo-end -->
  *
@@ -49,7 +49,7 @@ import java.util.List;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class ListContainers
+public class OpenStackListServers
   extends AbstractJCloudsSourceAction {
 
   private static final long serialVersionUID = -6630288063048110072L;
@@ -67,7 +67,7 @@ public class ListContainers
    */
   @Override
   public String globalInfo() {
-    return "Lists the stored containers in the specified region.";
+    return "Lists the servers in the specified region.";
   }
 
   /**
@@ -126,7 +126,7 @@ public class ListContainers
    * @return		the provider
    */
   public String getProvider() {
-    return "openstack-swift";
+    return "openstack-nova";
   }
 
   /**
@@ -146,16 +146,25 @@ public class ListContainers
    */
   @Override
   protected String doExecute() {
-    SwiftApi 		swiftApi;
-    ContainerApi 	containerApi;
+    String	result;
+    NovaApi	novaApi;
+    ServerApi 	serverApi;
 
-    swiftApi     = (SwiftApi) m_Connection.buildAPI(SwiftApi.class);
-    containerApi = swiftApi.getContainerApi(m_Region);
-    m_Items.clear();
-    for (Container container : containerApi.list().toSet())
-      m_Items.add(container.getName());
+    result = null;
 
-    return null;
+    if (m_Region.isEmpty())
+      result = "No region provided!";
+
+    if (result == null) {
+
+      novaApi = (NovaApi) m_Connection.buildAPI(NovaApi.class);
+      serverApi = novaApi.getServerApi(m_Region);
+      m_Items.clear();
+      for (Server server : serverApi.listInDetail().concat())
+	m_Items.add(server.toString());  // TODO what to output
+    }
+
+    return result;
   }
 
   /**
