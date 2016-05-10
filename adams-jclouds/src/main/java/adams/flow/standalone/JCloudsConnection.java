@@ -294,7 +294,7 @@ public class JCloudsConnection
   public String getQuickInfo() {
     String	result;
 
-    result  = QuickInfoHelper.toString(this, "provider", m_Provider, "provider: ");
+    result  = QuickInfoHelper.toString(this, "provider", (m_Provider.isEmpty() ? "-none-" : m_Provider), "provider: ");
     result += QuickInfoHelper.toString(this, "identity", m_Identity, ", identity: ");
     result += QuickInfoHelper.toString(this, "endpoint", m_Endpoint, ", endpoint: ");
 
