@@ -7,3 +7,18 @@
 # Author:  FracPete (fracpete at waikato dot ac dot nz)
 # Version: $Revision$
 
+# the JClouds standalone actions
+adams.flow.standalone.jclouds.JCloudsStandaloneAction=\
+  adams.flow.standalone.jclouds
+
+# the JClouds source actions
+adams.flow.source.jclouds.JCloudsSourceAction=\
+  adams.flow.source.jclouds
+
+# the JClouds transformer actions
+adams.flow.transformer.jclouds.JCloudsTransformerAction=\
+  adams.flow.transformer.jclouds
+
+# the JClouds sink actions
+adams.flow.sink.jclouds.JCloudsSinkAction=\
+  adams.flow.sink.jclouds
