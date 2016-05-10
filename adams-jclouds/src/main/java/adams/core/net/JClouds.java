@@ -37,9 +37,6 @@ public class JClouds {
   /** the properties file. */
   public final static String FILENAME = "adams/core/net/JClouds.props";
 
-  /** the key for the provider. */
-  public final static String PROVIDER = "Provider";
-
   /** the key for the identity (= tenantName:userName). */
   public final static String IDENTITY = "Identity";
 
@@ -98,15 +95,6 @@ public class JClouds {
     m_Properties = null;
 
     return result;
-  }
-
-  /**
-   * Returns the provider.
-   * 
-   * @return		the provider
-   */
-  public static String getProvider() {
-    return getProperties().getProperty(PROVIDER);
   }
 
   /**

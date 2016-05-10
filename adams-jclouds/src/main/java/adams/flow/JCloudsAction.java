@@ -48,6 +48,13 @@ public interface JCloudsAction
   public JCloudsConnection getConnection();
 
   /**
+   * Returns the provider that this action requires.
+   *
+   * @return		the provider
+   */
+  public String getProvider();
+
+  /**
    * Performs the action.
    *
    * @return		null if successful, otherwise error message

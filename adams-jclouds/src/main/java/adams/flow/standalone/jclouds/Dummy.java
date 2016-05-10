@@ -53,6 +53,15 @@ public class Dummy
   }
 
   /**
+   * Returns the provider that this action requires.
+   *
+   * @return		the provider
+   */
+  public String getProvider() {
+    return null;
+  }
+
+  /**
    * Performs the actual action.
    *
    * @return		null if successful, otherwise error message

@@ -21,7 +21,6 @@
 package adams.flow.sink;
 
 import adams.core.QuickInfoHelper;
-import adams.flow.core.ActorUtils;
 import adams.flow.sink.jclouds.Dummy;
 import adams.flow.sink.jclouds.JCloudsSinkAction;
 import adams.flow.standalone.JCloudsConnection;
@@ -151,18 +150,6 @@ public class JCloudsSink
   }
 
   /**
-   * Determines the JClouds connection in the flow.
-   *
-   * @return		the JClouds connection to use
-   */
-  protected JCloudsConnection getConnection() {
-    return (JCloudsConnection) ActorUtils.findClosestType(
-      this,
-      JCloudsConnection.class,
-      true);
-  }
-
-  /**
    * Returns the class that the consumer accepts.
    *
    * @return		the Class of objects that can be processed
@@ -184,7 +171,7 @@ public class JCloudsSink
     result = super.setUp();
 
     if (result == null) {
-      m_Connection = getConnection();
+      m_Connection = JCloudsConnection.getConnection(this, m_Action.getProvider());
       if (m_Connection == null)
         result = "Failed to locate " + JCloudsConnection.class.getName() + " instance!";
     }

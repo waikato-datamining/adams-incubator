@@ -41,12 +41,10 @@ public class JCloudsSettingsPanel
   protected void initGUI() {
     super.initGUI();
 
-    addPropertyType(JClouds.PROVIDER,   PropertyType.STRING);
     addPropertyType(JClouds.IDENTITY,   PropertyType.STRING);
     addPropertyType(JClouds.CREDENTIAL, PropertyType.PASSWORD);
     addPropertyType(JClouds.ENDPOINT,   PropertyType.STRING);
     setPropertyOrder(new String[]{
-      JClouds.PROVIDER,
       JClouds.IDENTITY,
       JClouds.CREDENTIAL,
       JClouds.ENDPOINT

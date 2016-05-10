@@ -3,9 +3,6 @@
 # Author: FracPete (fracpete at waikato dot ac dot nz)
 # Version: $Revision: 8872 $
 
-# Cloud provider
-Provider=openstack-nova
-
 # Cloud identity (tenantName:userName)
 Identity=tenantName:userName
 

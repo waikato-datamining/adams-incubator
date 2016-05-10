@@ -21,7 +21,6 @@
 package adams.flow.transformer;
 
 import adams.core.QuickInfoHelper;
-import adams.flow.core.ActorUtils;
 import adams.flow.core.Token;
 import adams.flow.standalone.JCloudsConnection;
 import adams.flow.transformer.jclouds.Dummy;
@@ -154,18 +153,6 @@ public class JCloudsTransformer
   }
 
   /**
-   * Determines the JClouds connection in the flow.
-   *
-   * @return		the JClouds connection to use
-   */
-  protected JCloudsConnection getConnection() {
-    return (JCloudsConnection) ActorUtils.findClosestType(
-      this,
-      JCloudsConnection.class,
-      true);
-  }
-
-  /**
    * Initializes the item for flow execution.
    *
    * @return		null if everything is fine, otherwise error message
@@ -177,7 +164,7 @@ public class JCloudsTransformer
     result = super.setUp();
 
     if (result == null) {
-      m_Connection = getConnection();
+      m_Connection = JCloudsConnection.getConnection(this, m_Action.getProvider());
       if (m_Connection == null)
         result = "Failed to locate " + JCloudsConnection.class.getName() + " instance!";
     }

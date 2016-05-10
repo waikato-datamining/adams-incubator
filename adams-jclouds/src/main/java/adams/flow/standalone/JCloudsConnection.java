@@ -24,6 +24,8 @@ import adams.core.QuickInfoHelper;
 import adams.core.base.BasePassword;
 import adams.core.base.BaseURL;
 import adams.core.net.JClouds;
+import adams.flow.core.Actor;
+import adams.flow.core.ActorUtils;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closeables;
 import com.google.inject.Module;
@@ -32,6 +34,7 @@ import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 
 import java.io.Closeable;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Level;
 
 /**
@@ -79,7 +82,7 @@ import java.util.logging.Level;
  * 
  * <pre>-provider &lt;java.lang.String&gt; (property: provider)
  * &nbsp;&nbsp;&nbsp;The cloud provider to use.
- * &nbsp;&nbsp;&nbsp;default: openstack-nova
+ * &nbsp;&nbsp;&nbsp;default: 
  * </pre>
  * 
  * <pre>-identity &lt;java.lang.String&gt; (property: identity)
@@ -96,7 +99,7 @@ import java.util.logging.Level;
  * &nbsp;&nbsp;&nbsp;The URL for the API endpoint.
  * &nbsp;&nbsp;&nbsp;default: https:&#47;&#47;somehost:5000&#47;v2.0
  * </pre>
- *
+ * 
  <!-- options-end -->
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
@@ -142,7 +145,7 @@ public class JCloudsConnection
 
     m_OptionManager.add(
       "provider", "provider",
-      JClouds.getProvider());
+      "");
 
     m_OptionManager.add(
       "identity", "identity",
@@ -367,5 +370,37 @@ public class JCloudsConnection
   public void cleanUp() {
     closeAPI();
     super.cleanUp();
+  }
+
+  /**
+   * Determines the JCloudsConnection in the flow that matches the specified
+   * provider.
+   *
+   * @param start	the starting point of the search
+   * @param provider	the provider to look for
+   * @return		the located connection, null if none located
+   */
+  public static JCloudsConnection getConnection(Actor start, String provider) {
+    JCloudsConnection	result;
+    List<Actor>		actors;
+    JCloudsConnection	conn;
+
+    if ((provider == null) || provider.isEmpty())
+      return null;
+
+    result = null;
+    actors = ActorUtils.findClosestTypes(
+      start,
+      adams.flow.standalone.JCloudsConnection.class,
+      true);
+    for (Actor actor: actors) {
+      conn = (JCloudsConnection) actor;
+      if (conn.getProvider().equals(provider)) {
+	result = conn;
+	break;
+      }
+    }
+
+    return result;
   }
 }

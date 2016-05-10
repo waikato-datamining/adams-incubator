@@ -121,6 +121,15 @@ public class ListServers
   }
 
   /**
+   * Returns the provider that this action requires.
+   *
+   * @return		the provider
+   */
+  public String getProvider() {
+    return "openstack-nova";
+  }
+
+  /**
    * Returns the data types of the generated data.
    *
    * @return		the data types
