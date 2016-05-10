@@ -1,0 +1,18 @@
+# Project: adams
+# Date: 2016-05-10 16:36:19
+# User: fracpete
+# Charset: UTF-8
+adams.flow.control.Flow -annotation "Lists the servers in all regions." -flow-execution-listener adams.flow.execution.NullListener
+ adams.flow.standalone.CallableActors
+  adams.flow.sink.Display -writer adams.data.io.output.NullWriter
+ adams.flow.standalone.JCloudsConnection
+ adams.flow.source.JCloudsSource -action adams.flow.source.jclouds.ListRegions
+ adams.flow.transformer.ArrayToSequence
+ adams.flow.transformer.SetVariable -var-name region
+ adams.flow.control.Tee -name "output region"
+  adams.flow.transformer.StringInsert -position first -value "--> "
+  adams.flow.sink.CallableSink -callable Display
+ adams.flow.control.Trigger -name "list servers for region"
+  adams.flow.source.JCloudsSource -action "adams.flow.source.jclouds.ListServers -region @{region}"
+  adams.flow.transformer.ArrayToSequence
+  adams.flow.sink.CallableSink -callable Display
