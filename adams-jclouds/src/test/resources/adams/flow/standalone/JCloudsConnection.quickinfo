@@ -1,1 +1,1 @@
-provider: openstack-nova, identity: tenantName:userName, endpoint: https://somehost:5000/v2.0, API: java.lang.Object
+provider: openstack-nova, identity: tenantName:userName, endpoint: https://somehost:5000/v2.0
