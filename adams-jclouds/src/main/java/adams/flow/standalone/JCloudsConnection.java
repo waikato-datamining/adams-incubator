@@ -20,6 +20,7 @@
 
 package adams.flow.standalone;
 
+import adams.core.base.BaseClassname;
 import adams.core.base.BasePassword;
 import adams.core.base.BaseURL;
 import adams.core.net.JClouds;
@@ -91,6 +92,11 @@ import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
  * &nbsp;&nbsp;&nbsp;default: https:&#47;&#47;somehost:5000&#47;v2.0
  * </pre>
  * 
+ * <pre>-api-class &lt;adams.core.base.BaseClassname&gt; (property: APIClass)
+ * &nbsp;&nbsp;&nbsp;The API class for the provider.
+ * &nbsp;&nbsp;&nbsp;default: java.lang.Object
+ * </pre>
+ * 
  <!-- options-end -->
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
@@ -113,6 +119,9 @@ public class JCloudsConnection
 
   /** the endpoint. */
   protected BaseURL m_Endpoint;
+
+  /** the API class. */
+  protected BaseClassname m_APIClass;
 
   /**
    * Returns a string describing the object.
@@ -146,6 +155,10 @@ public class JCloudsConnection
     m_OptionManager.add(
       "endpoint", "endpoint",
       JClouds.getEndpoint());
+
+    m_OptionManager.add(
+      "api-class", "APIClass",
+      new BaseClassname(Object.class));
   }
 
   /**
@@ -265,6 +278,35 @@ public class JCloudsConnection
   }
 
   /**
+   * Sets the API class to use.
+   *
+   * @param value	the class
+   */
+  public void setAPIClass(BaseClassname value) {
+    m_APIClass = value;
+    reset();
+  }
+
+  /**
+   * Returns the API class to use.
+   *
+   * @return		the class
+   */
+  public BaseClassname getAPIClass() {
+    return m_APIClass;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String APIClassTipText() {
+    return "The API class for the provider.";
+  }
+
+  /**
    * Assembles a context builder.
    *
    * @return		the builder
@@ -282,6 +324,15 @@ public class JCloudsConnection
     }
 
     return result;
+  }
+
+  /**
+   * Builds the API.
+   *
+   * @return		the API
+   */
+  public Object buildAPI() {
+    return getContextBuilder().buildApi(m_APIClass.classValue());
   }
 
   /**
