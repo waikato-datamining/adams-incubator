@@ -26,9 +26,13 @@ import adams.core.base.BasePassword;
 import adams.core.base.BaseURL;
 import adams.core.net.JClouds;
 import com.google.common.collect.ImmutableSet;
+import com.google.common.io.Closeables;
 import com.google.inject.Module;
 import org.jclouds.ContextBuilder;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
+
+import java.io.Closeable;
+import java.util.logging.Level;
 
 /**
  <!-- globalinfo-start -->
@@ -124,6 +128,9 @@ public class JCloudsConnection
   /** the API class. */
   protected BaseClassname m_APIClass;
 
+  /** the API instance. */
+  protected Closeable m_APIInstance;
+
   /**
    * Returns a string describing the object.
    *
@@ -160,6 +167,15 @@ public class JCloudsConnection
     m_OptionManager.add(
       "api-class", "APIClass",
       new BaseClassname(Object.class));
+  }
+
+  /**
+   * Resets the scheme.
+   */
+  @Override
+  protected void reset() {
+    super.reset();
+    closeAPI();
   }
 
   /**
@@ -349,8 +365,10 @@ public class JCloudsConnection
    *
    * @return		the API
    */
-  public Object buildAPI() {
-    return getContextBuilder().buildApi(m_APIClass.classValue());
+  public synchronized Closeable buildAPI() {
+    if (m_APIInstance == null)
+      m_APIInstance = getContextBuilder().buildApi(m_APIClass.classValue());
+    return m_APIInstance;
   }
 
   /**
@@ -361,5 +379,30 @@ public class JCloudsConnection
   @Override
   protected String doExecute() {
     return null;
+  }
+
+  /**
+   * Closes the API if necessary.
+   */
+  protected void closeAPI() {
+    if (m_APIInstance != null) {
+      try {
+	Closeables.close(m_APIInstance, true);
+      }
+      catch (Exception e) {
+	getLogger().log(Level.WARNING, "Failed to close API!", e);
+      }
+      m_APIInstance = null;
+    }
+  }
+
+  /**
+   * Cleans up after the execution has finished. Also removes graphical
+   * components.
+   */
+  @Override
+  public void cleanUp() {
+    closeAPI();
+    super.cleanUp();
   }
 }
