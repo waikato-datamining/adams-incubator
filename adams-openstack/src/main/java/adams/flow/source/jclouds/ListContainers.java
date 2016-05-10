@@ -153,7 +153,7 @@ public class ListContainers
     containerApi = swiftApi.getContainerApi(m_Region);
     m_Items.clear();
     for (Container container : containerApi.list().toSet())
-      m_Items.add(container.toString());
+      m_Items.add(container.getName());
 
     return null;
   }

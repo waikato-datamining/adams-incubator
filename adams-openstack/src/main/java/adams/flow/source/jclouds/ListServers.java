@@ -153,7 +153,7 @@ public class ListServers
     serverApi = novaApi.getServerApi(m_Region);
     m_Items.clear();
     for (Server server : serverApi.listInDetail().concat())
-      m_Items.add(server.toString());
+      m_Items.add(server.toString());  // TODO what to output
 
     return null;
   }
