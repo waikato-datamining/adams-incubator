@@ -57,7 +57,7 @@ public class OpenStackListContainers
   /** the region. */
   protected String m_Region;
 
-  /** the servers. */
+  /** the containers. */
   protected List<String> m_Items;
 
   /**
