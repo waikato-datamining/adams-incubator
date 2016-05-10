@@ -175,6 +175,8 @@ public class JCloudsStandalone
 
     m_Action.setConnection(m_Connection);
     result = m_Action.execute();
+    if (result != null)
+      getLogger().severe("Failed to execute action: " + result);
 
     return result;
   }

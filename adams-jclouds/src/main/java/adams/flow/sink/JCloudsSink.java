@@ -191,6 +191,8 @@ public class JCloudsSink
     m_Action.setConnection(m_Connection);
     m_Action.input(m_InputToken.getPayload());
     result = m_Action.execute();
+    if (result != null)
+      getLogger().severe("Failed to execute action: " + result);
 
     return result;
   }

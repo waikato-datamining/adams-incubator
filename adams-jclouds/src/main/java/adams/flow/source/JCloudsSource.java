@@ -195,6 +195,9 @@ public class JCloudsSource
       if (m_Action.hasPendingOutput())
 	m_OutputToken = new Token(m_Action.output());
     }
+    else {
+      getLogger().severe("Failed to execute action: " + result);
+    }
 
     return result;
   }
