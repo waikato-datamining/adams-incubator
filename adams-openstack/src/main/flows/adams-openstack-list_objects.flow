@@ -1,0 +1,27 @@
+# Project: adams
+# Date: 2016-05-11 10:28:19
+# User: fracpete
+# Charset: UTF-8
+adams.flow.control.Flow -annotation "Lists all objects in all the containers in all regions." -flow-execution-listener adams.flow.execution.NullListener
+ adams.flow.standalone.CallableActors
+  adams.flow.sink.Display -writer adams.data.io.output.NullWriter
+ adams.flow.standalone.JCloudsConnection -name "JCloudsConnection - nova" -provider openstack-nova
+ adams.flow.standalone.JCloudsConnection -name "JCloudsConnection - swift" -provider openstack-swift
+ adams.flow.source.JCloudsSource -action adams.flow.source.jclouds.OpenStackListRegions
+ adams.flow.transformer.ArrayToSequence
+ adams.flow.transformer.SetVariable -var-name region
+ adams.flow.control.Tee -name "output region"
+  adams.flow.transformer.StringInsert -position first -value "R: "
+  adams.flow.sink.CallableSink -callable Display
+ adams.flow.control.Trigger -name "list containers for region"
+  adams.flow.source.JCloudsSource -action "adams.flow.source.jclouds.OpenStackListContainers -region @{region}"
+  adams.flow.transformer.ArrayToSequence
+  adams.flow.control.Tee -name "output container"
+   adams.flow.transformer.StringInsert -position first -value "C: "
+   adams.flow.sink.CallableSink -callable Display
+  adams.flow.transformer.SetVariable -var-name container
+  adams.flow.control.Trigger -name "list objects in container"
+   adams.flow.source.JCloudsSource -action "adams.flow.source.jclouds.OpenStackListObjects -region @{region} -container-name @{container}"
+   adams.flow.transformer.ArrayToSequence
+   adams.flow.transformer.StringInsert -position first -value "O: "
+   adams.flow.sink.CallableSink -callable Display

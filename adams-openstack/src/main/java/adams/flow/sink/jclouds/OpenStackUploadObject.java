@@ -14,11 +14,11 @@
  */
 
 /**
- * OpenStackUploadContainer.java
+ * OpenStackUploadObject.java
  * Copyright (C) 2016 University of Waikato, Hamilton, NZ
  */
 
-package adams.flow.transformer.jclouds;
+package adams.flow.sink.jclouds;
 
 import adams.core.SerializationHelper;
 import adams.core.Utils;
@@ -31,6 +31,7 @@ import com.google.common.io.ByteSource;
 import org.jclouds.io.Payload;
 import org.jclouds.io.Payloads;
 import org.jclouds.openstack.swift.v1.SwiftApi;
+import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.features.ContainerApi;
 import org.jclouds.openstack.swift.v1.features.ObjectApi;
 import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
@@ -40,7 +41,7 @@ import java.util.Map;
 
 /**
  <!-- globalinfo-start -->
- * Stores an object with optional meta-data in the cloud.<br>
+ * Stores an object with optional meta-data in the cloud, creates the container if necessary.<br>
  * Outputs the name of the stored object.
  * <br><br>
  <!-- globalinfo-end -->
@@ -56,7 +57,12 @@ import java.util.Map;
  * &nbsp;&nbsp;&nbsp;default: 
  * </pre>
  * 
- * <pre>-name &lt;java.lang.String&gt; (property: name)
+ * <pre>-container-name &lt;java.lang.String&gt; (property: containerName)
+ * &nbsp;&nbsp;&nbsp;The container name to use.
+ * &nbsp;&nbsp;&nbsp;default: 
+ * </pre>
+ * 
+ * <pre>-object-name &lt;java.lang.String&gt; (property: objectName)
  * &nbsp;&nbsp;&nbsp;The object name to use.
  * &nbsp;&nbsp;&nbsp;default: 
  * </pre>
@@ -86,8 +92,8 @@ import java.util.Map;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class OpenStackUploadContainer
-  extends AbstractJCloudsTransformerAction {
+public class OpenStackUploadObject
+  extends AbstractJCloudsSinkAction {
 
   private static final long serialVersionUID = 5077164507336679181L;
 
@@ -113,14 +119,14 @@ public class OpenStackUploadContainer
   /** the region. */
   protected String m_Region;
 
+  /** the name for the container. */
+  protected String m_ContainerName;
+
   /** the name for the object. */
-  protected String m_Name;
+  protected String m_ObjectName;
 
   /** the meta-data. */
   protected BaseKeyValuePair[] m_MetaData;
-
-  /** the output. */
-  protected String m_UploadedName;
 
   /** the format. */
   protected Format m_Format;
@@ -139,7 +145,7 @@ public class OpenStackUploadContainer
   @Override
   public String globalInfo() {
     return
-      "Stores an object with optional meta-data in the cloud.\n"
+      "Stores an object with optional meta-data in the cloud, creates the container if necessary.\n"
 	+ "Outputs the name of the stored object.";
   }
 
@@ -155,7 +161,11 @@ public class OpenStackUploadContainer
       "");
 
     m_OptionManager.add(
-      "name", "name",
+      "container-name", "containerName",
+      "");
+
+    m_OptionManager.add(
+      "object-name", "objectName",
       "");
 
     m_OptionManager.add(
@@ -173,16 +183,6 @@ public class OpenStackUploadContainer
     m_OptionManager.add(
       "from-string", "fromString",
       new StringToString());
-  }
-
-  /**
-   * Resets the scheme.
-   */
-  @Override
-  protected void reset() {
-    super.reset();
-
-    m_UploadedName = null;
   }
 
   /**
@@ -215,22 +215,22 @@ public class OpenStackUploadContainer
   }
 
   /**
-   * Sets the name to use.
+   * Sets the container name to use.
    *
    * @param value	the name
    */
-  public void setName(String value) {
-    m_Name = value;
+  public void setContainerName(String value) {
+    m_ContainerName = value;
     reset();
   }
 
   /**
-   * Returns the name to use.
+   * Returns the container name to use.
    *
    * @return		the name
    */
-  public String getName() {
-    return m_Name;
+  public String getContainerName() {
+    return m_ContainerName;
   }
 
   /**
@@ -239,7 +239,36 @@ public class OpenStackUploadContainer
    * @return 		tip text for this property suitable for
    * 			displaying in the GUI or for listing the options.
    */
-  public String nameTipText() {
+  public String containerNameTipText() {
+    return "The container name to use.";
+  }
+
+  /**
+   * Sets the object name to use.
+   *
+   * @param value	the name
+   */
+  public void setObjectName(String value) {
+    m_ObjectName = value;
+    reset();
+  }
+
+  /**
+   * Returns the object name to use.
+   *
+   * @return		the name
+   */
+  public String getObjectName() {
+    return m_ObjectName;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String objectNameTipText() {
     return "The object name to use.";
   }
 
@@ -378,16 +407,6 @@ public class OpenStackUploadContainer
   }
 
   /**
-   * Returns the data types being generated.
-   *
-   * @return		the data types
-   */
-  @Override
-  public Class[] generates() {
-    return new Class[]{String.class};
-  }
-
-  /**
    * Returns the provider that this action requires.
    *
    * @return		the provider
@@ -407,6 +426,7 @@ public class OpenStackUploadContainer
     String			result;
     SwiftApi			swiftApi;
     ContainerApi 		containerApi;
+    Container			container;
     CreateContainerOptions 	options;
     Map<String,String> 		meta;
     ObjectApi 			objectApi;
@@ -414,17 +434,19 @@ public class OpenStackUploadContainer
     byte[]			data;
     String			msg;
 
-    result         = null;
-    m_UploadedName = null;
+    result = null;
 
     if (m_Region.isEmpty())
       result = "No region provided!";
-    else if (m_Name.isEmpty())
-      result = "No name provided!";
+    else if (m_ContainerName.isEmpty())
+      result = "No container name provided!";
 
     if (result == null) {
       swiftApi     = (SwiftApi) getConnection().buildAPI(SwiftApi.class);
       containerApi = swiftApi.getContainerApi(m_Region);
+
+      // container already present?
+      container = containerApi.get(m_ContainerName);
 
       // meta data
       meta = new HashMap<>();
@@ -436,7 +458,10 @@ public class OpenStackUploadContainer
 	  meta.put(pair.getPairKey(), pair.getPairValue());
       }
       options = CreateContainerOptions.Builder.metadata(meta);
-      containerApi.create(m_Name, options);
+      if (container == null)
+	containerApi.create(m_ContainerName, options);
+      else
+	containerApi.updateMetadata(m_ContainerName, meta);
 
       // convert data
       data = null;
@@ -468,11 +493,10 @@ public class OpenStackUploadContainer
       // upload data
       if (data != null) {
 	payload   = Payloads.newByteSourcePayload(ByteSource.wrap(data));
-	objectApi = swiftApi.getObjectApi(m_Region, m_Name);
-	objectApi.put(m_Name, payload);
+	objectApi = swiftApi.getObjectApi(m_Region, m_ContainerName);
+	objectApi.put(m_ObjectName, payload);
 	if (isLoggingEnabled())
-	  getLogger().info("Data uploaded: " + m_Region + "/" + m_Name);
-	m_UploadedName = m_Name;
+	  getLogger().info("Data uploaded: " + m_Region + "/" + m_ContainerName + "/" + m_ObjectName);
       }
       else {
 	getLogger().severe("Failed to generate payload!");
@@ -480,26 +504,5 @@ public class OpenStackUploadContainer
     }
 
     return result;
-  }
-
-  /**
-   * Returns whether any data was generated.
-   *
-   * @return		true if data available to be collected
-   * @see		#output()
-   */
-  @Override
-  public boolean hasPendingOutput() {
-    return (m_UploadedName != null);
-  }
-
-  /**
-   * Returns the generated data.
-   *
-   * @return		the generated data
-   */
-  @Override
-  public Object output() {
-    return m_UploadedName;
   }
 }

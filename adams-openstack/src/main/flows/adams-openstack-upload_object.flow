@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2016-05-10 21:27:02
+# Date: 2016-05-11 10:26:37
 # User: fracpete
 # Charset: UTF-8
 adams.flow.control.Flow -annotation "Uploads an object to one or more regions." -flow-execution-listener adams.flow.execution.NullListener
@@ -8,12 +8,15 @@ adams.flow.control.Flow -annotation "Uploads an object to one or more regions." 
  adams.flow.standalone.JCloudsConnection -name "JCloudsConnection - nova" -provider openstack-nova
  adams.flow.standalone.JCloudsConnection -name "JCloudsConnection - swift" -provider openstack-swift
  adams.flow.source.Start
+ adams.flow.control.Trigger -name "prompt user"
+  adams.flow.source.EnterManyValues -value "adams.flow.source.ValueDefinition -name file -display \"File to upload\" -type FILE_ABSOLUTE -default-value ${CWD}" -value "adams.flow.source.ValueDefinition -name container -display \"Name of container\" -default-value adams" -value "adams.flow.source.ValueDefinition -name object -display \"Name of object\" -help \"Uses filename without path if left empty\""
+  adams.flow.transformer.SpreadSheetVariableRowIterator
  adams.flow.control.Trigger -name "select upload region(s)"
   adams.flow.source.JCloudsSource -action adams.flow.source.jclouds.OpenStackListRegions
   adams.flow.transformer.SelectArraySubset -message "Please select the region to upload to"
   adams.flow.transformer.SetStorageValue -storage-name regions
- adams.flow.control.Trigger -name "selecting file to upload"
-  adams.flow.source.SelectFile -stop-if-canceled true -file-chooser-title "Select file to upload"
+ adams.flow.control.Trigger -name "loading file"
+  adams.flow.source.FileSupplier -file @{file}
   adams.flow.control.Tee -name filename
    adams.flow.transformer.BaseName -remove-extensions true
    adams.flow.transformer.SetVariable -var-name name
@@ -21,7 +24,6 @@ adams.flow.control.Flow -annotation "Uploads an object to one or more regions." 
   adams.flow.transformer.SetStorageValue -storage-name object
  adams.flow.control.Trigger -name "iterate regions"
   adams.flow.source.StorageValue -storage-name regions
-  adams.flow.control.Breakpoint -condition adams.flow.condition.bool.Expression
   adams.flow.transformer.ArrayToSequence
   adams.flow.transformer.SetVariable -var-name region
   adams.flow.control.Tee -name "output region"
@@ -29,5 +31,4 @@ adams.flow.control.Flow -annotation "Uploads an object to one or more regions." 
    adams.flow.sink.CallableSink -callable Display
   adams.flow.control.Trigger -name "upload to region"
    adams.flow.source.StorageValue -storage-name object
-   adams.flow.transformer.JCloudsTransformer -action "adams.flow.transformer.jclouds.OpenStackUploadContainer -region @{region} -name @{name} -format SERIALIZED_OBJECT -to-string adams.data.conversion.StringToString -from-string adams.data.conversion.StringToString"
-   adams.flow.sink.CallableSink -callable Display
+   adams.flow.sink.JCloudsSink -action "adams.flow.sink.jclouds.OpenStackUploadObject -region @{region} -container-name @{container} -object-name @{name} -format SERIALIZED_OBJECT -to-string adams.data.conversion.StringToString -from-string adams.data.conversion.StringToString"
