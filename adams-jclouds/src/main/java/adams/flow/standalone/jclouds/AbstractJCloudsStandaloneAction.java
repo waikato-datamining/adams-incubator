@@ -57,6 +57,15 @@ public abstract class AbstractJCloudsStandaloneAction
   }
 
   /**
+   * Returns the additional information.
+   *
+   * @return		the additional information, null or 0-length string for no information
+   */
+  public String getAdditionalInformation() {
+    return "Provider: " + getProvider();
+  }
+
+  /**
    * Hook method for checks before the actual execution.
    * <br>
    * Default implementation ensures that a connection is present.

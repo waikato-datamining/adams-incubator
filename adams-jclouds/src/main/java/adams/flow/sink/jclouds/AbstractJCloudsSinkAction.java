@@ -60,6 +60,15 @@ public abstract class AbstractJCloudsSinkAction
   }
 
   /**
+   * Returns the additional information.
+   *
+   * @return		the additional information, null or 0-length string for no information
+   */
+  public String getAdditionalInformation() {
+    return "Provider: " + getProvider();
+  }
+
+  /**
    * Returns the accepted data types.
    *
    * @return		the data types

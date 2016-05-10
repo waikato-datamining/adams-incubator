@@ -20,6 +20,7 @@
 
 package adams.flow;
 
+import adams.core.AdditionalInformationHandler;
 import adams.core.CleanUpHandler;
 import adams.core.option.OptionHandler;
 import adams.flow.standalone.JCloudsConnection;
@@ -31,7 +32,7 @@ import adams.flow.standalone.JCloudsConnection;
  * @version $Revision$
  */
 public interface JCloudsAction
-  extends OptionHandler, CleanUpHandler {
+  extends OptionHandler, CleanUpHandler, AdditionalInformationHandler {
 
   /**
    * Sets the JClouds connection to use.
@@ -53,6 +54,13 @@ public interface JCloudsAction
    * @return		the provider
    */
   public String getProvider();
+
+  /**
+   * Returns the additional information.
+   *
+   * @return		the additional information, null or 0-length string for no information
+   */
+  public String getAdditionalInformation();
 
   /**
    * Performs the action.

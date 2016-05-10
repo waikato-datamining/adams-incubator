@@ -57,6 +57,15 @@ public abstract class AbstractJCloudsSourceAction
   }
 
   /**
+   * Returns the additional information.
+   *
+   * @return		the additional information, null or 0-length string for no information
+   */
+  public String getAdditionalInformation() {
+    return "Provider: " + getProvider();
+  }
+
+  /**
    * Returns the data types of the generated data.
    *
    * @return		the data types
