@@ -58,7 +58,7 @@ public class ListServers
   protected String m_Region;
 
   /** the servers. */
-  protected List<String> m_Servers;
+  protected List<String> m_Items;
 
   /**
    * Returns a string describing the object.
@@ -67,7 +67,7 @@ public class ListServers
    */
   @Override
   public String globalInfo() {
-    return "Lists the servers from the specified region.";
+    return "Lists the servers in the specified region.";
   }
 
   /**
@@ -88,7 +88,7 @@ public class ListServers
   @Override
   protected void reset() {
     super.reset();
-    m_Servers = new ArrayList<>();
+    m_Items = new ArrayList<>();
   }
 
   /**
@@ -151,9 +151,9 @@ public class ListServers
 
     novaApi   = (NovaApi) m_Connection.buildAPI(NovaApi.class);
     serverApi = novaApi.getServerApi(m_Region);
-    m_Servers.clear();
+    m_Items.clear();
     for (Server server : serverApi.listInDetail().concat())
-      m_Servers.add(server.toString());
+      m_Items.add(server.toString());
 
     return null;
   }
@@ -166,7 +166,7 @@ public class ListServers
    */
   @Override
   public boolean hasPendingOutput() {
-    return (m_Servers.size() > 0);
+    return (m_Items.size() > 0);
   }
 
   /**
@@ -176,6 +176,6 @@ public class ListServers
    */
   @Override
   public Object output() {
-    return m_Servers.toArray(new String[m_Servers.size()]);
+    return m_Items.toArray(new String[m_Items.size()]);
   }
 }

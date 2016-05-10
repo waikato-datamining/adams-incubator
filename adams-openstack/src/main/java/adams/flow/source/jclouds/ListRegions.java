@@ -48,7 +48,7 @@ public class ListRegions
   private static final long serialVersionUID = -6630288063048110072L;
 
   /** the regions. */
-  protected List<String> m_Regions;
+  protected List<String> m_Items;
 
   /**
    * Returns a string describing the object.
@@ -66,7 +66,7 @@ public class ListRegions
   @Override
   protected void reset() {
     super.reset();
-    m_Regions = new ArrayList<>();
+    m_Items = new ArrayList<>();
   }
 
   /**
@@ -95,8 +95,8 @@ public class ListRegions
    */
   @Override
   protected String doExecute() {
-    m_Regions.clear();
-    m_Regions.addAll(((NovaApi) m_Connection.buildAPI(NovaApi.class)).getConfiguredRegions());
+    m_Items.clear();
+    m_Items.addAll(((NovaApi) m_Connection.buildAPI(NovaApi.class)).getConfiguredRegions());
     return null;
   }
 
@@ -108,7 +108,7 @@ public class ListRegions
    */
   @Override
   public boolean hasPendingOutput() {
-    return (m_Regions.size() > 0);
+    return (m_Items.size() > 0);
   }
 
   /**
@@ -118,6 +118,6 @@ public class ListRegions
    */
   @Override
   public Object output() {
-    return m_Regions.toArray(new String[m_Regions.size()]);
+    return m_Items.toArray(new String[m_Items.size()]);
   }
 }
