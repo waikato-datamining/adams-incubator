@@ -30,6 +30,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.io.Closeables;
 import com.google.inject.Module;
 import org.jclouds.ContextBuilder;
+import org.jclouds.View;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 
 import java.io.Closeable;
@@ -322,7 +323,7 @@ public class JCloudsConnection
   }
 
   /**
-   * Builds the API.
+   * Builds the API. API instances get closed automatically.
    *
    * @param cls		the API class to use
    * @return		the API
@@ -333,6 +334,16 @@ public class JCloudsConnection
     if (!m_APIInstances.containsKey(cls))
       m_APIInstances.put(cls, getContextBuilder().buildApi(cls));
     return m_APIInstances.get(cls);
+  }
+
+  /**
+   * Builds the view. Caller must close view.
+   *
+   * @param cls		the view class to use
+   * @return		the view
+   */
+  public synchronized View buildView(Class cls) {
+    return getContextBuilder().buildView(cls);
   }
 
   /**
