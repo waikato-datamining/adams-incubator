@@ -20,6 +20,7 @@
 
 package adams.flow.standalone;
 
+import adams.core.QuickInfoHelper;
 import adams.core.base.BaseClassname;
 import adams.core.base.BasePassword;
 import adams.core.base.BaseURL;
@@ -304,6 +305,23 @@ public class JCloudsConnection
    */
   public String APIClassTipText() {
     return "The API class for the provider.";
+  }
+
+  /**
+   * Returns a quick info about the actor, which will be displayed in the GUI.
+   *
+   * @return		null if no info available, otherwise short string
+   */
+  @Override
+  public String getQuickInfo() {
+    String	result;
+
+    result  = QuickInfoHelper.toString(this, "provider", m_Provider, "provider: ");
+    result += QuickInfoHelper.toString(this, "identity", m_Identity, ", identity: ");
+    result += QuickInfoHelper.toString(this, "endpoint", m_Endpoint, ", endpoint: ");
+    result += QuickInfoHelper.toString(this, "apiClass", m_APIClass, ", API: ");
+
+    return result;
   }
 
   /**

@@ -68,12 +68,28 @@ The following actors are available:
 \begin{tight_itemize}
   \item \textit{JCloudsConnection} -- general connection parameters for
   the cloud provider.
+  \item \textit{JCloudsStandalone} -- executes a JClouds action that generates
+  consumes no input and no output.
+  \item \textit{JCloudsSource} -- executes a JClouds action that generates
+  only output.
+  \item \textit{JCloudsTransformer} -- executes a JClouds action that consumes
+  data and generates output.
+  \item \textit{JCloudsSink} -- executes a JClouds action that only consumes data.
 \end{tight_itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Preferences}
 
-TODO
+Figure \ref{preferences} shows the preferences panel for JClouds. These
+preferences are used by the \textit{JCloudsConnection} standalone in the
+flow by default.
+
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=12.0cm]{images/preferences.png}
+  \caption{JClouds preferences panel.}
+  \label{preferences}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{bibliography}
