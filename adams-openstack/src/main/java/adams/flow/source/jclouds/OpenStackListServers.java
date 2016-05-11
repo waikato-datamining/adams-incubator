@@ -29,7 +29,7 @@ import java.util.List;
 
 /**
  <!-- globalinfo-start -->
- * Lists the servers from the specified region.
+ * Lists the server IDs from the specified region.
  * <br><br>
  <!-- globalinfo-end -->
  *
@@ -67,7 +67,7 @@ public class OpenStackListServers
    */
   @Override
   public String globalInfo() {
-    return "Lists the servers in the specified region.";
+    return "Lists the server IDs in the specified region.";
   }
 
   /**
@@ -161,7 +161,7 @@ public class OpenStackListServers
       serverApi = novaApi.getServerApi(m_Region);
       m_Items.clear();
       for (Server server : serverApi.listInDetail().concat())
-	m_Items.add(server.toString());  // TODO what to output
+	m_Items.add(server.getId());
     }
 
     return result;
