@@ -14,7 +14,7 @@
  */
 
 /**
- * OpenStackUploadContainer.java
+ * CopyFileTo.java
  * Copyright (C) 2016 University of Waikato, Hamilton, NZ
  */
 
@@ -29,8 +29,7 @@ import org.jclouds.ssh.SshClient;
 
 /**
  <!-- globalinfo-start -->
- * Stores an object with optional meta-data in the cloud.<br>
- * Outputs the name of the stored object.
+ * Copies the incoming file onto the server.
  * <br><br>
  <!-- globalinfo-end -->
  *
@@ -40,34 +39,19 @@ import org.jclouds.ssh.SshClient;
  * &nbsp;&nbsp;&nbsp;default: WARNING
  * </pre>
  * 
- * <pre>-region &lt;java.lang.String&gt; (property: region)
- * &nbsp;&nbsp;&nbsp;The region to use.
+ * <pre>-provider &lt;java.lang.String&gt; (property: provider)
+ * &nbsp;&nbsp;&nbsp;The cloud provider to use.
  * &nbsp;&nbsp;&nbsp;default: 
  * </pre>
  * 
- * <pre>-name &lt;java.lang.String&gt; (property: name)
- * &nbsp;&nbsp;&nbsp;The object name to use.
+ * <pre>-server &lt;java.lang.String&gt; (property: server)
+ * &nbsp;&nbsp;&nbsp;The ID of the server to copy the file to.
  * &nbsp;&nbsp;&nbsp;default: 
  * </pre>
  * 
- * <pre>-meta-data &lt;adams.core.base.BaseKeyValuePair&gt; [-meta-data ...] (property: metaData)
- * &nbsp;&nbsp;&nbsp;The meta-data to use (optional).
- * &nbsp;&nbsp;&nbsp;default: 
- * </pre>
- * 
- * <pre>-format &lt;STRING|STRING_CONVERSION|SERIALIZED_OBJECT&gt; (property: format)
- * &nbsp;&nbsp;&nbsp;The format to store the incoming data in.
- * &nbsp;&nbsp;&nbsp;default: STRING
- * </pre>
- * 
- * <pre>-to-string &lt;adams.data.conversion.ConversionToString&gt; (property: toString)
- * &nbsp;&nbsp;&nbsp;The conversion to convert object into string.
- * &nbsp;&nbsp;&nbsp;default: adams.data.conversion.StringToString
- * </pre>
- * 
- * <pre>-from-string &lt;adams.data.conversion.ConversionFromString&gt; (property: fromString)
- * &nbsp;&nbsp;&nbsp;The conversion to convert the string back into an object.
- * &nbsp;&nbsp;&nbsp;default: adams.data.conversion.StringToString
+ * <pre>-remote-dir &lt;java.lang.String&gt; (property: remoteDir)
+ * &nbsp;&nbsp;&nbsp;The remote directory to copy the file to.
+ * &nbsp;&nbsp;&nbsp;default: &#47;tmp
  * </pre>
  * 
  <!-- options-end -->
@@ -75,13 +59,13 @@ import org.jclouds.ssh.SshClient;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class OpenStackUploadFile
+public class CopyFileTo
   extends AbstractJCloudsTransformerAction {
 
   private static final long serialVersionUID = 5077164507336679181L;
 
-  /** the region. */
-  protected String m_Region;
+  /** the provider. */
+  protected String m_Provider;
 
   /** the server ID. */
   protected String m_Server;
@@ -111,7 +95,7 @@ public class OpenStackUploadFile
     super.defineOptions();
 
     m_OptionManager.add(
-      "region", "region",
+      "provider", "provider",
       "");
 
     m_OptionManager.add(
@@ -124,22 +108,23 @@ public class OpenStackUploadFile
   }
 
   /**
-   * Sets the region to use.
+   * Sets the provider to use.
    *
-   * @param value	the region
+   * @param value	the provider
    */
-  public void setRegion(String value) {
-    m_Region = value;
+  public void setProvider(String value) {
+    m_Provider = value;
     reset();
   }
 
   /**
-   * Returns the region to use.
+   * Returns the provider that this action requires.
    *
-   * @return		the region
+   * @return		the provider
    */
-  public String getRegion() {
-    return m_Region;
+  @Override
+  public String getProvider() {
+    return m_Provider;
   }
 
   /**
@@ -148,8 +133,8 @@ public class OpenStackUploadFile
    * @return 		tip text for this property suitable for
    * 			displaying in the GUI or for listing the options.
    */
-  public String regionTipText() {
-    return "The region to use.";
+  public String providerTipText() {
+    return "The cloud provider to use.";
   }
 
   /**
@@ -231,16 +216,6 @@ public class OpenStackUploadFile
   }
 
   /**
-   * Returns the provider that this action requires.
-   *
-   * @return		the provider
-   */
-  @Override
-  public String getProvider() {
-    return "openstack-nova";
-  }
-
-  /**
    * Performs the actual action.
    *
    * @return		null if successful, otherwise error message
@@ -257,9 +232,7 @@ public class OpenStackUploadFile
     result     = null;
     m_Uploaded = null;
 
-    if (m_Region.isEmpty())
-      result = "No region set!";
-    else if (m_Server.isEmpty())
+    if (m_Server.isEmpty())
       result = "No server ID set!";
 
     if (result == null) {
