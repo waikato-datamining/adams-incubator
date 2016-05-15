@@ -21,10 +21,10 @@
 package adams.flow.transformer.jclouds;
 
 import adams.core.io.PlaceholderFile;
+import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.io.Payloads;
-import org.jclouds.openstack.nova.v2_0.compute.NovaComputeService;
 import org.jclouds.ssh.SshClient;
 
 /**
@@ -249,7 +249,7 @@ public class OpenStackUploadFile
   protected String doExecute() {
     String 			result;
     ComputeServiceContext	context;
-    NovaComputeService		compute;
+    ComputeService		compute;
     NodeMetadata		node;
     SshClient			client;
     PlaceholderFile		file;
@@ -265,7 +265,7 @@ public class OpenStackUploadFile
     if (result == null) {
       file    = new PlaceholderFile((String) m_Input);
       context = (ComputeServiceContext) m_Connection.buildView(ComputeServiceContext.class);
-      compute = (NovaComputeService) context.getComputeService();
+      compute = context.getComputeService();
       node    = compute.getNodeMetadata(m_Server);
       client = compute.getContext().utils().sshForNode().apply(node);
       client.connect();
