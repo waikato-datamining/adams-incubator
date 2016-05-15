@@ -83,11 +83,14 @@ public class OpenStackUploadFile
   /** the region. */
   protected String m_Region;
 
+  /** the server ID. */
+  protected String m_Server;
+
   /** the remote directory. */
   protected String m_RemoteDir;
 
   /** the uploaded file. */
-  protected String m_UploadedName;
+  protected String m_Uploaded;
 
   /**
    * Returns a string describing the object.
@@ -109,6 +112,10 @@ public class OpenStackUploadFile
 
     m_OptionManager.add(
       "region", "region",
+      "");
+
+    m_OptionManager.add(
+      "server", "server",
       "");
 
     m_OptionManager.add(
@@ -143,6 +150,35 @@ public class OpenStackUploadFile
    */
   public String regionTipText() {
     return "The region to use.";
+  }
+
+  /**
+   * Sets the ID of the server to copy the file to.
+   *
+   * @param value	the server ID
+   */
+  public void setServer(String value) {
+    m_Server = value;
+    reset();
+  }
+
+  /**
+   * Returns the ID of the server to copy the file to.
+   *
+   * @return		the server ID
+   */
+  public String getServer() {
+    return m_Server;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String serverTipText() {
+    return "The ID of the server to copy the file to.";
   }
 
   /**
@@ -218,18 +254,26 @@ public class OpenStackUploadFile
     SshClient			client;
     PlaceholderFile		file;
 
-    result         = null;
-    m_UploadedName = null;
+    result     = null;
+    m_Uploaded = null;
 
-    file    = new PlaceholderFile((String) m_Input);
-    node    = null;  // TODO where to get node from?
-    context = (ComputeServiceContext) m_Connection.buildView(ComputeServiceContext.class);
-    compute = (NovaComputeService) context.getComputeService();
-    client  = compute.getContext().utils().sshForNode().apply(node);
-    client.connect();
-    // TODO credentials? https://jclouds.apache.org/start/compute/
-    client.put(m_RemoteDir + "/" + file.getName(), Payloads.newFilePayload(file.getAbsoluteFile()));
-    client.disconnect();
+    if (m_Region.isEmpty())
+      result = "No region set!";
+    else if (m_Server.isEmpty())
+      result = "No server ID set!";
+
+    if (result == null) {
+      file    = new PlaceholderFile((String) m_Input);
+      context = (ComputeServiceContext) m_Connection.buildView(ComputeServiceContext.class);
+      compute = (NovaComputeService) context.getComputeService();
+      node    = compute.getNodeMetadata(m_Server);
+      client = compute.getContext().utils().sshForNode().apply(node);
+      client.connect();
+      // TODO credentials? https://jclouds.apache.org/start/compute/
+      client.put(m_RemoteDir + "/" + file.getName(), Payloads.newFilePayload(file.getAbsoluteFile()));
+      client.disconnect();
+      context.close();
+    }
 
     return result;
   }
@@ -242,7 +286,7 @@ public class OpenStackUploadFile
    */
   @Override
   public boolean hasPendingOutput() {
-    return (m_UploadedName != null);
+    return (m_Uploaded != null);
   }
 
   /**
@@ -252,6 +296,6 @@ public class OpenStackUploadFile
    */
   @Override
   public Object output() {
-    return m_UploadedName;
+    return m_Uploaded;
   }
 }

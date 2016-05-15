@@ -9,10 +9,10 @@
     <version>0.4.13-SNAPSHOT</version>
   </parent>
 
-  <artifactId>adams-openstack</artifactId>
+  <artifactId>adams-jclouds-openstack</artifactId>
   <packaging>jar</packaging>
 
-  <name>adams-openstack</name>
+  <name>adams-jclouds-openstack</name>
   <description>Module containing Openstack support using JClouds.</description>
   <url>https://adams.cms.waikato.ac.nz/</url>
   <organization>
@@ -70,12 +70,6 @@
     <!-- jclouds OpenStack dependencies -->
     <dependency>
       <groupId>org.apache.jclouds.api</groupId>
-      <artifactId>openstack-keystone</artifactId>
-      <version>${jclouds.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.jclouds.api</groupId>
       <artifactId>openstack-nova</artifactId>
       <version>${jclouds.version}</version>
     </dependency>
@@ -83,36 +77,6 @@
     <dependency>
       <groupId>org.apache.jclouds.api</groupId>
       <artifactId>openstack-swift</artifactId>
-      <version>${jclouds.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.jclouds.api</groupId>
-      <artifactId>openstack-cinder</artifactId>
-      <version>${jclouds.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.jclouds.api</groupId>
-      <artifactId>openstack-trove</artifactId>
-      <version>${jclouds.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.jclouds.labs</groupId>
-      <artifactId>openstack-glance</artifactId>
-      <version>${jclouds.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.jclouds.labs</groupId>
-      <artifactId>openstack-marconi</artifactId>
-      <version>${jclouds.version}</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.jclouds.labs</groupId>
-      <artifactId>openstack-neutron</artifactId>
       <version>${jclouds.version}</version>
     </dependency>
   </dependencies>

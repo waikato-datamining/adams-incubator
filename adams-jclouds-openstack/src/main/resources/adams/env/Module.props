@@ -4,7 +4,7 @@
 # Version: $Revision: 8629 $
 
 # The name of the module
-Name=adams-openstack
+Name=adams-jclouds-openstack
 
 # The version of the module
 Version=${project.version}
@@ -13,7 +13,7 @@ Version=${project.version}
 BuildTimestamp=${timestamp}
 
 # A short description of the module
-Description=Cloud support for Openstack
+Description=Cloud support for Openstack using JClouds
 
 # The author of the module
 Author=Peter Reutemann
