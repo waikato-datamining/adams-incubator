@@ -32,6 +32,7 @@ import com.google.inject.Module;
 import org.jclouds.ContextBuilder;
 import org.jclouds.View;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
+import org.jclouds.sshj.config.SshjSshClientModule;
 
 import java.io.Closeable;
 import java.util.HashMap;
@@ -316,7 +317,9 @@ public class JCloudsConnection
       result.endpoint(m_Endpoint.getValue());
     result.credentials(m_Identity, m_Credential.getValue());
     if (isLoggingEnabled()) {
-      modules = ImmutableSet.<Module>of(new SLF4JLoggingModule());
+      modules = ImmutableSet.<Module>of(
+	new SLF4JLoggingModule(),
+	new SshjSshClientModule());
       result.modules(modules);
     }
 
