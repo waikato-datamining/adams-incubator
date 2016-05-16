@@ -87,18 +87,18 @@ import java.util.logging.Level;
  * </pre>
  * 
  * <pre>-identity &lt;java.lang.String&gt; (property: identity)
- * &nbsp;&nbsp;&nbsp;The identity to use (tenantName:userName).
- * &nbsp;&nbsp;&nbsp;default: tenantName:userName
+ * &nbsp;&nbsp;&nbsp;The identity to use (eg 'tenantName:userName' or 'accesskeyid').
+ * &nbsp;&nbsp;&nbsp;default: MoS_fracpete:fracpete
  * </pre>
  * 
  * <pre>-credential &lt;adams.core.base.BasePassword&gt; (property: credential)
- * &nbsp;&nbsp;&nbsp;The password to use for the connection.
- * &nbsp;&nbsp;&nbsp;default: {c2VjcmV0}
+ * &nbsp;&nbsp;&nbsp;The password or secretkey to use for the connection.
+ * &nbsp;&nbsp;&nbsp;default: {dG9udXNJYzA=}
  * </pre>
  * 
  * <pre>-endpoint &lt;adams.core.base.BaseURL&gt; (property: endpoint)
  * &nbsp;&nbsp;&nbsp;The URL for the API endpoint.
- * &nbsp;&nbsp;&nbsp;default: https:&#47;&#47;somehost:5000&#47;v2.0
+ * &nbsp;&nbsp;&nbsp;default: http:&#47;&#47;comet.cms.waikato.ac.nz:5000&#47;v2.0
  * </pre>
  * 
  <!-- options-end -->
@@ -225,7 +225,7 @@ public class JCloudsConnection
    * 			displaying in the GUI or for listing the options.
    */
   public String identityTipText() {
-    return "The identity to use (tenantName:userName).";
+    return "The identity to use (eg 'tenantName:userName' or 'accesskeyid').";
   }
 
   /**
@@ -254,7 +254,7 @@ public class JCloudsConnection
    * 			displaying in the GUI or for listing the options.
    */
   public String credentialTipText() {
-    return "The password to use for the connection.";
+    return "The password or secretkey to use for the connection.";
   }
 
   /**
