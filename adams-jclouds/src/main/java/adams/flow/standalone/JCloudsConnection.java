@@ -312,7 +312,8 @@ public class JCloudsConnection
     Iterable<Module> 	modules;
     
     result = ContextBuilder.newBuilder(m_Provider);
-    result.endpoint(m_Endpoint.getValue());
+    if (!m_Endpoint.getValue().equals(BaseURL.DEFAULT_URL))
+      result.endpoint(m_Endpoint.getValue());
     result.credentials(m_Identity, m_Credential.getValue());
     if (isLoggingEnabled()) {
       modules = ImmutableSet.<Module>of(new SLF4JLoggingModule());
