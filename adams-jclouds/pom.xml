@@ -93,7 +93,13 @@
       <artifactId>jclouds-sshj</artifactId>
       <version>${jclouds.version}</version>
     </dependency>
-    
+
+    <dependency>
+      <groupId>org.apache.jclouds</groupId>
+      <artifactId>jclouds-blobstore</artifactId>
+      <version>${jclouds.version}</version>
+    </dependency>
+
     <!-- 3rd party dependencies -->
     <dependency>
       <groupId>ch.qos.logback</groupId>
