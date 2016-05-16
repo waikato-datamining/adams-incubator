@@ -39,7 +39,8 @@
     <module>adams-javacv-dependencies</module>
     <module>adams-openml</module>
     <module>adams-jclouds</module>
-    <module>adams-openstack</module>
+    <module>adams-jclouds-aws</module>
+    <module>adams-jclouds-openstack</module>
     <module>adams-tumblr</module>
     <module>adams-weka-hadoop</module>
   </modules>
