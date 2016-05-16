@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2016-05-11 10:59:27
+# Date: 2016-05-16 15:02:17
 # User: fracpete
 # Charset: UTF-8
 adams.flow.control.Flow -annotation "Lists all objects in all the containers in all regions." -flow-execution-listener adams.flow.execution.NullListener
@@ -10,6 +10,7 @@ adams.flow.control.Flow -annotation "Lists all objects in all the containers in 
  adams.flow.source.Start
  adams.flow.control.Trigger -name "select region(s)"
   adams.flow.source.JCloudsSource -action adams.flow.source.jclouds.OpenStackListRegions
+  adams.flow.transformer.SpreadSheetInfo -output-array true -type CELL_VALUES -column-index Region
   adams.flow.transformer.SelectArraySubset -message "Please select the regions"
   adams.flow.transformer.ArrayToSequence
   adams.flow.transformer.SetVariable -var-name region
@@ -18,6 +19,7 @@ adams.flow.control.Flow -annotation "Lists all objects in all the containers in 
    adams.flow.sink.CallableSink -callable Display
   adams.flow.control.Trigger -name "select container(s)"
    adams.flow.source.JCloudsSource -action "adams.flow.source.jclouds.OpenStackListContainers -region @{region}"
+   adams.flow.transformer.SpreadSheetInfo -output-array true -type CELL_VALUES -column-index Name
    adams.flow.transformer.SelectArraySubset -message "Please select the containers"
    adams.flow.transformer.ArrayToSequence
    adams.flow.transformer.SetVariable -var-name container
@@ -26,10 +28,18 @@ adams.flow.control.Flow -annotation "Lists all objects in all the containers in 
     adams.flow.sink.CallableSink -callable Display
    adams.flow.control.Trigger -name "select object(s)"
     adams.flow.source.JCloudsSource -action "adams.flow.source.jclouds.OpenStackListObjects -region @{region} -container-name @{container}"
+    adams.flow.transformer.SpreadSheetInfo -output-array true -type CELL_VALUES -column-index Name
     adams.flow.transformer.SelectArraySubset -message "Please select the containers to delete"
     adams.flow.transformer.ArrayToSequence
+    adams.flow.transformer.SetVariable -var-name object
     adams.flow.control.Tee -name "output object name"
      adams.flow.transformer.StringInsert -position first -value "O: "
      adams.flow.sink.CallableSink -callable Display
     adams.flow.transformer.JCloudsTransformer -action "adams.flow.transformer.jclouds.OpenStackDownloadObject -region @{region} -container-name @{container}"
-    adams.flow.sink.CallableSink -callable Display
+    adams.flow.transformer.SetStorageValue -storage-name object
+    adams.flow.control.Trigger -name "select output file"
+     adams.flow.source.SelectFile -stop-if-canceled true -file-chooser-title "Select output file"
+     adams.flow.transformer.SetVariable -var-name outfile
+    adams.flow.control.Trigger -name "save file"
+     adams.flow.source.StorageValue -storage-name object
+     adams.flow.sink.BinaryFileWriter -output @{outfile}

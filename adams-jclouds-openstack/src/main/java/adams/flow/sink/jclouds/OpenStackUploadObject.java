@@ -24,6 +24,7 @@ import adams.core.SerializationHelper;
 import adams.core.Utils;
 import adams.core.base.BaseKeyValuePair;
 import adams.core.option.OptionUtils;
+import adams.data.blob.BlobContainer;
 import adams.data.conversion.ConversionFromString;
 import adams.data.conversion.ConversionToString;
 import adams.data.conversion.StringToString;
@@ -34,7 +35,7 @@ import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.features.ContainerApi;
 import org.jclouds.openstack.swift.v1.features.ObjectApi;
-import org.jclouds.openstack.swift.v1.options.CreateContainerOptions;
+import org.jclouds.openstack.swift.v1.options.PutOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +73,7 @@ import java.util.Map;
  * &nbsp;&nbsp;&nbsp;default: 
  * </pre>
  * 
- * <pre>-format &lt;STRING|STRING_CONVERSION|SERIALIZED_OBJECT&gt; (property: format)
+ * <pre>-format &lt;STRING|STRING_CONVERSION|BYTE_ARRAY|SERIALIZED_OBJECT&gt; (property: format)
  * &nbsp;&nbsp;&nbsp;The format to store the incoming data in.
  * &nbsp;&nbsp;&nbsp;default: STRING
  * </pre>
@@ -113,6 +114,7 @@ public class OpenStackUploadObject
   public enum Format {
     STRING,
     STRING_CONVERSION,
+    BYTE_ARRAY,
     SERIALIZED_OBJECT
   }
 
@@ -398,6 +400,8 @@ public class OpenStackUploadObject
     switch (m_Format) {
       case STRING:
 	return new Class[]{String.class};
+      case BYTE_ARRAY:
+        return new Class[]{byte[].class, BlobContainer.class};
       case SERIALIZED_OBJECT:
       case STRING_CONVERSION:
 	return new Class[]{Object.class};
@@ -427,7 +431,6 @@ public class OpenStackUploadObject
     SwiftApi			swiftApi;
     ContainerApi 		containerApi;
     Container			container;
-    CreateContainerOptions 	options;
     Map<String,String> 		meta;
     ObjectApi 			objectApi;
     Payload 			payload;
@@ -457,11 +460,8 @@ public class OpenStackUploadObject
 	for (BaseKeyValuePair pair: m_MetaData)
 	  meta.put(pair.getPairKey(), pair.getPairValue());
       }
-      options = CreateContainerOptions.Builder.metadata(meta);
       if (container == null)
-	containerApi.create(m_ContainerName, options);
-      else
-	containerApi.updateMetadata(m_ContainerName, meta);
+	containerApi.create(m_ContainerName);
 
       // convert data
       data = null;
@@ -479,6 +479,12 @@ public class OpenStackUploadObject
 	      getLogger().severe("Failed to convert object to string: " + msg);
 	    m_ToString.cleanUp();
 	    break;
+	  case BYTE_ARRAY:
+	    if (m_Input instanceof BlobContainer)
+	      data = ((BlobContainer) m_Input).getContent();
+	    else
+	      data = (byte[]) m_Input;
+	    break;
 	  case SERIALIZED_OBJECT:
 	    data = SerializationHelper.toByteArray(m_Input);
 	    break;
@@ -494,7 +500,7 @@ public class OpenStackUploadObject
       if (data != null) {
 	payload   = Payloads.newByteSourcePayload(ByteSource.wrap(data));
 	objectApi = swiftApi.getObjectApi(m_Region, m_ContainerName);
-	objectApi.put(m_ObjectName, payload);
+	objectApi.put(m_ObjectName, payload, PutOptions.Builder.metadata(meta));
 	if (isLoggingEnabled())
 	  getLogger().info("Data uploaded: " + m_Region + "/" + m_ContainerName + "/" + m_ObjectName);
       }

@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2016-05-11 10:26:37
+# Date: 2016-05-16 15:43:08
 # User: fracpete
 # Charset: UTF-8
 adams.flow.control.Flow -annotation "Uploads an object to one or more regions." -flow-execution-listener adams.flow.execution.NullListener
@@ -13,6 +13,7 @@ adams.flow.control.Flow -annotation "Uploads an object to one or more regions." 
   adams.flow.transformer.SpreadSheetVariableRowIterator
  adams.flow.control.Trigger -name "select upload region(s)"
   adams.flow.source.JCloudsSource -action adams.flow.source.jclouds.OpenStackListRegions
+  adams.flow.transformer.SpreadSheetInfo -output-array true -type CELL_VALUES -column-index Region
   adams.flow.transformer.SelectArraySubset -message "Please select the region to upload to"
   adams.flow.transformer.SetStorageValue -storage-name regions
  adams.flow.control.Trigger -name "loading file"
@@ -31,4 +32,4 @@ adams.flow.control.Flow -annotation "Uploads an object to one or more regions." 
    adams.flow.sink.CallableSink -callable Display
   adams.flow.control.Trigger -name "upload to region"
    adams.flow.source.StorageValue -storage-name object
-   adams.flow.sink.JCloudsSink -action "adams.flow.sink.jclouds.OpenStackUploadObject -region @{region} -container-name @{container} -object-name @{name} -format SERIALIZED_OBJECT -to-string adams.data.conversion.StringToString -from-string adams.data.conversion.StringToString"
+   adams.flow.sink.JCloudsSink -action "adams.flow.sink.jclouds.OpenStackUploadObject -region @{region} -container-name @{container} -object-name @{name} -format BYTE_ARRAY -to-string adams.data.conversion.StringToString -from-string adams.data.conversion.StringToString"

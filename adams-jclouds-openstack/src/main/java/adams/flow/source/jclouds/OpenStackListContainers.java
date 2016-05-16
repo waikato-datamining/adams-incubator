@@ -20,12 +20,12 @@
 
 package adams.flow.source.jclouds;
 
+import adams.data.spreadsheet.DefaultSpreadSheet;
+import adams.data.spreadsheet.Row;
+import adams.data.spreadsheet.SpreadSheet;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.features.ContainerApi;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  <!-- globalinfo-start -->
@@ -58,7 +58,7 @@ public class OpenStackListContainers
   protected String m_Region;
 
   /** the containers. */
-  protected List<String> m_Items;
+  protected SpreadSheet m_Output;
 
   /**
    * Returns a string describing the object.
@@ -88,7 +88,8 @@ public class OpenStackListContainers
   @Override
   protected void reset() {
     super.reset();
-    m_Items = new ArrayList<>();
+
+    m_Output = null;
   }
 
   /**
@@ -136,7 +137,7 @@ public class OpenStackListContainers
    */
   @Override
   public Class[] generates() {
-    return new Class[]{String[].class};
+    return new Class[]{SpreadSheet.class};
   }
 
   /**
@@ -149,18 +150,37 @@ public class OpenStackListContainers
     String		result;
     SwiftApi 		swiftApi;
     ContainerApi 	containerApi;
+    SpreadSheet		sheet;
+    Row			row;
 
-    result = null;
+    result   = null;
+    m_Output = null;
 
     if (m_Region.isEmpty())
       result = "No region provided!";
 
     if (result == null) {
-      swiftApi = (SwiftApi) m_Connection.buildAPI(SwiftApi.class);
+      swiftApi     = (SwiftApi) m_Connection.buildAPI(SwiftApi.class);
       containerApi = swiftApi.getContainerApi(m_Region);
-      m_Items.clear();
-      for (Container container : containerApi.list().toSet())
-	m_Items.add(container.getName());
+      sheet        = new DefaultSpreadSheet();
+
+      // header
+      row = sheet.getHeaderRow();
+      row.addCell("N").setContentAsString("Name");
+      row.addCell("BU").setContentAsString("BytesUsed");
+      row.addCell("OC").setContentAsString("ObjectCount");
+      row.addCell("AR").setContentAsString("AnybodyRead");
+
+      // data
+      for (Container container : containerApi.list().toSet()) {
+	row = sheet.addRow();
+	row.addCell("N").setContentAsString(container.getName());
+	row.addCell("BU").setContent(container.getBytesUsed());
+	row.addCell("OC").setContent(container.getObjectCount());
+	row.addCell("AR").setContent(container.getAnybodyRead() == null ? null : container.getAnybodyRead().toString());
+      }
+
+      m_Output = sheet;
     }
 
     return result;
@@ -174,7 +194,7 @@ public class OpenStackListContainers
    */
   @Override
   public boolean hasPendingOutput() {
-    return (m_Items.size() > 0);
+    return (m_Output != null);
   }
 
   /**
@@ -184,6 +204,11 @@ public class OpenStackListContainers
    */
   @Override
   public Object output() {
-    return m_Items.toArray(new String[m_Items.size()]);
+    Object	result;
+
+    result   = m_Output;
+    m_Output = null;
+
+    return result;
   }
 }

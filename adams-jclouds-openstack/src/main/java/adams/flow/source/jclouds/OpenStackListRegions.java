@@ -20,10 +20,10 @@
 
 package adams.flow.source.jclouds;
 
+import adams.data.spreadsheet.DefaultSpreadSheet;
+import adams.data.spreadsheet.Row;
+import adams.data.spreadsheet.SpreadSheet;
 import org.jclouds.openstack.nova.v2_0.NovaApi;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  <!-- globalinfo-start -->
@@ -48,7 +48,7 @@ public class OpenStackListRegions
   private static final long serialVersionUID = -6630288063048110072L;
 
   /** the regions. */
-  protected List<String> m_Items;
+  protected SpreadSheet m_Output;
 
   /**
    * Returns a string describing the object.
@@ -66,7 +66,8 @@ public class OpenStackListRegions
   @Override
   protected void reset() {
     super.reset();
-    m_Items = new ArrayList<>();
+
+    m_Output = null;
   }
 
   /**
@@ -85,7 +86,7 @@ public class OpenStackListRegions
    */
   @Override
   public Class[] generates() {
-    return new Class[]{String[].class};
+    return new Class[]{SpreadSheet.class};
   }
 
   /**
@@ -95,8 +96,23 @@ public class OpenStackListRegions
    */
   @Override
   protected String doExecute() {
-    m_Items.clear();
-    m_Items.addAll(((NovaApi) m_Connection.buildAPI(NovaApi.class)).getConfiguredRegions());
+    SpreadSheet		sheet;
+    Row			row;
+
+    sheet = new DefaultSpreadSheet();
+
+    // header
+    row = sheet.getHeaderRow();
+    row.addCell("R").setContentAsString("Region");
+
+    // data
+    for (String region: ((NovaApi) m_Connection.buildAPI(NovaApi.class)).getConfiguredRegions()) {
+      row = sheet.addRow();
+      row.addCell("R").setContentAsString(region);
+    }
+
+    m_Output = sheet;
+
     return null;
   }
 
@@ -108,7 +124,7 @@ public class OpenStackListRegions
    */
   @Override
   public boolean hasPendingOutput() {
-    return (m_Items.size() > 0);
+    return (m_Output != null);
   }
 
   /**
@@ -118,6 +134,11 @@ public class OpenStackListRegions
    */
   @Override
   public Object output() {
-    return m_Items.toArray(new String[m_Items.size()]);
+    Object	result;
+
+    result   = m_Output;
+    m_Output = null;
+
+    return result;
   }
 }

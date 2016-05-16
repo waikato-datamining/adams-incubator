@@ -23,6 +23,7 @@ package adams.flow.transformer.jclouds;
 import adams.core.SerializationHelper;
 import adams.core.Utils;
 import adams.core.option.OptionUtils;
+import adams.data.blob.BlobContainer;
 import adams.data.conversion.ConversionFromString;
 import adams.flow.sink.jclouds.OpenStackUploadObject;
 import adams.flow.sink.jclouds.OpenStackUploadObject.Format;
@@ -227,14 +228,14 @@ public class OpenStackDownloadObject
 	swiftObject = objectApi.get(name);
 	meta = swiftObject.getMetadata();
 	// what format?
-	if (meta.containsKey(OpenStackUploadObject.METADATA_FORMAT))
-	  format = Format.valueOf(meta.get(OpenStackUploadObject.METADATA_FORMAT));
+	if (meta.containsKey(OpenStackUploadObject.METADATA_FORMAT.toLowerCase()))
+	  format = Format.valueOf(meta.get(OpenStackUploadObject.METADATA_FORMAT.toLowerCase()));
 	else
 	  format = Format.STRING;
 	// special conversion?
 	if (format == Format.STRING_CONVERSION) {
-	  if (meta.containsKey(OpenStackUploadObject.METADATA_CONVERSION)) {
-	    conv = (ConversionFromString) OptionUtils.forCommandLine(ConversionFromString.class, meta.get(OpenStackUploadObject.METADATA_CONVERSION));
+	  if (meta.containsKey(OpenStackUploadObject.METADATA_CONVERSION.toLowerCase())) {
+	    conv = (ConversionFromString) OptionUtils.forCommandLine(ConversionFromString.class, meta.get(OpenStackUploadObject.METADATA_CONVERSION.toLowerCase()));
 	  }
 	  else {
 	    getLogger().warning("No conversion commandline stored in meta-data, cannot convert from string back into object!");
@@ -257,6 +258,10 @@ public class OpenStackDownloadObject
 	      getLogger().severe("Failed to convert string: " + msg);
 	    conv.cleanUp();
 	    break;
+          case BYTE_ARRAY:
+            m_Object = new BlobContainer();
+	    ((BlobContainer) m_Object).setContent(bos.toByteArray());
+            break;
 	  case SERIALIZED_OBJECT:
 	    m_Object = SerializationHelper.fromByteArray(bos.toByteArray());
 	    break;

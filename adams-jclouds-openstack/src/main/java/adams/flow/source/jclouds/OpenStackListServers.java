@@ -20,12 +20,13 @@
 
 package adams.flow.source.jclouds;
 
+import adams.core.DateTimeMsec;
+import adams.data.spreadsheet.DefaultSpreadSheet;
+import adams.data.spreadsheet.Row;
+import adams.data.spreadsheet.SpreadSheet;
 import org.jclouds.openstack.nova.v2_0.NovaApi;
 import org.jclouds.openstack.nova.v2_0.domain.Server;
 import org.jclouds.openstack.nova.v2_0.features.ServerApi;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  <!-- globalinfo-start -->
@@ -58,7 +59,7 @@ public class OpenStackListServers
   protected String m_Region;
 
   /** the servers. */
-  protected List<String> m_Items;
+  protected SpreadSheet m_Output;
 
   /**
    * Returns a string describing the object.
@@ -88,7 +89,8 @@ public class OpenStackListServers
   @Override
   protected void reset() {
     super.reset();
-    m_Items = new ArrayList<>();
+
+    m_Output = null;
   }
 
   /**
@@ -136,7 +138,7 @@ public class OpenStackListServers
    */
   @Override
   public Class[] generates() {
-    return new Class[]{String[].class};
+    return new Class[]{SpreadSheet.class};
   }
 
   /**
@@ -149,19 +151,43 @@ public class OpenStackListServers
     String	result;
     NovaApi	novaApi;
     ServerApi 	serverApi;
+    SpreadSheet	sheet;
+    Row		row;
 
-    result = null;
+    result   = null;
+    m_Output = null;
 
     if (m_Region.isEmpty())
       result = "No region provided!";
 
     if (result == null) {
-
-      novaApi = (NovaApi) m_Connection.buildAPI(NovaApi.class);
+      novaApi   = (NovaApi) m_Connection.buildAPI(NovaApi.class);
       serverApi = novaApi.getServerApi(m_Region);
-      m_Items.clear();
-      for (Server server : serverApi.listInDetail().concat())
-	m_Items.add(server.getId());
+      sheet     = new DefaultSpreadSheet();
+
+      // header
+      row = sheet.getHeaderRow();
+      row.addCell("ID").setContentAsString("ID");
+      row.addCell("TID").setContentAsString("TenantID");
+      row.addCell("UID").setContentAsString("UserID");
+      row.addCell("S").setContentAsString("Status");
+      row.addCell("IM").setContentAsString("Image");
+      row.addCell("CR").setContentAsString("Created");
+      row.addCell("UP").setContentAsString("Updated");
+
+      // data
+      for (Server server : serverApi.listInDetail().concat()) {
+	row = sheet.addRow();
+	row.addCell("ID").setContentAsString(server.getId());
+	row.addCell("TID").setContentAsString(server.getTenantId());
+	row.addCell("UID").setContentAsString(server.getUserId());
+	row.addCell("S").setContentAsString(server.getStatus().toString());
+	row.addCell("IM").setContentAsString(server.getImage().toString());
+	row.addCell("CR").setContent(new DateTimeMsec(server.getCreated()));
+	row.addCell("UP").setContent(new DateTimeMsec(server.getUpdated()));
+      }
+
+      m_Output = sheet;
     }
 
     return result;
@@ -175,7 +201,7 @@ public class OpenStackListServers
    */
   @Override
   public boolean hasPendingOutput() {
-    return (m_Items.size() > 0);
+    return (m_Output != null);
   }
 
   /**
@@ -185,6 +211,11 @@ public class OpenStackListServers
    */
   @Override
   public Object output() {
-    return m_Items.toArray(new String[m_Items.size()]);
+    Object	result;
+
+    result   = m_Output;
+    m_Output = null;
+
+    return result;
   }
 }

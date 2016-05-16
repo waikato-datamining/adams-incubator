@@ -20,12 +20,14 @@
 
 package adams.flow.source.jclouds;
 
+import adams.core.DateTimeMsec;
+import adams.data.spreadsheet.DefaultSpreadSheet;
+import adams.data.spreadsheet.Row;
+import adams.data.spreadsheet.SpreadSheet;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.ObjectList;
+import org.jclouds.openstack.swift.v1.domain.SwiftObject;
 import org.jclouds.openstack.swift.v1.features.ObjectApi;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  <!-- globalinfo-start -->
@@ -65,8 +67,8 @@ public class OpenStackListObjects
   /** the name for the container. */
   protected String m_ContainerName;
 
-  /** the objects. */
-  protected List<String> m_Items;
+  /** the containers. */
+  protected SpreadSheet m_Output;
 
   /**
    * Returns a string describing the object.
@@ -100,7 +102,8 @@ public class OpenStackListObjects
   @Override
   protected void reset() {
     super.reset();
-    m_Items = new ArrayList<>();
+
+    m_Output = null;
   }
 
   /**
@@ -177,7 +180,7 @@ public class OpenStackListObjects
    */
   @Override
   public Class[] generates() {
-    return new Class[]{String[].class};
+    return new Class[]{SpreadSheet.class};
   }
 
   /**
@@ -192,8 +195,12 @@ public class OpenStackListObjects
     ObjectApi 		objectApi;
     ObjectList		objects;
     int			i;
+    SpreadSheet		sheet;
+    Row			row;
+    SwiftObject		obj;
 
-    result = null;
+    result   = null;
+    m_Output = null;
 
     if (m_Region.isEmpty())
       result = "No region provided!";
@@ -204,9 +211,29 @@ public class OpenStackListObjects
       swiftApi  = (SwiftApi) getConnection().buildAPI(SwiftApi.class);
       objectApi = swiftApi.getObjectApi(m_Region, m_ContainerName);
       objects   = objectApi.list();
-      m_Items.clear();
-      for (i = 0; i < objects.size(); i++)
-	m_Items.add(objects.get(i).getName());
+      sheet     = new DefaultSpreadSheet();
+
+      // header
+      row = sheet.getHeaderRow();
+      row.addCell("N").setContentAsString("Name");
+      row.addCell("U").setContentAsString("URI");
+      row.addCell("E").setContentAsString("ETag");
+      row.addCell("LM").setContentAsString("LastModified");
+
+      // data
+      for (i = 0; i < objects.size(); i++) {
+	obj = objects.get(i);
+	row = sheet.addRow();
+	row.addCell("N").setContentAsString(obj.getName());
+	if (obj.getUri() != null)
+	  row.addCell("U").setContentAsString(obj.getUri().toString());
+	if (obj.getETag() != null)
+	  row.addCell("E").setContentAsString(obj.getETag());
+	if (obj.getLastModified() != null)
+	  row.addCell("LM").setContent(new DateTimeMsec(obj.getLastModified()));
+      }
+
+      m_Output = sheet;
     }
 
     return result;
@@ -220,7 +247,7 @@ public class OpenStackListObjects
    */
   @Override
   public boolean hasPendingOutput() {
-    return (m_Items.size() > 0);
+    return (m_Output != null);
   }
 
   /**
@@ -230,6 +257,11 @@ public class OpenStackListObjects
    */
   @Override
   public Object output() {
-    return m_Items.toArray(new String[m_Items.size()]);
+    Object	result;
+
+    result   = m_Output;
+    m_Output = null;
+
+    return result;
   }
 }
