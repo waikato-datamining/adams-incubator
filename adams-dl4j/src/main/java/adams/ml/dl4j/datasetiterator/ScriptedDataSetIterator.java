@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  <!-- globalinfo-start -->
- * A meta input split that uses any scripting handler for managing the input split in the specified script file.
+ * A meta dataset iterator that uses any scripting handler for managing the dataset iterator in the specified script file.
  * <br><br>
  <!-- globalinfo-end -->
  *
@@ -82,8 +82,8 @@ public class ScriptedDataSetIterator
   @Override
   public String globalInfo() {
     return
-      "A meta input split that uses any scripting handler for managing the "
-        + "input split in the specified script file.";
+      "A meta dataset iterator that uses any scripting handler for managing the "
+        + "dataset iterator in the specified script file.";
   }
 
   /**
