@@ -33,23 +33,47 @@ import java.util.Map;
 
 /**
  <!-- globalinfo-start -->
+ * A meta-model that uses any scripting handler for generating the model in the specified script file.
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->
+ * <pre>-logging-level &lt;OFF|SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST&gt; (property: loggingLevel)
+ * &nbsp;&nbsp;&nbsp;The logging level for outputting errors and debugging output.
+ * &nbsp;&nbsp;&nbsp;default: WARNING
+ * </pre>
+ * 
+ * <pre>-script &lt;adams.core.io.PlaceholderFile&gt; (property: scriptFile)
+ * &nbsp;&nbsp;&nbsp;The script file to load and execute.
+ * &nbsp;&nbsp;&nbsp;default: ${CWD}
+ * </pre>
+ * 
+ * <pre>-options &lt;adams.core.base.BaseText&gt; (property: scriptOptions)
+ * &nbsp;&nbsp;&nbsp;The options for the script; must consist of 'key=value' pairs separated 
+ * &nbsp;&nbsp;&nbsp;by blanks; the value of 'key' can be accessed via the 'getAdditionalOptions
+ * &nbsp;&nbsp;&nbsp;().getXYZ("key")' method in the script actor.
+ * &nbsp;&nbsp;&nbsp;default: 
+ * </pre>
+ * 
+ * <pre>-handler &lt;adams.core.scripting.AbstractScriptingHandler&gt; (property: handler)
+ * &nbsp;&nbsp;&nbsp;The handler to use for scripting.
+ * &nbsp;&nbsp;&nbsp;default: adams.core.scripting.Dummy
+ * </pre>
+ * 
  <!-- options-end -->
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
  * @version $Revision: 13193 $
  */
 public class ModelWithScriptedConfiguration
-  extends AbstractScriptedModelGenerator
+  extends AbstractScriptedModelConfigurator
   implements Model {
 
   /** for serialization. */
   private static final long serialVersionUID = 1304903578667689350L;
 
   /** the loaded script object. */
-  protected transient ModelGenerator m_ModelGeneratorObject;
+  protected transient ModelConfigurator m_ModelConfiguratorObject;
 
   /** the configured model to use. */
   protected Model m_Model;
@@ -65,7 +89,7 @@ public class ModelWithScriptedConfiguration
   @Override
   public String globalInfo() {
     return
-      "A sink action that uses any scripting handler for managing the "
+      "A meta-model that uses any scripting handler for generating the "
 	+ "model in the specified script file.";
   }
 
@@ -134,7 +158,7 @@ public class ModelWithScriptedConfiguration
     Object[]	result;
 
     result = m_Handler.loadScriptObject(
-      ModelGenerator.class,
+      ModelConfigurator.class,
       m_ScriptFile,
       m_ScriptOptions,
       getOptionManager().getVariables());
@@ -166,7 +190,7 @@ public class ModelWithScriptedConfiguration
     result = super.check();
 
     if (result == null)
-      m_ModelGeneratorObject = (ModelGenerator) m_ScriptObject;
+      m_ModelConfiguratorObject = (ModelConfigurator) m_ScriptObject;
 
     return result;
   }
@@ -178,7 +202,7 @@ public class ModelWithScriptedConfiguration
   public void destroy() {
     super.destroy();
 
-    m_ModelGeneratorObject = null;
+    m_ModelConfiguratorObject = null;
   }
 
   /**
@@ -188,8 +212,15 @@ public class ModelWithScriptedConfiguration
    */
   @Override
   public Model configureModel() {
-    if (m_ModelGeneratorObject != null)
-      return m_ModelGeneratorObject.configureModel();
+    String	msg;
+
+    if (m_ModelConfiguratorObject == null) {
+      msg = check();
+      if (msg != null)
+	throw new IllegalStateException(msg);
+    }
+    if (m_ModelConfiguratorObject != null)
+      return m_ModelConfiguratorObject.configureModel();
     else
       throw new IllegalStateException("No model generator available!");
   }

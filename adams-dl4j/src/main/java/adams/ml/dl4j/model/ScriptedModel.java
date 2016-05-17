@@ -33,9 +33,33 @@ import java.util.Map;
 
 /**
  <!-- globalinfo-start -->
+ * A model that uses any scripting handler for managing the model in the specified script file.
+ * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->
+ * <pre>-logging-level &lt;OFF|SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST&gt; (property: loggingLevel)
+ * &nbsp;&nbsp;&nbsp;The logging level for outputting errors and debugging output.
+ * &nbsp;&nbsp;&nbsp;default: WARNING
+ * </pre>
+ * 
+ * <pre>-script &lt;adams.core.io.PlaceholderFile&gt; (property: scriptFile)
+ * &nbsp;&nbsp;&nbsp;The script file to load and execute.
+ * &nbsp;&nbsp;&nbsp;default: ${CWD}
+ * </pre>
+ * 
+ * <pre>-options &lt;adams.core.base.BaseText&gt; (property: scriptOptions)
+ * &nbsp;&nbsp;&nbsp;The options for the script; must consist of 'key=value' pairs separated 
+ * &nbsp;&nbsp;&nbsp;by blanks; the value of 'key' can be accessed via the 'getAdditionalOptions
+ * &nbsp;&nbsp;&nbsp;().getXYZ("key")' method in the script actor.
+ * &nbsp;&nbsp;&nbsp;default: 
+ * </pre>
+ * 
+ * <pre>-handler &lt;adams.core.scripting.AbstractScriptingHandler&gt; (property: handler)
+ * &nbsp;&nbsp;&nbsp;The handler to use for scripting.
+ * &nbsp;&nbsp;&nbsp;default: adams.core.scripting.Dummy
+ * </pre>
+ * 
  <!-- options-end -->
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)

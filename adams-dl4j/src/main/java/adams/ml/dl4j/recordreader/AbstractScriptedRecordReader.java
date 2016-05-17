@@ -14,27 +14,28 @@
  */
 
 /*
- * AbstractScriptedModelGenerator.java
+ * AbstractScriptedRecordReader.java
  * Copyright (C) 2016 University of Waikato, Hamilton, New Zealand
  *
  */
 
-package adams.ml.dl4j.model;
+package adams.ml.dl4j.recordreader;
 
 import adams.core.base.BaseText;
 import adams.core.io.PlaceholderFile;
 import adams.core.option.AbstractOptionHandler;
 import adams.core.scripting.FileBasedScriptingWithOptions;
+import org.canova.api.records.reader.RecordReader;
 
 /**
- * Abstract ancestor for model generators that execute external scripts.
+ * Abstract ancestor for input splits that execute external scripts.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
- * @version $Revision$
+ * @version $Revision: 13195 $
  */
-public abstract class AbstractScriptedModelGenerator
+public abstract class AbstractScriptedRecordReader
   extends AbstractOptionHandler
-  implements ModelGenerator, FileBasedScriptingWithOptions {
+  implements RecordReader, FileBasedScriptingWithOptions {
 
   /** for serialization. */
   private static final long serialVersionUID = -8187233244973711251L;

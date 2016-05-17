@@ -9,6 +9,7 @@
 
 # record readers to use
 org.canova.api.records.reader.RecordReader=\
+  adams.ml.dl4j.recordreader,\
   org.canova.api.records.reader,\
   org.canova.api.records.reader.impl,\
   org.canova.codec.reader,\
@@ -32,6 +33,7 @@ org.deeplearning4j.nn.api.Model=\
 
 # dataset iterators
 org.deeplearning4j.datasets.iterator.DataSetIterator=\
+  adams.ml.dl4j.datasetiterator,\
   org.deeplearning4j.datasets.iterator,\
   org.deeplearning4j.datasets.iterator.impl,\
   org.deeplearning4j.datasets.canova,\
@@ -40,4 +42,5 @@ org.deeplearning4j.datasets.iterator.DataSetIterator=\
 
 # the input splitters
 org.canova.api.split.InputSplit=\
-  org.canova.api.split,\
+  adams.ml.dl4j.inputsplit,\
+  org.canova.api.split

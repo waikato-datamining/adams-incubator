@@ -14,7 +14,7 @@
  */
 
 /**
- * ModelGenerator.java
+ * ModelConfigurator.java
  * Copyright (C) 2016 University of Waikato, Hamilton, NZ
  */
 
@@ -28,7 +28,7 @@ import org.deeplearning4j.nn.api.Model;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public interface ModelGenerator {
+public interface ModelConfigurator {
 
   /**
    * Configures a model and returns it.
