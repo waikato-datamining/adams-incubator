@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  <!-- globalinfo-start -->
- * A meta dataset iterator that uses any scripting handler for managing the dataset iterator in the specified script file.
+ * A meta dataset iterator that uses any scripting handler for managing the  in the specified script file.
  * <br><br>
  <!-- globalinfo-end -->
  *
@@ -202,7 +202,7 @@ public class ScriptedDataSetIterator
    * Returns the iterator. Raises an {@link IllegalStateException} if not
    * model object loaded.
    *
-   * @return		the input splot
+   * @return		the iterator
    */
   protected synchronized DataSetIterator getDataSetIterator() {
     if (m_DataSetIteratorObject != null)
