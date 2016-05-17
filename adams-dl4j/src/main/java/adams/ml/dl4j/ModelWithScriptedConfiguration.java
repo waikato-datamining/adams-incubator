@@ -13,14 +13,15 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * Groovy.java
- * Copyright (C) 2016 University of Waikato, Hamilton, NZ
+/*
+ * ModelWithScriptedConfiguration.java
+ * Copyright (C) 2016 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.ml.dl4j;
 
-import adams.core.scripting.GroovyScript;
+import adams.core.scripting.AbstractScriptingHandler;
+import adams.core.scripting.Dummy;
 import org.deeplearning4j.berkeley.Pair;
 import org.deeplearning4j.nn.api.Model;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
@@ -37,19 +38,24 @@ import java.util.Map;
  <!-- options-start -->
  <!-- options-end -->
  *
- * @author FracPete (fracpete at waikato dot ac dot nz)
- * @version $Revision$
+ * @author  fracpete (fracpete at waikato dot ac dot nz)
+ * @version $Revision: 13193 $
  */
-public class Groovy
-  extends AbstractScriptedModel {
+public class ModelWithScriptedConfiguration
+  extends AbstractScriptedModelGenerator
+  implements Model {
 
-  private static final long serialVersionUID = 7199224184165322501L;
+  /** for serialization. */
+  private static final long serialVersionUID = 1304903578667689350L;
 
   /** the loaded script object. */
-  protected transient Model m_ModelObject;
+  protected transient ModelGenerator m_ModelGeneratorObject;
 
-  /** the inline script. */
-  protected GroovyScript m_InlineScript;
+  /** the configured model to use. */
+  protected Model m_Model;
+
+  /** the scripting handler to use. */
+  protected AbstractScriptingHandler m_Handler;
 
   /**
    * Returns a string describing the object.
@@ -58,7 +64,9 @@ public class Groovy
    */
   @Override
   public String globalInfo() {
-    return "A filter that uses a Groovy script for processing the data.";
+    return
+      "A sink action that uses any scripting handler for managing the "
+	+ "model in the specified script file.";
   }
 
   /**
@@ -69,8 +77,8 @@ public class Groovy
     super.defineOptions();
 
     m_OptionManager.add(
-	    "inline-script", "inlineScript",
-	    getDefaultInlineScript());
+      "handler", "handler",
+      new Dummy());
   }
 
   /**
@@ -82,37 +90,28 @@ public class Groovy
   @Override
   public String scriptOptionsTipText() {
     return
-        "The options for the Groovy script; must consist of 'key=value' pairs "
-      + "separated by blanks; the value of 'key' can be accessed via the "
-      + "'getAdditionalOptions().getXYZ(\"key\")' method in the Groovy actor.";
+      "The options for the script; must consist of 'key=value' pairs "
+	+ "separated by blanks; the value of 'key' can be accessed via the "
+	+ "'getAdditionalOptions().getXYZ(\"key\")' method in the script actor.";
   }
 
   /**
-   * Returns the default inline script.
+   * Sets the handler to use for scripting.
    *
-   * @return		the default script
+   * @param value 	the handler
    */
-  protected GroovyScript getDefaultInlineScript() {
-    return new GroovyScript();
-  }
-
-  /**
-   * Sets the inline script to use instead of the external script file.
-   *
-   * @param value 	the inline script
-   */
-  public void setInlineScript(GroovyScript value) {
-    m_InlineScript = value;
+  public void setHandler(AbstractScriptingHandler value) {
+    m_Handler = value;
     reset();
   }
 
   /**
-   * Gets the inline script to use instead of the external script file.
+   * Gets the handler to use for scripting.
    *
-   * @return 		the inline script
+   * @return 		the handler
    */
-  public GroovyScript getInlineScript() {
-    return m_InlineScript;
+  public AbstractScriptingHandler getHandler() {
+    return m_Handler;
   }
 
   /**
@@ -121,8 +120,8 @@ public class Groovy
    * @return		tip text for this property suitable for
    * 			displaying in the explorer/experimenter gui
    */
-  public String inlineScriptTipText() {
-    return "The inline script, if not using an external script file.";
+  public String handlerTipText() {
+    return "The handler to use for scripting.";
   }
 
   /**
@@ -134,12 +133,11 @@ public class Groovy
   protected String loadScriptObject() {
     Object[]	result;
 
-    result = adams.core.scripting.Groovy.getSingleton().loadScriptObject(
-	Model.class,
-	m_ScriptFile,
-	m_InlineScript,
-	m_ScriptOptions,
-	getOptionManager().getVariables());
+    result = m_Handler.loadScriptObject(
+      ModelGenerator.class,
+      m_ScriptFile,
+      m_ScriptOptions,
+      getOptionManager().getVariables());
     m_ScriptObject = result[1];
 
     return (String) result[0];
@@ -168,9 +166,44 @@ public class Groovy
     result = super.check();
 
     if (result == null)
-      m_ModelObject = (Model) m_ScriptObject;
+      m_ModelGeneratorObject = (ModelGenerator) m_ScriptObject;
 
     return result;
+  }
+
+  /**
+   * Frees up memory in a "destructive" non-reversible way.
+   */
+  @Override
+  public void destroy() {
+    super.destroy();
+
+    m_ModelGeneratorObject = null;
+  }
+
+  /**
+   * Configures a model and returns it.
+   *
+   * @return		the model
+   */
+  @Override
+  public Model configureModel() {
+    if (m_ModelGeneratorObject != null)
+      return m_ModelGeneratorObject.configureModel();
+    else
+      throw new IllegalStateException("No model generator available!");
+  }
+
+  /**
+   * Instantiates the model if necessary.
+   *
+   * @return		the model
+   * @see		#configureModel()
+   */
+  protected synchronized Model getModel() {
+    if (m_Model == null)
+      m_Model = configureModel();
+    return m_Model;
   }
 
   /**
@@ -179,10 +212,7 @@ public class Groovy
    */
   @Override
   public void update(INDArray gradient, String paramType) {
-    if (m_ModelObject != null)
-      m_ModelObject.update(gradient, paramType);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().update(gradient, paramType);
   }
 
   /**
@@ -191,10 +221,7 @@ public class Groovy
    */
   @Override
   public double score() {
-    if (m_ModelObject != null)
-      return m_ModelObject.score();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().score();
   }
 
   /**
@@ -202,10 +229,7 @@ public class Groovy
    */
   @Override
   public void computeGradientAndScore() {
-    if (m_ModelObject != null)
-      m_ModelObject.computeGradientAndScore();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().computeGradientAndScore();
   }
 
   /**
@@ -215,10 +239,7 @@ public class Groovy
    */
   @Override
   public void accumulateScore(double accum) {
-    if (m_ModelObject != null)
-      m_ModelObject.accumulateScore(accum);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().accumulateScore(accum);
   }
 
   /**
@@ -227,10 +248,7 @@ public class Groovy
    */
   @Override
   public INDArray params() {
-    if (m_ModelObject != null)
-      return m_ModelObject.params();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().params();
   }
 
   /**
@@ -240,10 +258,7 @@ public class Groovy
    */
   @Override
   public int numParams() {
-    if (m_ModelObject != null)
-      return m_ModelObject.numParams();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().numParams();
   }
 
   /**
@@ -253,10 +268,7 @@ public class Groovy
    */
   @Override
   public int numParams(boolean backwards) {
-    if (m_ModelObject != null)
-      return m_ModelObject.numParams(backwards);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().numParams(backwards);
   }
 
   /**
@@ -267,10 +279,7 @@ public class Groovy
    */
   @Override
   public void setParams(INDArray params) {
-    if (m_ModelObject != null)
-      m_ModelObject.setParams(params);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().setParams(params);
   }
 
   /**
@@ -280,10 +289,7 @@ public class Groovy
    */
   @Override
   public void applyLearningRateScoreDecay() {
-    if (m_ModelObject != null)
-      m_ModelObject.applyLearningRateScoreDecay();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().applyLearningRateScoreDecay();
   }
 
   /**
@@ -296,7 +302,7 @@ public class Groovy
     msg = check();
     if (msg != null)
       throw new IllegalStateException(msg);
-    m_ModelObject.fit();
+    getModel().fit();
   }
 
   /**
@@ -305,10 +311,7 @@ public class Groovy
    */
   @Override
   public void fit(INDArray data) {
-    if (m_ModelObject != null)
-      m_ModelObject.fit(data);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().fit(data);
   }
 
   /**
@@ -317,10 +320,7 @@ public class Groovy
    */
   @Override
   public void iterate(INDArray input) {
-    if (m_ModelObject != null)
-      m_ModelObject.iterate(input);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().iterate(input);
   }
 
   /**
@@ -329,10 +329,7 @@ public class Groovy
    */
   @Override
   public Gradient gradient() {
-    if (m_ModelObject != null)
-      return m_ModelObject.gradient();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().gradient();
   }
 
   /**
@@ -341,10 +338,7 @@ public class Groovy
    */
   @Override
   public Pair<Gradient, Double> gradientAndScore() {
-    if (m_ModelObject != null)
-      return m_ModelObject.gradientAndScore();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().gradientAndScore();
   }
 
   /**
@@ -353,10 +347,7 @@ public class Groovy
    */
   @Override
   public int batchSize() {
-    if (m_ModelObject != null)
-      return m_ModelObject.batchSize();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().batchSize();
   }
 
   /**
@@ -365,10 +356,7 @@ public class Groovy
    */
   @Override
   public NeuralNetConfiguration conf() {
-    if (m_ModelObject != null)
-      return m_ModelObject.conf();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().conf();
   }
 
   /**
@@ -377,10 +365,7 @@ public class Groovy
    */
   @Override
   public void setConf(NeuralNetConfiguration conf) {
-    if (m_ModelObject != null)
-      m_ModelObject.setConf(conf);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().setConf(conf);
   }
 
   /**
@@ -389,10 +374,7 @@ public class Groovy
    */
   @Override
   public INDArray input() {
-    if (m_ModelObject != null)
-      return m_ModelObject.input();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().input();
   }
 
   /**
@@ -400,10 +382,7 @@ public class Groovy
    */
   @Override
   public void validateInput() {
-    if (m_ModelObject != null)
-      m_ModelObject.validateInput();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().validateInput();
   }
 
   /**
@@ -412,10 +391,7 @@ public class Groovy
    */
   @Override
   public ConvexOptimizer getOptimizer() {
-    if (m_ModelObject != null)
-      return m_ModelObject.getOptimizer();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().getOptimizer();
   }
 
   /**
@@ -425,10 +401,7 @@ public class Groovy
    */
   @Override
   public INDArray getParam(String param) {
-    if (m_ModelObject != null)
-      return m_ModelObject.getParam(param);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().getParam(param);
   }
 
   /**
@@ -436,10 +409,7 @@ public class Groovy
    */
   @Override
   public void initParams() {
-    if (m_ModelObject != null)
-      m_ModelObject.initParams();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().initParams();
   }
 
   /**
@@ -448,10 +418,7 @@ public class Groovy
    */
   @Override
   public Map<String, INDArray> paramTable() {
-    if (m_ModelObject != null)
-      return m_ModelObject.paramTable();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().paramTable();
   }
 
   /**
@@ -460,10 +427,7 @@ public class Groovy
    */
   @Override
   public void setParamTable(Map<String, INDArray> paramTable) {
-    if (m_ModelObject != null)
-      m_ModelObject.setParamTable(paramTable);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().setParamTable(paramTable);
   }
 
   /**
@@ -473,10 +437,7 @@ public class Groovy
    */
   @Override
   public void setParam(String key, INDArray val) {
-    if (m_ModelObject != null)
-      m_ModelObject.setParam(key, val);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().setParam(key, val);
   }
 
   /**
@@ -484,19 +445,6 @@ public class Groovy
    */
   @Override
   public void clear() {
-    if (m_ModelObject != null)
-      m_ModelObject.clear();
-    else
-      throw new IllegalStateException("No model script loaded!");
-  }
-
-  /**
-   * Frees up memory in a "destructive" non-reversible way.
-   */
-  @Override
-  public void destroy() {
-    super.destroy();
-
-    m_ModelObject = null;
+    getModel().clear();
   }
 }

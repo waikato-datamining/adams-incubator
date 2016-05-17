@@ -14,7 +14,7 @@
  */
 
 /*
- * Scripted.java
+ * ScriptedModel.java
  * Copyright (C) 2016 University of Waikato, Hamilton, New Zealand
  */
 
@@ -33,39 +33,15 @@ import java.util.Map;
 
 /**
  <!-- globalinfo-start -->
- * A sink action that uses any scripting handler for executing the script action in the specified file.
- * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- options-start -->
- * <pre>-logging-level &lt;OFF|SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST&gt; (property: loggingLevel)
- * &nbsp;&nbsp;&nbsp;The logging level for outputting errors and debugging output.
- * &nbsp;&nbsp;&nbsp;default: WARNING
- * </pre>
- *
- * <pre>-script &lt;adams.core.io.PlaceholderFile&gt; (property: scriptFile)
- * &nbsp;&nbsp;&nbsp;The script file to load and execute.
- * &nbsp;&nbsp;&nbsp;default: ${CWD}
- * </pre>
- *
- * <pre>-options &lt;adams.core.base.BaseText&gt; (property: scriptOptions)
- * &nbsp;&nbsp;&nbsp;The options for the script; must consist of 'key=value' pairs separated 
- * &nbsp;&nbsp;&nbsp;by blanks; the value of 'key' can be accessed via the 'getAdditionalOptions
- * &nbsp;&nbsp;&nbsp;().getXYZ("key")' method in the script actor.
- * &nbsp;&nbsp;&nbsp;default: 
- * </pre>
- *
- * <pre>-handler &lt;adams.core.scripting.AbstractScriptingHandler&gt; (property: handler)
- * &nbsp;&nbsp;&nbsp;The handler to use for scripting.
- * &nbsp;&nbsp;&nbsp;default: adams.core.scripting.Dummy
- * </pre>
- *
  <!-- options-end -->
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public class Scripted
+public class ScriptedModel
   extends AbstractScriptedModel {
 
   /** for serialization. */
@@ -85,7 +61,7 @@ public class Scripted
   @Override
   public String globalInfo() {
     return
-      "A sink action that uses any scripting handler for managing the "
+      "A model that uses any scripting handler for managing the "
 	+ "model in the specified script file.";
   }
 
@@ -202,15 +178,25 @@ public class Scripted
   }
 
   /**
+   * Returns the model. Raises an {@link IllegalStateException} if not
+   * model object loaded.
+   *
+   * @return		the model
+   */
+  protected synchronized Model getModel() {
+    if (m_ModelObject != null)
+      return m_ModelObject;
+    else
+      throw new IllegalStateException("No model script loaded!");
+  }
+
+  /**
    * Perform one update  applying the gradient
    * @param gradient the gradient to apply
    */
   @Override
   public void update(INDArray gradient, String paramType) {
-    if (m_ModelObject != null)
-      m_ModelObject.update(gradient, paramType);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().update(gradient, paramType);
   }
 
   /**
@@ -219,10 +205,7 @@ public class Scripted
    */
   @Override
   public double score() {
-    if (m_ModelObject != null)
-      return m_ModelObject.score();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().score();
   }
 
   /**
@@ -230,10 +213,7 @@ public class Scripted
    */
   @Override
   public void computeGradientAndScore() {
-    if (m_ModelObject != null)
-      m_ModelObject.computeGradientAndScore();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().computeGradientAndScore();
   }
 
   /**
@@ -243,10 +223,7 @@ public class Scripted
    */
   @Override
   public void accumulateScore(double accum) {
-    if (m_ModelObject != null)
-      m_ModelObject.accumulateScore(accum);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().accumulateScore(accum);
   }
 
   /**
@@ -255,10 +232,7 @@ public class Scripted
    */
   @Override
   public INDArray params() {
-    if (m_ModelObject != null)
-      return m_ModelObject.params();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().params();
   }
 
   /**
@@ -268,10 +242,7 @@ public class Scripted
    */
   @Override
   public int numParams() {
-    if (m_ModelObject != null)
-      return m_ModelObject.numParams();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().numParams();
   }
 
   /**
@@ -281,10 +252,7 @@ public class Scripted
    */
   @Override
   public int numParams(boolean backwards) {
-    if (m_ModelObject != null)
-      return m_ModelObject.numParams(backwards);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().numParams(backwards);
   }
 
   /**
@@ -295,10 +263,7 @@ public class Scripted
    */
   @Override
   public void setParams(INDArray params) {
-    if (m_ModelObject != null)
-      m_ModelObject.setParams(params);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().setParams(params);
   }
 
   /**
@@ -308,10 +273,7 @@ public class Scripted
    */
   @Override
   public void applyLearningRateScoreDecay() {
-    if (m_ModelObject != null)
-      m_ModelObject.applyLearningRateScoreDecay();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().applyLearningRateScoreDecay();
   }
 
   /**
@@ -319,12 +281,7 @@ public class Scripted
    */
   @Override
   public void fit() {
-    String	msg;
-
-    msg = check();
-    if (msg != null)
-      throw new IllegalStateException(msg);
-    m_ModelObject.fit();
+    getModel().fit();
   }
 
   /**
@@ -333,10 +290,7 @@ public class Scripted
    */
   @Override
   public void fit(INDArray data) {
-    if (m_ModelObject != null)
-      m_ModelObject.fit(data);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().fit(data);
   }
 
   /**
@@ -345,10 +299,7 @@ public class Scripted
    */
   @Override
   public void iterate(INDArray input) {
-    if (m_ModelObject != null)
-      m_ModelObject.iterate(input);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().iterate(input);
   }
 
   /**
@@ -357,10 +308,7 @@ public class Scripted
    */
   @Override
   public Gradient gradient() {
-    if (m_ModelObject != null)
-      return m_ModelObject.gradient();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().gradient();
   }
 
   /**
@@ -369,10 +317,7 @@ public class Scripted
    */
   @Override
   public Pair<Gradient, Double> gradientAndScore() {
-    if (m_ModelObject != null)
-      return m_ModelObject.gradientAndScore();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().gradientAndScore();
   }
 
   /**
@@ -381,10 +326,7 @@ public class Scripted
    */
   @Override
   public int batchSize() {
-    if (m_ModelObject != null)
-      return m_ModelObject.batchSize();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().batchSize();
   }
 
   /**
@@ -393,10 +335,7 @@ public class Scripted
    */
   @Override
   public NeuralNetConfiguration conf() {
-    if (m_ModelObject != null)
-      return m_ModelObject.conf();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().conf();
   }
 
   /**
@@ -405,10 +344,7 @@ public class Scripted
    */
   @Override
   public void setConf(NeuralNetConfiguration conf) {
-    if (m_ModelObject != null)
-      m_ModelObject.setConf(conf);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().setConf(conf);
   }
 
   /**
@@ -417,10 +353,7 @@ public class Scripted
    */
   @Override
   public INDArray input() {
-    if (m_ModelObject != null)
-      return m_ModelObject.input();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().input();
   }
 
   /**
@@ -428,10 +361,7 @@ public class Scripted
    */
   @Override
   public void validateInput() {
-    if (m_ModelObject != null)
-      m_ModelObject.validateInput();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().validateInput();
   }
 
   /**
@@ -440,10 +370,7 @@ public class Scripted
    */
   @Override
   public ConvexOptimizer getOptimizer() {
-    if (m_ModelObject != null)
-      return m_ModelObject.getOptimizer();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().getOptimizer();
   }
 
   /**
@@ -453,10 +380,7 @@ public class Scripted
    */
   @Override
   public INDArray getParam(String param) {
-    if (m_ModelObject != null)
-      return m_ModelObject.getParam(param);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().getParam(param);
   }
 
   /**
@@ -464,10 +388,7 @@ public class Scripted
    */
   @Override
   public void initParams() {
-    if (m_ModelObject != null)
-      m_ModelObject.initParams();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().initParams();
   }
 
   /**
@@ -476,10 +397,7 @@ public class Scripted
    */
   @Override
   public Map<String, INDArray> paramTable() {
-    if (m_ModelObject != null)
-      return m_ModelObject.paramTable();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    return getModel().paramTable();
   }
 
   /**
@@ -488,10 +406,7 @@ public class Scripted
    */
   @Override
   public void setParamTable(Map<String, INDArray> paramTable) {
-    if (m_ModelObject != null)
-      m_ModelObject.setParamTable(paramTable);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().setParamTable(paramTable);
   }
 
   /**
@@ -501,10 +416,7 @@ public class Scripted
    */
   @Override
   public void setParam(String key, INDArray val) {
-    if (m_ModelObject != null)
-      m_ModelObject.setParam(key, val);
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().setParam(key, val);
   }
 
   /**
@@ -512,9 +424,6 @@ public class Scripted
    */
   @Override
   public void clear() {
-    if (m_ModelObject != null)
-      m_ModelObject.clear();
-    else
-      throw new IllegalStateException("No model script loaded!");
+    getModel().clear();
   }
 }
