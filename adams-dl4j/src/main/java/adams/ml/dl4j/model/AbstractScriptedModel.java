@@ -14,27 +14,28 @@
  */
 
 /*
- * AbstractScriptedModelGenerator.java
+ * AbstractScriptedModel.java
  * Copyright (C) 2016 University of Waikato, Hamilton, New Zealand
  *
  */
 
-package adams.ml.dl4j;
+package adams.ml.dl4j.model;
 
 import adams.core.base.BaseText;
 import adams.core.io.PlaceholderFile;
 import adams.core.option.AbstractOptionHandler;
 import adams.core.scripting.FileBasedScriptingWithOptions;
+import org.deeplearning4j.nn.api.Model;
 
 /**
- * Abstract ancestor for model generators that execute external scripts.
+ * Abstract ancestor for models that execute external scripts.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public abstract class AbstractScriptedModelGenerator
+public abstract class AbstractScriptedModel
   extends AbstractOptionHandler
-  implements ModelGenerator, FileBasedScriptingWithOptions {
+  implements Model, FileBasedScriptingWithOptions {
 
   /** for serialization. */
   private static final long serialVersionUID = -8187233244973711251L;

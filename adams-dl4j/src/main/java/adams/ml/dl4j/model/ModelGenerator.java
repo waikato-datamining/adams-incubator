@@ -18,7 +18,7 @@
  * Copyright (C) 2016 University of Waikato, Hamilton, NZ
  */
 
-package adams.ml.dl4j;
+package adams.ml.dl4j.model;
 
 import org.deeplearning4j.nn.api.Model;
 

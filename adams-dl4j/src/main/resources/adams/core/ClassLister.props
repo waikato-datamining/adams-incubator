@@ -6,3 +6,38 @@
 #
 # Author:  FracPete (fracpete at waikato dot ac dot nz)
 # Version: $Revision$
+
+# record readers to use
+org.canova.api.records.reader.RecordReader=\
+  org.canova.api.records.reader,\
+  org.canova.api.records.reader.impl,\
+  org.canova.codec.reader,\
+  org.canova.image.recordreader
+
+# models
+org.deeplearning4j.nn.api.Model=\
+  adams.ml.dl4j.model,\
+  org.deeplearning4j.nn.api,\
+  org.deeplearning4j.nn.multilayer,\
+  org.deeplearning4j.nn.layers,\
+  org.deeplearning4j.nn.layers.convolution,\
+  org.deeplearning4j.nn.layers.convolution.subsampling,\
+  org.deeplearning4j.nn.layers.feedforward.dense,\
+  org.deeplearning4j.nn.layers.feedforward.rbm,\
+  org.deeplearning4j.nn.layers.feedforward.autoencoder,\
+  org.deeplearning4j.nn.layers.feedforward.autoencoder.recursive,\
+  org.deeplearning4j.nn.layers.normalization,\
+  org.deeplearning4j.nn.layers.recurrent,\
+  org.deeplearning4j.plot
+
+# dataset iterators
+org.deeplearning4j.datasets.iterator.DataSetIterator=\
+  org.deeplearning4j.datasets.iterator,\
+  org.deeplearning4j.datasets.iterator.impl,\
+  org.deeplearning4j.datasets.canova,\
+  org.deeplearning4j.datasets.iterator.impl,\
+  org.deeplearning4j.datasets.test
+
+# the input splitters
+org.canova.api.split.InputSplit=\
+  org.canova.api.split,\

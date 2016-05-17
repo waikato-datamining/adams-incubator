@@ -14,17 +14,18 @@
  */
 
 /**
- * AbstractModelGeneratorScript.java
+ * AbstractScript.java
  * Copyright (C) 2016 University of Waikato, Hamilton, New Zealand
  */
-package adams.ml.dl4j;
+package adams.ml.dl4j.model;
 
 import adams.core.option.AbstractOptionHandler;
 import adams.flow.core.AdditionalOptions;
 import adams.flow.core.AdditionalOptionsHandler;
+import org.deeplearning4j.nn.api.Model;
 
 /**
- * Ancestor for model generator scripts.
+ * Ancestor for model scripts.
  * <br><br>
  * Scripts of scripting languages like Jython or Groovy need to be derived from this
  * class.
@@ -32,9 +33,9 @@ import adams.flow.core.AdditionalOptionsHandler;
  * @author  fracpete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public abstract class AbstractModelGeneratorScript
+public abstract class AbstractScript
   extends AbstractOptionHandler
-  implements ModelGenerator, AdditionalOptionsHandler {
+  implements Model, AdditionalOptionsHandler {
 
   /** for serialization. */
   private static final long serialVersionUID = -8283487312539061029L;

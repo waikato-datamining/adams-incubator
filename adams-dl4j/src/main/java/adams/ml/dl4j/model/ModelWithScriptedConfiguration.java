@@ -14,11 +14,11 @@
  */
 
 /*
- * ScriptedModel.java
+ * ModelWithScriptedConfiguration.java
  * Copyright (C) 2016 University of Waikato, Hamilton, New Zealand
  */
 
-package adams.ml.dl4j;
+package adams.ml.dl4j.model;
 
 import adams.core.scripting.AbstractScriptingHandler;
 import adams.core.scripting.Dummy;
@@ -39,16 +39,20 @@ import java.util.Map;
  <!-- options-end -->
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
- * @version $Revision$
+ * @version $Revision: 13193 $
  */
-public class ScriptedModel
-  extends AbstractScriptedModel {
+public class ModelWithScriptedConfiguration
+  extends AbstractScriptedModelGenerator
+  implements Model {
 
   /** for serialization. */
   private static final long serialVersionUID = 1304903578667689350L;
 
   /** the loaded script object. */
-  protected transient Model m_ModelObject;
+  protected transient ModelGenerator m_ModelGeneratorObject;
+
+  /** the configured model to use. */
+  protected Model m_Model;
 
   /** the scripting handler to use. */
   protected AbstractScriptingHandler m_Handler;
@@ -61,7 +65,7 @@ public class ScriptedModel
   @Override
   public String globalInfo() {
     return
-      "A model that uses any scripting handler for managing the "
+      "A sink action that uses any scripting handler for managing the "
 	+ "model in the specified script file.";
   }
 
@@ -130,7 +134,7 @@ public class ScriptedModel
     Object[]	result;
 
     result = m_Handler.loadScriptObject(
-      Model.class,
+      ModelGenerator.class,
       m_ScriptFile,
       m_ScriptOptions,
       getOptionManager().getVariables());
@@ -162,7 +166,7 @@ public class ScriptedModel
     result = super.check();
 
     if (result == null)
-      m_ModelObject = (Model) m_ScriptObject;
+      m_ModelGeneratorObject = (ModelGenerator) m_ScriptObject;
 
     return result;
   }
@@ -174,20 +178,32 @@ public class ScriptedModel
   public void destroy() {
     super.destroy();
 
-    m_ModelObject = null;
+    m_ModelGeneratorObject = null;
   }
 
   /**
-   * Returns the model. Raises an {@link IllegalStateException} if not
-   * model object loaded.
+   * Configures a model and returns it.
    *
    * @return		the model
    */
-  protected synchronized Model getModel() {
-    if (m_ModelObject != null)
-      return m_ModelObject;
+  @Override
+  public Model configureModel() {
+    if (m_ModelGeneratorObject != null)
+      return m_ModelGeneratorObject.configureModel();
     else
-      throw new IllegalStateException("No model script loaded!");
+      throw new IllegalStateException("No model generator available!");
+  }
+
+  /**
+   * Instantiates the model if necessary.
+   *
+   * @return		the model
+   * @see		#configureModel()
+   */
+  protected synchronized Model getModel() {
+    if (m_Model == null)
+      m_Model = configureModel();
+    return m_Model;
   }
 
   /**
@@ -281,6 +297,11 @@ public class ScriptedModel
    */
   @Override
   public void fit() {
+    String	msg;
+
+    msg = check();
+    if (msg != null)
+      throw new IllegalStateException(msg);
     getModel().fit();
   }
 
