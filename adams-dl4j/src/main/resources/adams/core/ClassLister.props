@@ -40,6 +40,12 @@ org.deeplearning4j.datasets.iterator.DataSetIterator=\
   org.deeplearning4j.datasets.iterator.impl,\
   org.deeplearning4j.datasets.test
 
+# the dataset preprocessors
+org.nd4j.linalg.dataset.api.DataSetPreProcessor=\
+  adams.ml.dl4j.datasetpreprocessor,\
+  org.nd4j.linalg.dataset.api,\
+  org.deeplearning4j.datasets.iterator
+
 # the input splitters
 org.canova.api.split.InputSplit=\
   adams.ml.dl4j.inputsplit,\
