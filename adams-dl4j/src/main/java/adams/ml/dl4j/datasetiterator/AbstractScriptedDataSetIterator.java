@@ -28,7 +28,7 @@ import adams.core.scripting.FileBasedScriptingWithOptions;
 import org.deeplearning4j.datasets.iterator.DataSetIterator;
 
 /**
- * Abstract ancestor for input splits that execute external scripts.
+ * Abstract ancestor for dataset iterators that execute external scripts.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision: 13195 $
