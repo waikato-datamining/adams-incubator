@@ -768,7 +768,7 @@ public class SimpleMultiLayerNetwork
       .regularization(m_UseRegularization)
       .l2(m_L2)
       .useDropConnect(m_UseDropConnect)
-      .list(2) // # NN layers (doesn't count input layer)
+      .list()
       .layer(0, new RBM.Builder(RBM.HiddenUnit.RECTIFIED, RBM.VisibleUnit.GAUSSIAN)
 	  .nIn(numInput) // # input nodes
 	  .nOut(m_HiddenNodes) // # fully connected hidden layer nodes. Add list if multiple layers.
