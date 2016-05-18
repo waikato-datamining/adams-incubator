@@ -59,7 +59,14 @@ public abstract class AbstractModelConfigurator
    * @return		the model
    */
   public Model configureModel() {
+    Model	result;
+
     check();
-    return doConfigureModel();
+    result = doConfigureModel();
+
+    if (isLoggingEnabled())
+      getLogger().info(result.conf().toYaml());
+
+    return result;
   }
 }
