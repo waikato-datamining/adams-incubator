@@ -21,6 +21,9 @@
 package adams.ml.dl4j.recordreader;
 
 import adams.core.option.AbstractOptionHandler;
+import adams.core.option.OptionUtils;
+import adams.ml.dl4j.inputsplit.FileSplitConfigurator;
+import adams.ml.dl4j.inputsplit.InputSplitConfigurator;
 import org.canova.api.records.reader.RecordReader;
 
 /**
@@ -34,6 +37,50 @@ public abstract class AbstractRecordReaderConfigurator
   implements RecordReaderConfigurator {
 
   private static final long serialVersionUID = -5049221729823530346L;
+
+  /** the input split. */
+  protected InputSplitConfigurator m_InputSplit;
+
+  /**
+   * Adds options to the internal list of options.
+   */
+  @Override
+  public void defineOptions() {
+    super.defineOptions();
+
+    m_OptionManager.add(
+      "input-split", "inputSplit",
+      new FileSplitConfigurator());
+  }
+
+  /**
+   * Sets the input split configurator to use.
+   *
+   * @param value	the configurator
+   */
+  public void setInputSplit(InputSplitConfigurator value) {
+    m_InputSplit = value;
+    reset();
+  }
+
+  /**
+   * Returns the input split configurator to use.
+   *
+   * @return 		the configurator
+   */
+  public InputSplitConfigurator getInputSplit() {
+    return m_InputSplit;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return		tip text for this property suitable for
+   *             	displaying in the GUI or for listing the options.
+   */
+  public String inputSplitTipText() {
+    return "The input split configurator to use for initializing the iterator.";
+  }
 
   /**
    * Hook method before configuring the record reader.
@@ -59,7 +106,17 @@ public abstract class AbstractRecordReaderConfigurator
    * @return		the reader
    */
   public RecordReader configureRecordReader() {
+    RecordReader	result;
+
     check();
-    return doConfigureRecordReader();
+    result = doConfigureRecordReader();
+    try {
+      result.initialize(m_InputSplit.configureInputSplit());
+    }
+    catch (Exception e) {
+      throw new IllegalStateException("Failed to initialize with input split: " + OptionUtils.getCommandLine(m_InputSplit), e);
+    }
+
+    return result;
   }
 }
