@@ -27,7 +27,9 @@ import org.canova.api.records.reader.RecordReader;
 import org.canova.api.split.InputSplit;
 import org.canova.api.writable.Writable;
 
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
@@ -276,6 +278,18 @@ public class ScriptedRecordReader
   @Override
   public List<String> getLabels() {
     return getRecordReader().getLabels();
+  }
+
+  /**
+   * Load the record from the given DataInputStream
+   * Unlike {@link #next()} the internal state of the RecordReader is not modified
+   * Implementations of this method should not close the DataInputStream
+   *
+   * @throws IOException if error occurs during reading from the input stream
+   */
+  @Override
+  public Collection<Writable> record(URI uri, DataInputStream dataInputStream) throws IOException {
+    return getRecordReader().record(uri, dataInputStream);
   }
 
   /** Set the configuration to be used by this object. */

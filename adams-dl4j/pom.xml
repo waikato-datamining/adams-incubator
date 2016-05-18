@@ -43,9 +43,9 @@
   </developers>
 
   <properties>
-    <nd4j.version>0.4-rc3.8</nd4j.version>
-    <dl4j.version>0.4-rc3.8</dl4j.version>
-    <canova.version>0.0.0.14</canova.version>
+    <nd4j.version>0.4-rc3.9</nd4j.version>
+    <dl4j.version>0.4-rc3.9</dl4j.version>
+    <canova.version>0.0.0.15</canova.version>
     <jackson.version>2.5.1</jackson.version>
   </properties>
 
@@ -106,7 +106,13 @@
 
     <dependency>
       <groupId>org.nd4j</groupId>
-      <artifactId>nd4j-x86</artifactId>
+      <artifactId>nd4j-backend-impls</artifactId>
+      <version>${nd4j.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.nd4j</groupId>
+      <artifactId>nd4j-native</artifactId>
       <version>${nd4j.version}</version>
     </dependency>
 
