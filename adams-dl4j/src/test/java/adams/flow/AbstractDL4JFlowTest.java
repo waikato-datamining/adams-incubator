@@ -53,7 +53,7 @@ public abstract class AbstractDL4JFlowTest
 	new org.nd4j.linalg.factory.Nd4j();
 	m_CanRunDL4J = true;
       }
-      catch (Exception e) {
+      catch (Throwable t) {
 	m_CanRunDL4J = false;
       }
 
