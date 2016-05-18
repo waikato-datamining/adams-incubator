@@ -22,13 +22,16 @@ package adams.ml.dl4j.datasetpreprocessor;
 
 import org.nd4j.linalg.dataset.api.DataSetPreProcessor;
 
+import java.io.Serializable;
+
 /**
  * Interface for classes that can configure a {@link DataSetPreProcessor}.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public interface DataSetPreProcessorConfigurator {
+public interface DataSetPreProcessorConfigurator
+  extends Serializable {
 
   /**
    * Configures the {@link DataSetPreProcessor} and returns it.

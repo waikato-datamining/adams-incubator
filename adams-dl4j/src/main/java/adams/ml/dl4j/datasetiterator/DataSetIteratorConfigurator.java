@@ -22,13 +22,16 @@ package adams.ml.dl4j.datasetiterator;
 
 import org.deeplearning4j.datasets.iterator.DataSetIterator;
 
+import java.io.Serializable;
+
 /**
  * Interface for classes that can configure a {@link DataSetIterator}.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public interface DataSetIteratorConfigurator {
+public interface DataSetIteratorConfigurator
+  extends Serializable {
 
   /**
    * Configures the {@link DataSetIterator} and returns it.

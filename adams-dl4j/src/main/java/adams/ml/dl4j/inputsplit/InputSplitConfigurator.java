@@ -22,13 +22,16 @@ package adams.ml.dl4j.inputsplit;
 
 import org.canova.api.split.InputSplit;
 
+import java.io.Serializable;
+
 /**
  * Interface for classes that can configure an {@link InputSplit}.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public interface InputSplitConfigurator {
+public interface InputSplitConfigurator
+  extends Serializable {
 
   /**
    * Configures the {@link InputSplit} and returns it.

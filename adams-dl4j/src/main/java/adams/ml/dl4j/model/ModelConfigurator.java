@@ -22,13 +22,16 @@ package adams.ml.dl4j.model;
 
 import org.deeplearning4j.nn.api.Model;
 
+import java.io.Serializable;
+
 /**
  * Interface for classes that can configure a {@link Model}.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @version $Revision$
  */
-public interface ModelConfigurator {
+public interface ModelConfigurator
+  extends Serializable {
 
   /**
    * Configures a model and returns it.
