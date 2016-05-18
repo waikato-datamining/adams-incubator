@@ -44,7 +44,7 @@ import org.openml.apiconnector.io.OpenmlConnector;
  * &nbsp;&nbsp;&nbsp;default: OpenMLConnection
  * </pre>
  * 
- * <pre>-annotation &lt;adams.core.base.BaseText&gt; (property: annotations)
+ * <pre>-annotation &lt;adams.core.base.BaseAnnotation&gt; (property: annotations)
  * &nbsp;&nbsp;&nbsp;The annotations to attach to this actor.
  * &nbsp;&nbsp;&nbsp;default: 
  * </pre>
@@ -61,14 +61,20 @@ import org.openml.apiconnector.io.OpenmlConnector;
  * &nbsp;&nbsp;&nbsp;default: false
  * </pre>
  * 
- * <pre>-user &lt;java.lang.String&gt; (property: user)
- * &nbsp;&nbsp;&nbsp;The user to use for connecting to OpenML.org.
- * &nbsp;&nbsp;&nbsp;default: fracpete&#64;waikato.ac.nz
+ * <pre>-silent &lt;boolean&gt; (property: silent)
+ * &nbsp;&nbsp;&nbsp;If enabled, then no errors are output in the console; Note: the enclosing 
+ * &nbsp;&nbsp;&nbsp;actor handler must have this enabled as well.
+ * &nbsp;&nbsp;&nbsp;default: false
  * </pre>
  * 
- * <pre>-password &lt;adams.core.base.BasePassword&gt; (property: password)
- * &nbsp;&nbsp;&nbsp;The OpenML password.
- * &nbsp;&nbsp;&nbsp;default: {Tm9qcmVyazA=}
+ * <pre>-url &lt;java.lang.String&gt; (property: URL)
+ * &nbsp;&nbsp;&nbsp;The URL to connect to.
+ * &nbsp;&nbsp;&nbsp;default: http:&#47;&#47;openml.liacs.nl&#47;
+ * </pre>
+ * 
+ * <pre>-api-key &lt;java.lang.String&gt; (property: APIKey)
+ * &nbsp;&nbsp;&nbsp;The API Key to use for connecting to OpenML.org.
+ * &nbsp;&nbsp;&nbsp;default: 
  * </pre>
  * 
  <!-- options-end -->
