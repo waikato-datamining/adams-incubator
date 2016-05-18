@@ -127,10 +127,9 @@ public class OpenMLDatasetDescription
     did    = (Integer) m_InputToken.getPayload();
 	
     try {
-      m_Connection.getSession();
       if (isLoggingEnabled())
 	getLogger().info("Obtaining dataset description for #" + did);
-      desc  = m_Connection.getConnector().dataDescription(did);
+      desc  = m_Connection.getConnector().dataGet(did);
       sheet = new DefaultSpreadSheet();
       
       // header

@@ -19,20 +19,14 @@
  */
 package adams.gui.application;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
-import javax.swing.JCheckBox;
-import javax.swing.JPasswordField;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-import javax.swing.SpinnerNumberModel;
-
-import adams.core.Constants;
 import adams.core.Properties;
 import adams.core.net.OpenMLHelper;
 import adams.gui.core.ParameterPanel;
+
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
+import java.awt.BorderLayout;
 
 /**
  * Panel for configuring the system-wide OpenML settings.
@@ -49,17 +43,11 @@ public class OpenMLSetupPanel
   /** the parameters. */
   protected ParameterPanel m_PanelParameters;
 
-  /** the user. */
-  protected JTextField m_TextUser;
-
-  /** the password. */
-  protected JPasswordField m_TextPassword;
-
-  /** Whether to show the password. */
-  protected JCheckBox m_CheckBoxShowPassword;
-
   /** the URL. */
   protected JTextField m_TextURL;
+
+  /** the API Key. */
+  protected JTextField m_TextAPIKey;
 
   /** the verbose level. */
   protected JSpinner m_SpinnerVerboseLevel;
@@ -76,30 +64,13 @@ public class OpenMLSetupPanel
     m_PanelParameters = new ParameterPanel();
     add(m_PanelParameters, BorderLayout.CENTER);
 
-    m_TextUser = new JTextField(20);
-    m_TextUser.setText(OpenMLHelper.getUser());
-    m_PanelParameters.addParameter("_User", m_TextUser);
-
-    m_TextPassword = new JPasswordField(20);
-    m_TextPassword.setText(OpenMLHelper.getPassword().getValue());
-    m_TextPassword.setEchoChar(Constants.PASSWORD_CHAR);
-    m_PanelParameters.addParameter("_Password", m_TextPassword);
-
-    m_CheckBoxShowPassword = new JCheckBox();
-    m_CheckBoxShowPassword.setSelected(false);
-    m_CheckBoxShowPassword.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
-	if (m_CheckBoxShowPassword.isSelected())
-	  m_TextPassword.setEchoChar((char) 0);
-	else
-	  m_TextPassword.setEchoChar(Constants.PASSWORD_CHAR);
-      }
-    });
-    m_PanelParameters.addParameter("Show password", m_CheckBoxShowPassword);
-
     m_TextURL = new JTextField(20);
     m_TextURL.setText(OpenMLHelper.getURL());
     m_PanelParameters.addParameter("U_RL", m_TextURL);
+
+    m_TextAPIKey = new JTextField(20);
+    m_TextAPIKey.setText(OpenMLHelper.getAPIKey());
+    m_PanelParameters.addParameter("API _Key", m_TextAPIKey);
 
     m_SpinnerVerboseLevel = new JSpinner();
     ((SpinnerNumberModel) m_SpinnerVerboseLevel.getModel()).setMinimum(0);
@@ -119,9 +90,8 @@ public class OpenMLSetupPanel
 
     result = new Properties();
 
-    result.setProperty(OpenMLHelper.USER, m_TextUser.getText());
-    result.setProperty(OpenMLHelper.PASSWORD, m_TextPassword.getText());
     result.setProperty(OpenMLHelper.URL, m_TextURL.getText());
+    result.setProperty(OpenMLHelper.APIKEY, m_TextAPIKey.getText());
     result.setInteger(OpenMLHelper.VERBOSE_LEVEL, ((SpinnerNumberModel) m_SpinnerVerboseLevel.getModel()).getNumber().intValue());
 
     return result;

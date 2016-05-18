@@ -15,17 +15,16 @@
 
 /*
  * OpenMLHelper.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.core.net;
 
-import java.io.StringReader;
-
 import adams.core.Properties;
-import adams.core.base.BasePassword;
 import adams.env.Environment;
 import adams.env.OpenMLDefinition;
+
+import java.io.StringReader;
 
 /**
  * A helper class for the OpenML setup.
@@ -38,14 +37,11 @@ public class OpenMLHelper {
   /** the name of the props file. */
   public final static String FILENAME = "OpenML.props";
 
-  /** the user key. */
-  public final static String USER = "User";
-
-  /** the password. */
-  public final static String PASSWORD = "Password";
-
   /** the URL. */
   public final static String URL = "URL";
+
+  /** the API key. */
+  public final static String APIKEY = "APIKey";
 
   /** the verbose leve. */
   public final static String VERBOSE_LEVEL = "VerboseLevel";
@@ -74,7 +70,6 @@ public class OpenMLHelper {
   /**
    * Writes the specified properties to disk.
    *
-   * @param props	the properties to write to disk
    * @return		true if successfully stored
    */
   public synchronized static boolean writeProperties() {
@@ -98,30 +93,21 @@ public class OpenMLHelper {
   }
 
   /**
-   * Returns the user.
-   *
-   * @return		the user
-   */
-  public static String getUser() {
-    return getProperties().getProperty(USER, "");
-  }
-
-  /**
-   * Returns the password.
-   *
-   * @return		the password
-   */
-  public static BasePassword getPassword() {
-    return new BasePassword(getProperties().getProperty(PASSWORD, ""));
-  }
-
-  /**
    * Returns the URL.
    *
    * @return		the URL
    */
   public static String getURL() {
     return getProperties().getProperty(URL, "http://openml.liacs.nl/");
+  }
+
+  /**
+   * Returns the user.
+   *
+   * @return		the user
+   */
+  public static String getAPIKey() {
+    return getProperties().getProperty(APIKEY, "");
   }
 
   /**

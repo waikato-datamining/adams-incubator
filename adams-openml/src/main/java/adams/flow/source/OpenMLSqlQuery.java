@@ -15,7 +15,7 @@
 
 /**
  * OpenMLSqlQuery.java
- * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.source;
 
@@ -173,7 +173,6 @@ public class OpenMLSqlQuery
     result = null;
     
     try {
-      m_Connection.getSession();
       json   = m_Connection.getConnector().freeQuery(m_Query.getValue());
       result = checkJSON(json);
       if (result == null)

@@ -180,9 +180,8 @@ public class OpenMLListDatasets
     
     sql = null;
     try {
-      m_Connection.getSession();
       sql    = "select did, name, version from dataset where ";
-      where = new ArrayList<String>();
+      where = new ArrayList<>();
       where.add("source = 0");
       if (!m_RegExpName.isMatchAll())
 	where.add("name regexp " + SQL.backquote(m_RegExpName));

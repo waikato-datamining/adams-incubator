@@ -15,20 +15,14 @@
 
 /*
  * OpenMLConnection.java
- * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.flow.standalone;
 
-import adams.core.DateFormat;
-import adams.core.DateUtils;
 import adams.core.QuickInfoHelper;
-import adams.core.base.BasePassword;
 import adams.core.net.OpenMLHelper;
 import org.openml.apiconnector.io.OpenmlConnector;
-import org.openml.apiconnector.xml.Authenticate;
-
-import java.util.Date;
 
 /**
  <!-- globalinfo-start -->
@@ -88,21 +82,15 @@ public class OpenMLConnection
   /** for serialization. */
   private static final long serialVersionUID = -1959430342987913960L;
 
-  /** the OpenML user. */
-  protected String m_User;
-
-  /** the OpenML password. */
-  protected BasePassword m_Password;
-
   /** the OpenML URL. */
   protected String m_URL;
-  
+
+  /** the OpenML API key. */
+  protected String m_APIKey;
+
   /** the connector instance. */
   protected OpenmlConnector m_Connector;
 
-  /** the session object. */
-  protected Authenticate m_Session;
-  
   /**
    * Returns a string describing the object.
    *
@@ -121,16 +109,12 @@ public class OpenMLConnection
     super.defineOptions();
 
     m_OptionManager.add(
-	    "user", "user",
-	    OpenMLHelper.getUser());
-
-    m_OptionManager.add(
-	    "password", "password",
-	    OpenMLHelper.getPassword());
-
-    m_OptionManager.add(
 	    "url", "URL",
 	    OpenMLHelper.getURL());
+
+    m_OptionManager.add(
+	    "api-key", "APIKey",
+	    OpenMLHelper.getAPIKey());
   }
 
   /**
@@ -141,64 +125,6 @@ public class OpenMLConnection
     super.initialize();
 
     m_Connector = null;
-  }
-  
-  /**
-   * Sets the OpenML user.
-   *
-   * @param value	the user
-   */
-  public void setUser(String value) {
-    m_User = value;
-    reset();
-  }
-
-  /**
-   * Returns the OpenML user.
-   *
-   * @return		the user
-   */
-  public String getUser() {
-    return m_User;
-  }
-
-  /**
-   * Returns the tip text for this property.
-   *
-   * @return 		tip text for this property suitable for
-   * 			displaying in the GUI or for listing the options.
-   */
-  public String userTipText() {
-    return "The user to use for connecting to OpenML.org.";
-  }
-
-  /**
-   * Sets the OpenML password.
-   *
-   * @param value	the password
-   */
-  public void setPassword(BasePassword value) {
-    m_Password = value;
-    reset();
-  }
-
-  /**
-   * Returns the OpenML password.
-   *
-   * @return		the password
-   */
-  public BasePassword getPassword() {
-    return m_Password;
-  }
-
-  /**
-   * Returns the tip text for this property.
-   *
-   * @return 		tip text for this property suitable for
-   * 			displaying in the GUI or for listing the options.
-   */
-  public String passwordTipText() {
-    return "The OpenML password.";
   }
 
   /**
@@ -231,42 +157,44 @@ public class OpenMLConnection
   }
 
   /**
+   * Sets the OpenML API key.
+   *
+   * @param value	the key
+   */
+  public void setAPIKey(String value) {
+    m_APIKey = value;
+    reset();
+  }
+
+  /**
+   * Returns the OpenML API key.
+   *
+   * @return		the key
+   */
+  public String getAPIKey() {
+    return m_APIKey;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String APIKeyTipText() {
+    return "The API Key to use for connecting to OpenML.org.";
+  }
+
+  /**
    * Returns a quick info about the actor, which will be displayed in the GUI.
    *
    * @return		null if no info available, otherwise short string
    */
   @Override
   public String getQuickInfo() {
-    return QuickInfoHelper.toString(this, "user", m_User, "user: ");
+    return QuickInfoHelper.toString(this, "APIKey", m_APIKey, "key: ");
   }
 
-  /**
-   * Performs the authentication.
-   * 
-   * @return		null if OK, otherwise error message
-   */
-  protected String performAuthentication() {
-    String	result;
-    
-    result = null;
-    
-    try {
-      if (m_Connector == null) {
-	m_Connector = new OpenmlConnector(m_URL);
-        m_Connector.setVerboseLevel(OpenMLHelper.getVerboseLevel());
-      }
-      m_Connector.setCredentials(m_User, m_Password.getValue());
-      m_Session = m_Connector.authenticate();
-      if (isLoggingEnabled())
-	getLogger().info("sessionHash=" + m_Session.getSessionHash() + ", validUntil=" + m_Session.getValidUntil());
-    }
-    catch (Exception e) {
-      result = handleException("Authentication failed!", e);
-    }
-    
-    return result;
-  }
-  
   /**
    * Returns the connector object.
    * 
@@ -275,33 +203,7 @@ public class OpenMLConnection
   public OpenmlConnector getConnector() {
     return m_Connector;
   }
-  
-  /**
-   * Returns the session object.
-   * 
-   * @return		the session, null if failed to authenticate
-   */
-  public Authenticate getSession() {
-    String	msg;
-    DateFormat	format;
-    
-    // expired?
-    if (m_Session != null) {
-      format = DateUtils.getTimestampFormatter();
-      if (format.format(new Date()).compareTo(m_Session.getValidUntil()) > 0)
-	m_Session = null;
-    }
 
-    // re-authenticate?
-    if (m_Session == null) {
-      msg = performAuthentication();
-      if (msg != null)
-	return null;
-    }
-    
-    return m_Session;
-  }
-  
   /**
    * Executes the flow item.
    *
@@ -309,6 +211,12 @@ public class OpenMLConnection
    */
   @Override
   protected String doExecute() {
-    return performAuthentication();
+    if (m_Connector == null) {
+      m_Connector = new OpenmlConnector(m_URL);
+      m_Connector.setVerboseLevel(OpenMLHelper.getVerboseLevel());
+    }
+    m_Connector.setApiKey(m_APIKey);
+
+    return null;
   }
 }

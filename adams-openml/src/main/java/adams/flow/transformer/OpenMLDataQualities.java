@@ -127,7 +127,6 @@ public class OpenMLDataQualities
     did    = (Integer) m_InputToken.getPayload();
 	
     try {
-      m_Connection.getSession();
       if (isLoggingEnabled())
 	getLogger().info("Obtaining data qualities for #" + did);
       qual  = m_Connection.getConnector().dataQualities(did);

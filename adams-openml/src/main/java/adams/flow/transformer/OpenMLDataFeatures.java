@@ -127,7 +127,6 @@ public class OpenMLDataFeatures
     did    = (Integer) m_InputToken.getPayload();
 	
     try {
-      m_Connection.getSession();
       if (isLoggingEnabled())
 	getLogger().info("Obtaining data features for #" + did);
       feat  = m_Connection.getConnector().dataFeatures(did);
