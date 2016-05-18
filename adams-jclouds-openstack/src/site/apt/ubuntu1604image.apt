@@ -1,6 +1,10 @@
 Image creation for remote command execution
 
-  * based on this guide: http://docs.openstack.org/image-guide/openstack-images.html
+  * based on these guides:
+
+    * http://docs.openstack.org/image-guide/openstack-images.html
+
+    * http://docs.openstack.org/image-guide/ubuntu-image.html
 
   * create new virtual machine in VirtualBox, using QCOW format for disk
 
@@ -17,6 +21,8 @@ Image creation for remote command execution
   * update packages: sudo apt-get update && sudo apt-get upgrade
 
   * install cloud utilities: sudo apt-get intsall cloud-utils cloud-initramfs-growroot cloud-init
+
+  * dpkg-reconfigure cloud-init
 
   * disable firewall: sudo ufw disable
 
