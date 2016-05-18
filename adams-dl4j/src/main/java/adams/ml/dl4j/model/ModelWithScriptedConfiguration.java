@@ -208,11 +208,14 @@ public class ModelWithScriptedConfiguration
   /**
    * Configures a model and returns it.
    *
+   * @param numInput	the number of input nodes
+   * @param numOutput	the number of output nodes
    * @return		the model
    */
-  @Override
-  public Model configureModel() {
+  public Model configureModel(int numInput, int numOutput) {
     String	msg;
+
+    m_Model = null;
 
     if (m_ModelConfiguratorObject == null) {
       msg = check();
@@ -220,20 +223,20 @@ public class ModelWithScriptedConfiguration
 	throw new IllegalStateException(msg);
     }
     if (m_ModelConfiguratorObject != null)
-      return m_ModelConfiguratorObject.configureModel();
+      m_Model = m_ModelConfiguratorObject.configureModel(numInput, numOutput);
     else
       throw new IllegalStateException("No model generator available!");
+
+    return m_Model;
   }
 
   /**
    * Instantiates the model if necessary.
    *
    * @return		the model
-   * @see		#configureModel()
+   * @see		#configureModel(int, int)
    */
   protected synchronized Model getModel() {
-    if (m_Model == null)
-      m_Model = configureModel();
     return m_Model;
   }
 

@@ -36,7 +36,9 @@ public interface ModelConfigurator
   /**
    * Configures a model and returns it.
    *
+   * @param numInput	the number of input nodes
+   * @param numOutput	the number of output nodes
    * @return		the model
    */
-  public Model configureModel();
+  public Model configureModel(int numInput, int numOutput);
 }

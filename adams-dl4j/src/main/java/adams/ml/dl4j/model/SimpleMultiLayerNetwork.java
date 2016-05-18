@@ -89,6 +89,12 @@ import org.nd4j.linalg.lossfunctions.LossFunctions;
  * &nbsp;&nbsp;&nbsp;default: true
  * </pre>
  * 
+ * <pre>-hidden-nodes &lt;int&gt; (property: hiddenNodes)
+ * &nbsp;&nbsp;&nbsp;The number of hidden nodes.
+ * &nbsp;&nbsp;&nbsp;default: 3
+ * &nbsp;&nbsp;&nbsp;minimum: 1
+ * </pre>
+ * 
  * <pre>-hidden-activation &lt;java.lang.String&gt; (property: hiddenActivation)
  * &nbsp;&nbsp;&nbsp;The activation to use for the hidden layer; eg relu (rectified linear), 
  * &nbsp;&nbsp;&nbsp;tanh, sigmoid, softmax, hardtanh, leakyrelu, maxout, softsign, softplus.
@@ -146,15 +152,6 @@ public class SimpleMultiLayerNetwork
   /** the seed value. */
   protected long m_Seed;
 
-  /** the input nodes. */
-  protected int m_NumInputNodes;
-
-  /** the output nodes. */
-  protected int m_NumOutputNodes;
-
-  /** the number of nodes in the hidden layer. */
-  protected int m_NumHiddenNodes;
-
   /** the optimization algorithm. */
   protected OptimizationAlgorithm m_OptimizationAlgorithm;
 
@@ -169,6 +166,9 @@ public class SimpleMultiLayerNetwork
 
   /** whether to use drop-connect. */
   protected boolean m_UseDropConnect;
+
+  /** the number of nodes in the hidden layer. */
+  protected int m_HiddenNodes;
 
   /** the activation function of the hidden layer. */
   protected String m_HiddenActivation;
@@ -241,6 +241,10 @@ public class SimpleMultiLayerNetwork
     m_OptionManager.add(
       "use-drop-connect", "useDropConnect",
       true);
+
+    m_OptionManager.add(
+      "hidden-nodes", "hiddenNodes",
+      3, 1, null);
 
     m_OptionManager.add(
       "hidden-activation", "hiddenActivation",
@@ -514,6 +518,35 @@ public class SimpleMultiLayerNetwork
   }
 
   /**
+   * Sets the number of hidden nodes.
+   *
+   * @param value	the number of nodes
+   */
+  public void setHiddenNodes(int value) {
+    m_HiddenNodes= value;
+    reset();
+  }
+
+  /**
+   * Returns the number of hidden nodes.
+   *
+   * @return  		the number of nodes
+   */
+  public int getHiddenNodes() {
+    return m_HiddenNodes;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String hiddenNodesTipText() {
+    return "The number of hidden nodes.";
+  }
+
+  /**
    * Sets the hidden activation.
    *
    * @param value	the activation
@@ -721,10 +754,11 @@ public class SimpleMultiLayerNetwork
   /**
    * Configures the actual {@link Model} and returns it.
    *
+   * @param numInput	the number of input nodes
+   * @param numOutput	the number of output nodes
    * @return		the model
    */
-  @Override
-  protected Model doConfigureModel() {
+  protected Model doConfigureModel(int numInput, int numOutput) {
     MultiLayerConfiguration conf = new NeuralNetConfiguration.Builder()
       .seed(m_Seed) // Locks in weight initialization for tuning
       .iterations(m_NumIterations) // # training iterations predict/classify & backprop
@@ -736,8 +770,8 @@ public class SimpleMultiLayerNetwork
       .useDropConnect(m_UseDropConnect)
       .list(2) // # NN layers (doesn't count input layer)
       .layer(0, new RBM.Builder(RBM.HiddenUnit.RECTIFIED, RBM.VisibleUnit.GAUSSIAN)
-	  .nIn(m_NumInputNodes) // # input nodes
-	  .nOut(m_NumHiddenNodes) // # fully connected hidden layer nodes. Add list if multiple layers.
+	  .nIn(numInput) // # input nodes
+	  .nOut(m_HiddenNodes) // # fully connected hidden layer nodes. Add list if multiple layers.
 	  .weightInit(m_HiddenWeightInit) // Weight initialization
 	  .k(1) // # contrastive divergence iterations
 	  .activation(m_HiddenActivation) // Activation function type
@@ -747,8 +781,8 @@ public class SimpleMultiLayerNetwork
 	  .build()
       ) // NN layer type
       .layer(1, new OutputLayer.Builder(m_OutputLossFunction)
-	  .nIn(m_NumHiddenNodes) // # input nodes
-	  .nOut(m_NumOutputNodes) // # output nodes
+	  .nIn(m_HiddenNodes) // # input nodes
+	  .nOut(numOutput) // # output nodes
 	  .activation(m_OutputActivation)
 	  .build()
       ) // NN layer type

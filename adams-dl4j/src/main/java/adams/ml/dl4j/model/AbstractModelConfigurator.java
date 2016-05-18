@@ -49,20 +49,24 @@ public abstract class AbstractModelConfigurator
   /**
    * Configures the actual {@link Model} and returns it.
    *
+   * @param numInput	the number of input nodes
+   * @param numOutput	the number of output nodes
    * @return		the model
    */
-  protected abstract Model doConfigureModel();
+  protected abstract Model doConfigureModel(int numInput, int numOutput);
 
   /**
-   * Configures the {@link Model} and returns it.
+   * Configures a model and returns it.
    *
+   * @param numInput	the number of input nodes
+   * @param numOutput	the number of output nodes
    * @return		the model
    */
-  public Model configureModel() {
+  public Model configureModel(int numInput, int numOutput) {
     Model	result;
 
     check();
-    result = doConfigureModel();
+    result = doConfigureModel(numInput, numOutput);
 
     if (isLoggingEnabled())
       getLogger().info(result.conf().toYaml());

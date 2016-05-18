@@ -40,13 +40,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Test for DL4JModelSetup actor.
+ * Test for DL4JModelConfigurator actor.
  *
  * @author fracpete
  * @author adams.core.option.FlowJUnitTestProducer (code generator)
  * @version $Revision$
  */
-public class DL4JModelSetupTest
+public class DL4JModelConfiguratorTest
   extends AbstractFlowTest {
 
   /**
@@ -54,7 +54,7 @@ public class DL4JModelSetupTest
    *
    * @param name	the name of the test
    */
-  public DL4JModelSetupTest(String name) {
+  public DL4JModelConfiguratorTest(String name) {
     super(name);
   }
 
@@ -85,9 +85,9 @@ public class DL4JModelSetupTest
    */
   public void testRegression() {
     performRegressionTest(
-        new TmpFile[]{
-          new TmpFile("dumpfile.txt")
-        });
+      new TmpFile[]{
+	new TmpFile("dumpfile.txt")
+      });
   }
 
   /**
@@ -97,7 +97,7 @@ public class DL4JModelSetupTest
    * @return		the test suite
    */
   public static Test suite() {
-    return new TestSuite(DL4JModelSetupTest.class);
+    return new TestSuite(DL4JModelConfiguratorTest.class);
   }
 
   /**
@@ -114,9 +114,9 @@ public class DL4JModelSetupTest
       List<Actor> actors = new ArrayList<>();
 
       // Flow.DL4JModelSetup
-      DL4JModelSetup dl4jmodelsetup = new DL4JModelSetup();
+      DL4JModelConfigurator dl4jmodelsetup = new DL4JModelConfigurator();
       SimpleMultiLayerNetwork simplemultilayernetwork = new SimpleMultiLayerNetwork();
-      dl4jmodelsetup.setModel(simplemultilayernetwork);
+      dl4jmodelsetup.setModelConfigurator(simplemultilayernetwork);
 
       actors.add(dl4jmodelsetup);
 
