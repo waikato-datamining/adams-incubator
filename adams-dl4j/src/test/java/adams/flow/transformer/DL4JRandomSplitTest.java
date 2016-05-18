@@ -24,7 +24,7 @@ import adams.core.io.PlaceholderFile;
 import adams.core.option.AbstractArgumentOption;
 import adams.core.scripting.Dummy;
 import adams.env.Environment;
-import adams.flow.AbstractFlowTest;
+import adams.flow.AbstractDL4JFlowTest;
 import adams.flow.control.ContainerValuePicker;
 import adams.flow.control.Flow;
 import adams.flow.core.AbstractActor;
@@ -51,7 +51,7 @@ import java.util.List;
  * @version $Revision$
  */
 public class DL4JRandomSplitTest
-  extends AbstractFlowTest {
+  extends AbstractDL4JFlowTest {
 
   /**
    * Initializes the test.

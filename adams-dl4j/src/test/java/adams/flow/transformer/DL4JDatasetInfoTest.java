@@ -24,7 +24,7 @@ import adams.core.io.PlaceholderFile;
 import adams.core.option.AbstractArgumentOption;
 import adams.core.scripting.Dummy;
 import adams.env.Environment;
-import adams.flow.AbstractFlowTest;
+import adams.flow.AbstractDL4JFlowTest;
 import adams.flow.control.Flow;
 import adams.flow.core.AbstractActor;
 import adams.flow.core.Actor;
@@ -50,7 +50,7 @@ import java.util.List;
  * @version $Revision$
  */
 public class DL4JDatasetInfoTest
-  extends AbstractFlowTest {
+  extends AbstractDL4JFlowTest {
 
   /**
    * Initializes the test.
