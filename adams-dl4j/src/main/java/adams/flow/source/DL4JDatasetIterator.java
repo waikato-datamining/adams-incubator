@@ -94,6 +94,11 @@ import org.nd4j.linalg.dataset.DataSet;
  * &nbsp;&nbsp;&nbsp;default: adams.ml.dl4j.datasetpreprocessor.DataSetPreProcessorWithScriptedConfiguration -handler adams.core.scripting.Dummy
  * </pre>
  * 
+ * <pre>-normalize-zero-mean-zero-unit-variance &lt;boolean&gt; (property: normalizeZeroMeanZeroUnitVariance)
+ * &nbsp;&nbsp;&nbsp;If enabled, subtract by the column means and divide by the standard deviation.
+ * &nbsp;&nbsp;&nbsp;default: false
+ * </pre>
+ * 
  <!-- options-end -->
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
@@ -112,6 +117,9 @@ public class DL4JDatasetIterator
 
   /** the preprocessor. */
   protected DataSetPreProcessorConfigurator m_PreProcessor;
+
+  /** Subtract by the column means and divide by the standard deviation. */
+  protected boolean m_NormalizeZeroMeanZeroUnitVariance;
 
   /** the dataset iterator in use. */
   protected transient DataSetIterator m_ActualIterator;
@@ -146,6 +154,10 @@ public class DL4JDatasetIterator
     m_OptionManager.add(
       "preprocessor", "preProcessor",
       new DataSetPreProcessorWithScriptedConfiguration());
+
+    m_OptionManager.add(
+      "normalize-zero-mean-zero-unit-variance", "normalizeZeroMeanZeroUnitVariance",
+      false);
   }
 
   /**
@@ -236,6 +248,35 @@ public class DL4JDatasetIterator
   }
 
   /**
+   * Sets whether to subtract by the column means and divide by the standard deviation.
+   *
+   * @param value	true if to do
+   */
+  public void setNormalizeZeroMeanZeroUnitVariance(boolean value) {
+    m_NormalizeZeroMeanZeroUnitVariance = value;
+    reset();
+  }
+
+  /**
+   * Returns whether to subtract by the column means and divide by the standard deviation.
+   *
+   * @return 		true if to do
+   */
+  public boolean getNormalizeZeroMeanZeroUnitVariance() {
+    return m_NormalizeZeroMeanZeroUnitVariance;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return		tip text for this property suitable for
+   *             	displaying in the GUI or for listing the options.
+   */
+  public String normalizeZeroMeanZeroUnitVarianceTipText() {
+    return "If enabled, subtract by the column means and divide by the standard deviation.";
+  }
+
+  /**
    * Returns a quick info about the actor, which will be displayed in the GUI.
    *
    * @return		null if no info available, otherwise short string
@@ -291,7 +332,9 @@ public class DL4JDatasetIterator
     Token	result;
     DataSet	data;
 
-    data   = m_ActualIterator.next();
+    data = m_ActualIterator.next();
+    if (m_NormalizeZeroMeanZeroUnitVariance)
+      data.normalizeZeroMeanZeroUnitVariance();
     result = new Token(data);
     if (!m_ActualIterator.hasNext())
       m_ActualIterator = null;
