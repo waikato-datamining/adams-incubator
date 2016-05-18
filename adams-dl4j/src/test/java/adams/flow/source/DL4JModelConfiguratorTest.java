@@ -22,7 +22,7 @@ package adams.flow.source;
 
 import adams.core.io.PlaceholderFile;
 import adams.core.option.AbstractArgumentOption;
-import adams.data.conversion.DL4JModelToYaml;
+import adams.data.conversion.AnyToString;
 import adams.env.Environment;
 import adams.flow.AbstractFlowTest;
 import adams.flow.control.Flow;
@@ -122,8 +122,8 @@ public class DL4JModelConfiguratorTest
 
       // Flow.Convert
       Convert convert = new Convert();
-      DL4JModelToYaml dl4jmodeltoyaml = new DL4JModelToYaml();
-      convert.setConversion(dl4jmodeltoyaml);
+      AnyToString any = new AnyToString();
+      convert.setConversion(any);
 
       actors.add(convert);
 
