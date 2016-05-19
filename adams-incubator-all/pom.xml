@@ -104,11 +104,25 @@
     </dependency>
 
     <!-- jclouds -->
-    <!--dependency>
+    <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
       <artifactId>adams-jclouds</artifactId>
       <version>${project.version}</version>
-    </dependency-->
+    </dependency>
+
+    <!-- jclouds-aws -->
+    <dependency>
+      <groupId>nz.ac.waikato.cms.adams</groupId>
+      <artifactId>adams-jclouds-aws</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
+    <!-- jclouds-openstack -->
+    <dependency>
+      <groupId>nz.ac.waikato.cms.adams</groupId>
+      <artifactId>adams-jclouds-openstack</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
     <!-- openml -->
     <dependency>
