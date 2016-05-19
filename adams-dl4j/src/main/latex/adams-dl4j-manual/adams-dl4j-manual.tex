@@ -91,6 +91,7 @@ The following transformers are available:
 \begin{tight_itemize}
   \item \textit{DL4JRandomSplit} -- generates a random split on the incoming dataset.
   \item \textit{DL4JDatasetInfo} -- outputs information about a dataset.
+  \item \textit{DL4JModelReader} -- reads a serialized model from disk.
   \item \textit{DL4JScoring} -- generates scores (= predictions) for a dataset
   using a built model.
   \item \textit{DL4JTestSetEvaluator} -- evaluates an incoming built model on a
@@ -103,7 +104,7 @@ The following transformers are available:
 
 The following sinks are available:
 \begin{tight_itemize}
-  \item \textit{DL4J???} -- .
+  \item \textit{DL4JModelWriter} -- saves a model to disk using serialization.
 \end{tight_itemize}
 
 The following conversions are available:

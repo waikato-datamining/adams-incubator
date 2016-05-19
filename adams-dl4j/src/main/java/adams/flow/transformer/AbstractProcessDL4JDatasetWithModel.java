@@ -21,7 +21,6 @@ package adams.flow.transformer;
 
 import adams.core.MessageCollection;
 import adams.core.QuickInfoHelper;
-import adams.core.SerializationHelper;
 import adams.core.VariableName;
 import adams.core.io.ModelFileHandler;
 import adams.core.io.PlaceholderFile;
@@ -31,6 +30,7 @@ import adams.flow.container.DL4JModelContainer;
 import adams.flow.core.CallableActorHelper;
 import adams.flow.core.CallableActorReference;
 import adams.flow.core.Token;
+import adams.ml.dl4j.ModelSerialization;
 import org.nd4j.linalg.dataset.DataSet;
 
 import java.util.Hashtable;
@@ -421,7 +421,7 @@ public abstract class AbstractProcessDL4JDatasetWithModel<T>
     else {
       // load model
       try {
-        m_Model = (T) SerializationHelper.read(m_ModelFile.getAbsolutePath());
+        m_Model = (T) ModelSerialization.read(m_ModelFile);
       }
       catch (Exception e) {
         m_Model = null;
