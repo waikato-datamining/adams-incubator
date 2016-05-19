@@ -74,6 +74,12 @@ The following transformers are available:
 \begin{tight_itemize}
   \item \textit{DL4JRandomSplit} -- generates a random split on the incoming dataset.
   \item \textit{DL4JDatasetInfo} -- outputs information about a dataset.
+  \item \textit{DL4JTestSetEvaluator} -- evaluates an incoming built model on a
+  callable dataset.
+  \item \textit{DL4JTrainModel} -- builds a model obtained from a callable model
+  configurator on the incoming dataset.
+  \item \textit{DL4JTrainTestSetEvaluator} -- trains and evaluates a model obtained
+  from a callable model configurator on the incoming train/test set container.
 \end{tight_itemize}
 
 The following sinks are available:
