@@ -20,6 +20,7 @@
 
 package adams.flow.transformer;
 
+import adams.core.QuickInfoHelper;
 import adams.flow.container.DL4JPredictionContainer;
 import adams.flow.core.Token;
 import org.deeplearning4j.nn.api.Model;
@@ -102,6 +103,25 @@ public class DL4JScoring
    */
   public String addRegularizationTermsTipText() {
     return "Whether to add regularization terms.";
+  }
+
+  /**
+   * Returns a quick info about the actor, which will be displayed in the GUI.
+   *
+   * @return		null if no info available, otherwise short string
+   */
+  @Override
+  public String getQuickInfo() {
+    String	result;
+    String	value;
+
+    result = super.getQuickInfo();
+
+    value = QuickInfoHelper.toString(this, "addRegularizationTerms", m_AddRegularizationTerms, "add regularization terms", ", ");
+    if (value != null)
+      result += value;
+
+    return result;
   }
 
   /**
