@@ -20,8 +20,6 @@ Image creation for remote command execution
   
   * update packages: sudo apt-get update && sudo apt-get upgrade
 
-  * install cloud utilities: sudo apt-get intsall cloud-utils cloud-initramfs-growroot cloud-init
-
   * dpkg-reconfigure cloud-init
 
   * disable firewall: sudo ufw disable
@@ -110,4 +108,8 @@ esac
 +----
 
   * activate systemd script: sudo systemctl enable adams
+
+  * install cloud utilities (NB: will disable logins for ubuntu user!): 
+    
+    sudo apt-get install cloud-utils cloud-initramfs-growroot cloud-init
 
