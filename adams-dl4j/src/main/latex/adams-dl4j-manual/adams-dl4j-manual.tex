@@ -53,12 +53,29 @@
 \end{titlepage}
 
 \tableofcontents
-\listoffigures
+%\listoffigures
 %\listoftables
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Introduction}
-The \textit{dl4j} module wraps the deeplearning4j\cite{dl4j} library.
+The \textit{dl4j} module makes the deeplearning4j\cite{dl4j} library available
+within ADAMS.
+
+Due to the complex nature of configuring deep belief networks and such
+multi-layered neural networks, there is no graphical support for configuring
+networks as such. Instead, a so-called \textit{model configurator} is used
+to return a configured model. This can be achieved in two ways:
+\begin{tight_itemize}
+  \item \textit{Custom Java code} -- you can subclass
+  \textit{AbstractModelConfigurator} (located in package \textit{adams.ml.dl4j.model})
+  and implement your own parameters that are necessary for tweaking your network. This is
+  done by the \textit{SimpleMultiLayerNetwork} class in that package, which
+  is just a configurable version of the network describe by deeplearning4j's
+  tutorial on the iris dataset.
+  \item \textit{Scripting} -- taking advantage of either Groovy or Jython,
+  you can use the \textit{ModelWithScriptedConfiguration} class pointing
+  to your script file that generates the actual network to be trained and used.
+\end{tight_itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Flow}
