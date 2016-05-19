@@ -250,9 +250,9 @@ public class DL4JTrainModel
   }
 
   /**
-   * Returns an instance of the callable model.
+   * Returns an instance of the callable model configurator.
    *
-   * @return		the model
+   * @return		the model configurator
    * @throws Exception  if fails to obtain model
    */
   protected ModelConfigurator getModelConfiguratorInstance() throws Exception {
@@ -263,9 +263,9 @@ public class DL4JTrainModel
     result = (ModelConfigurator) CallableActorHelper.getSetup(ModelConfigurator.class, m_Model, this, errors);
     if (result == null) {
       if (errors.isEmpty())
-	throw new IllegalStateException("Failed to obtain model from '" + m_Model + "'!");
+	throw new IllegalStateException("Failed to obtain model configurator from '" + m_Model + "'!");
       else
-	throw new IllegalStateException("Failed to obtain model from '" + m_Model + "':\n" + errors);
+	throw new IllegalStateException("Failed to obtain model configurator from '" + m_Model + "':\n" + errors);
     }
 
     return result;
