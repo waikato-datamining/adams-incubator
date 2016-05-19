@@ -331,11 +331,6 @@ public class ModelWithScriptedConfiguration
    */
   @Override
   public void fit() {
-    String	msg;
-
-    msg = check();
-    if (msg != null)
-      throw new IllegalStateException(msg);
     getModel().fit();
   }
 
