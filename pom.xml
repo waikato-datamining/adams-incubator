@@ -24,7 +24,7 @@
   <properties>
     <adams.version>0.4.13-SNAPSHOT</adams.version>
     <adams-addons.version>0.4.13-SNAPSHOT</adams-addons.version>
-    <javacv.version>0.10</javacv.version>
+    <javacv.version>1.2</javacv.version>
     <timestamp>${maven.build.timestamp}</timestamp>
     <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
   </properties>
@@ -35,7 +35,6 @@
     <module>adams-geotools</module>
     <module>adams-hadoop</module>
     <module>adams-javacv</module>
-    <module>adams-javacv-dependencies</module>
     <module>adams-openml</module>
     <module>adams-jclouds</module>
     <module>adams-jclouds-aws</module>

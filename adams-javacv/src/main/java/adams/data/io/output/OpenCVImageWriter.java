@@ -15,7 +15,7 @@
 
 /**
  * OpenCVImageWriter.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.data.io.output;
 
@@ -23,6 +23,7 @@ import adams.core.Utils;
 import adams.core.io.PlaceholderFile;
 import adams.data.io.input.AbstractImageReader;
 import adams.data.io.input.OpenCVImageReader;
+import adams.data.opencv.OpenCVHelper;
 import adams.data.opencv.OpenCVImageContainer;
 
 /**
@@ -121,7 +122,7 @@ public class OpenCVImageWriter
    */
   @Override
   protected String doWrite(PlaceholderFile file, OpenCVImageContainer cont) {
-    if (org.bytedeco.javacpp.opencv_highgui.cvSaveImage(file.getAbsolutePath(), cont.getImage()) == 0)
+    if (org.bytedeco.javacpp.opencv_imgcodecs.imwrite(file.getAbsolutePath(), OpenCVHelper.toMat(cont.getImage())))
       return null;
     else
       return "Failed to write image to: " + file;

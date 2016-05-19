@@ -15,11 +15,11 @@
 
 /**
  * BorderType.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.data.opencv;
 
-import org.bytedeco.javacpp.opencv_imgproc;
+import org.bytedeco.javacpp.opencv_core;
 
 /**
  * The border types.
@@ -32,14 +32,14 @@ import org.bytedeco.javacpp.opencv_imgproc;
  * @version $Revision$
  */
 public enum BorderType {
-  CONSTANT(opencv_imgproc.BORDER_CONSTANT),
-  DEFAULT(opencv_imgproc.BORDER_DEFAULT),
-  ISOLATED(opencv_imgproc.BORDER_ISOLATED),
-  TRANSPARENT(opencv_imgproc.BORDER_TRANSPARENT),
-  REPLICATE(opencv_imgproc.BORDER_REPLICATE),
-  REFLECT(opencv_imgproc.BORDER_REFLECT),
-  REFLECT_101(opencv_imgproc.BORDER_REFLECT_101),
-  WRAP(opencv_imgproc.BORDER_WRAP);
+  CONSTANT(opencv_core.BORDER_CONSTANT),
+  DEFAULT(opencv_core.BORDER_DEFAULT),
+  ISOLATED(opencv_core.BORDER_ISOLATED),
+  TRANSPARENT(opencv_core.BORDER_TRANSPARENT),
+  REPLICATE(opencv_core.BORDER_REPLICATE),
+  REFLECT(opencv_core.BORDER_REFLECT),
+  REFLECT_101(opencv_core.BORDER_REFLECT_101),
+  WRAP(opencv_core.BORDER_WRAP);
   
   /** the associated integer value. */
   private int m_Border;

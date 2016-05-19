@@ -15,15 +15,14 @@
 
 /**
  * OpenCVImageContainer.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.data.opencv;
 
-import java.awt.image.BufferedImage;
-
+import adams.data.image.AbstractImageContainer;
 import org.bytedeco.javacpp.opencv_core.IplImage;
 
-import adams.data.image.AbstractImageContainer;
+import java.awt.image.BufferedImage;
 
 /**
  * Container for an OpenCV {@link IplImage} image.
@@ -64,9 +63,7 @@ public class OpenCVImageContainer
   }
   
   /**
-   * Returns a clone of the image. Actually, only for {@link ImageSingleBand}
-   * a clone is returned, all other types are a "subimage" with the same
-   * size as the original.
+   * Returns a clone of the image.
    * 
    * @return		the clone/subimage
    */
@@ -82,6 +79,6 @@ public class OpenCVImageContainer
    */
   @Override
   public BufferedImage toBufferedImage() {
-    return m_Content.getBufferedImage();
+    return OpenCVHelper.toBufferedImage(m_Content);
   }
 }

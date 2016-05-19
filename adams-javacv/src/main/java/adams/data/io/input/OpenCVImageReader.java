@@ -15,22 +15,21 @@
 
 /**
  * OpenCVImageReader.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.data.io.input;
-
-import java.awt.image.BufferedImage;
-import java.util.logging.Level;
-
-import javax.imageio.ImageIO;
-
-import org.bytedeco.javacpp.opencv_core.IplImage;
 
 import adams.core.Utils;
 import adams.core.io.PlaceholderFile;
 import adams.data.io.output.AbstractImageWriter;
 import adams.data.io.output.OpenCVImageWriter;
+import adams.data.opencv.OpenCVHelper;
 import adams.data.opencv.OpenCVImageContainer;
+import org.bytedeco.javacpp.opencv_core.IplImage;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.util.logging.Level;
 
 /**
  <!-- globalinfo-start -->
@@ -138,7 +137,7 @@ public class OpenCVImageReader
     }
     
     if (img != null) {
-      ipl    = IplImage.createFrom(img); 
+      ipl    = OpenCVHelper.toOpenCVImage(img);
       result = new OpenCVImageContainer();
       result.setImage(ipl);
     }

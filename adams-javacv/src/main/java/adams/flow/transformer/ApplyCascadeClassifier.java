@@ -15,7 +15,7 @@
 
 /*
  * ApplyCascadeClassifier.java
- * Copyright (C) 2015 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2015-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.transformer;
 
@@ -446,7 +446,7 @@ public class ApplyCascadeClassifier extends AbstractArrayProvider {
       m_OutputToken = m_InputToken;
 
       // Init and apply classifier
-      Rect rects = new Rect();
+      RectVector rects = new RectVector();
       if (m_ActualClassifier == null)
         m_ActualClassifier = new CascadeClassifier(m_Classifier.getAbsolutePath());
       m_ActualClassifier.detectMultiScale(new Mat(input), rects, m_ScaleFactor, m_MinNeighbors, 0, new Size(m_MinSize, m_MinSize), new Size(m_MaxSize, m_MaxSize));
@@ -456,8 +456,8 @@ public class ApplyCascadeClassifier extends AbstractArrayProvider {
         Rect rect = rects.position(i);
 
         // Crop
-        cvSetImageROI(input, rect.asCvRect());
-        IplImage cropped = cvCreateImage(rect.size().asCvSize(), input.depth(), input.nChannels());
+        cvSetImageROI(input, new CvRect(rect.x(), rect.y(), rect.width(), rect.height()));
+        IplImage cropped = cvCreateImage(new CvSize(rect.width(), rect.height()), input.depth(), input.nChannels());
         cvCopy(input, cropped, null);
 
         // Report

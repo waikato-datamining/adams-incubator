@@ -20,10 +20,10 @@
 
 package adams.data.opencv.multiimageoperation;
 
+import adams.data.opencv.OpenCVHelper;
 import adams.data.opencv.OpenCVImageContainer;
 import org.bytedeco.javacpp.opencv_core;
 import org.bytedeco.javacpp.opencv_core.IplImage;
-import org.bytedeco.javacpp.opencv_core.Mat;
 
 /**
  <!-- globalinfo-start -->
@@ -110,8 +110,10 @@ public class And
     result    = new OpenCVImageContainer[1];
     img0      = images[0].getImage();
     img1      = images[1].getImage();
+    if (img0.nChannels() != img1.nChannels())
+      throw new IllegalArgumentException("Images have different number of channels: " + img0.nChannels() + " != " + img1.nChannels());
     output    = img0.clone();
-    opencv_core.bitwise_and(new Mat(img0.asCvMat()), new Mat(img1.asCvMat()), new Mat(output.asCvMat()));
+    opencv_core.bitwise_and(OpenCVHelper.toMat(img0), OpenCVHelper.toMat(img1), OpenCVHelper.toMat(output));
     result[0] = new OpenCVImageContainer();
     result[0].setImage(output);
 
