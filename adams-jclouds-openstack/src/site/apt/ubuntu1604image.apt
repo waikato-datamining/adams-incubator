@@ -20,8 +20,6 @@ Image creation for remote command execution
   
   * update packages: sudo apt-get update && sudo apt-get upgrade
 
-  * dpkg-reconfigure cloud-init
-
   * disable firewall: sudo ufw disable
 
   * update grub configuration:
@@ -112,4 +110,6 @@ esac
   * install cloud utilities (NB: will disable logins for ubuntu user!): 
     
     sudo apt-get install cloud-utils cloud-initramfs-growroot cloud-init
+
+  * dpkg-reconfigure cloud-init
 
