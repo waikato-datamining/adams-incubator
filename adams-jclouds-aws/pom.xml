@@ -113,6 +113,12 @@
         <artifactId>maven-jar-plugin</artifactId>
       </plugin>
 
+      <!-- generates list of dependent modules -->
+      <plugin>
+        <groupId>com.github.fracpete</groupId>
+        <artifactId>maven-dependency-list-plugin</artifactId>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -127,7 +133,7 @@
               <attach>true</attach>
               <descriptors>
                 <!--descriptor>src/main/assembly/doc.xml</descriptor-->
-                <!--descriptor>src/main/assembly/flows.xml</descriptor-->
+                <descriptor>src/main/assembly/flows.xml</descriptor>
                 <descriptor>src/main/assembly/sources.xml</descriptor>
                 <!--descriptor>src/main/assembly/test-sources.xml</descriptor-->
               </descriptors>
