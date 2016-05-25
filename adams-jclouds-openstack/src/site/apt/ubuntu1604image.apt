@@ -53,11 +53,33 @@ Upload to OpenStack
 
   * export instance as OVF 1.0
 
-  * use qemu-img to convert image to QCOW2
+  * decompress the .ova file: tar xf image.ova
+
+  * use qemu-img to convert image to RAW
 
 +----
-qemu-img convert -O qcow2 image.vmdk image.qcow2
+qemu-img convert -O raw image.vmdk image.raw
 +----
 
-  * log into OpenStack web interface and upload qcow2 image
+  * upload image.raw to publicly accessible website
+
+  * log into OpenStack web interface and upload raw image
+
+    * Name: ubuntu-1604_adams-YYYYMMDD_x86_64
+
+    * Description: Ubuntu 16.04 with ADAMS
+
+    * Image source: Image location (= URL)
+
+    * Image location: the URL of the just uploaded image
+
+    * Format: Raw
+
+    * Architecture: x86_64
+
+    * Minimum disk: 6 GB
+
+    * Minimum RAM: 4096 MB
+
+    * Copy data: checked
 
