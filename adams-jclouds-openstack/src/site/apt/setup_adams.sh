@@ -21,7 +21,7 @@ tar -xzf jdk-8u92-linux-x64.tar.gz
 echo "...installing Java"
 sudo mv jdk1.8.0_92 /opt/jdk
 echo "...cleaning up Java"
-rm -f jdk-*.tar.gz
+rm -f jdk-*.tar.gz*
 
 # adams
 echo "adams..."
@@ -39,7 +39,7 @@ unzip -q adams-addons-snapshot-bin.zip
 echo "...installing ADAMS"
 sudo mv adams-addons-all-* /opt/adams
 echo "...cleaning up ADAMS"
-rm -f adams-addons-*.zip
+rm -f adams-addons-*.zip*
 
 # directories
 echo "creating directories..."
