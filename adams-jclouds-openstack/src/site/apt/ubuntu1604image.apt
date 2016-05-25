@@ -42,11 +42,9 @@ GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0"
 https://adams.cms.waikato.ac.nz/download/cloud/setup_adams.sh
 +----
 
-  * install cloud-init (NB: will disable logins for ubuntu user!): 
-    
-    sudo apt-get install cloud-init
+  * install cloud-init (NB: will disable logins for ubuntu user!): sudo apt-get install cloud-init
 
-  * dpkg-reconfigure cloud-init
+  * enable openstack: dpkg-reconfigure cloud-init
 
 
 Upload to OpenStack
