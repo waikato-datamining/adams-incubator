@@ -50,61 +50,10 @@ sudo chmod -R 777 /opt/data
 
   * download ADAMS (eg adams-addons-all) and install it in /opt/adams
 
-  * create systemd script /etc/init.d/adams with the following content
+  * download systemd script from link below and save it as /etc/init.d/adams
 
 +----
-#! /bin/sh
-### BEGIN INIT INFO
-# Provides:          adams
-# Required-Start:    $all
-# Required-Stop:
-# Default-Start:     2 3 4 5
-# Default-Stop:
-# Short-Description: Starts up ADAMS with a flowrunner for executing jobs and remote commands.
-### END INIT INFO
-
-
-PATH=/sbin:/usr/sbin:/bin:/usr/bin
-JAVA=/opt/jdk
-ADAMS=/opt/adams
-MEMORY=2g
-
-do_start() {
-	if [ -x /etc/rc.local ]; then
-	        [ "$VERBOSE" != no ] && log_begin_msg "Running local boot scripts (/etc/rc.local)"
-		/etc/rc.local
-		ES=$?
-		[ "$VERBOSE" != no ] && log_end_msg $ES
-		return $ES
-	fi
-}
-
-case "$1" in
-    start)
-        export JAVA_HOME=$JAVA
-	$JAVA/bin/java -cp "$ADAMS/lib/*:$ADAMS/lib/linux64/*" -Xmx$MEMORY adams.flow.FlowRunner -input /opt/adams/flows/adams-core-process_jobs_and_commands.flow &
-        ;;
-    restart|reload|force-reload)
-        echo "Error: argument '$1' not supported" >&2
-        exit 3
-        ;;
-    status)
-        COUNT=`ps -e | grep java | wc -l`
-        if [ $COUNT -eq 0 ]
-        then
-          echo "Not running"
-        else
-          echo "Running"
-        fi
-        ;;
-    stop)
-        killall java
-        ;;
-    *)
-        echo "Usage: $0 start|stop" >&2
-        exit 3
-        ;;
-esac
+https://adams.cms.waikato.ac.nz/download/cloud/systemd_adams
 +----
 
   * activate systemd script: sudo systemctl enable adams
