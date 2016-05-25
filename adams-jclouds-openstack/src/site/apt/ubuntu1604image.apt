@@ -6,7 +6,7 @@ Image creation for remote command execution
 
     * http://docs.openstack.org/image-guide/ubuntu-image.html
 
-  * create new virtual machine in VirtualBox, using QCOW format for disk
+  * create new virtual machine in VirtualBox, using default format for disk
 
   * use Ubuntu 16.04 server image 64bit
 
@@ -19,6 +19,8 @@ Image creation for remote command execution
     * reboot after initial setup
   
   * update packages: sudo apt-get update && sudo apt-get upgrade
+
+  * install zip and cloud-utils: sudo apt-get install zip cloud-utils
 
   * disable firewall: sudo ufw disable
 
@@ -80,7 +82,7 @@ do_start() {
 case "$1" in
     start)
         export JAVA_HOME=$JAVA
-	$JAVA/bin/java -cp "$ADAMS/lib/*" -Xmx$MEMORY adams.flow.FlowRunner -input /opt/adams/flows/adams-core-process_jobs_and_commands.flow &
+	$JAVA/bin/java -cp "$ADAMS/lib/*:$ADAMS/lib/linux64/*" -Xmx$MEMORY adams.flow.FlowRunner -input /opt/adams/flows/adams-core-process_jobs_and_commands.flow &
         ;;
     restart|reload|force-reload)
         echo "Error: argument '$1' not supported" >&2
@@ -107,9 +109,24 @@ esac
 
   * activate systemd script: sudo systemctl enable adams
 
-  * install cloud utilities (NB: will disable logins for ubuntu user!): 
+  * install cloud-init (NB: will disable logins for ubuntu user!): 
     
-    sudo apt-get install cloud-utils cloud-initramfs-growroot cloud-init
+    sudo apt-get install cloud-init
 
   * dpkg-reconfigure cloud-init
+
+
+Upload to OpenStack
+
+  * shut down machine instance
+
+  * export instance as OVF 1.0
+
+  * use qemu-img to convert image to QCOW2
+
++----
+qemu-img convert -O qcow2 image.vmdk image.qcow2
++----
+
+  * log into OpenStack web interface and upload qcow2 image
 
