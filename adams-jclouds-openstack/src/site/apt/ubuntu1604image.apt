@@ -36,27 +36,11 @@ GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0"
 
     * save and update grub using: sudo update-grub
 
-  * download Java and install it in /opt/jdk
-
-  * create directory structure in /opt
+  * download and run the following script:
 
 +----
-sudo mkdir -p /opt/data/incoming
-sudo mkdir -p /opt/data/processing
-sudo mkdir -p /opt/data/processed
-sudo mkdir -p /opt/data/failed
-sudo chmod -R 777 /opt/data
+https://adams.cms.waikato.ac.nz/download/cloud/setup_adams.sh
 +----
-
-  * download ADAMS (eg adams-addons-all) and install it in /opt/adams
-
-  * download systemd script from link below and save it as /etc/init.d/adams
-
-+----
-https://adams.cms.waikato.ac.nz/download/cloud/systemd_adams
-+----
-
-  * activate systemd script: sudo systemctl enable adams
 
   * install cloud-init (NB: will disable logins for ubuntu user!): 
     
