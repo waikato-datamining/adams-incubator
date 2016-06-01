@@ -1,0 +1,97 @@
+# Configuration file listing the superclasses and the packages in which to
+# look for derived classes.
+#
+# Format:
+# class.name=package1,package2,...
+#
+# Author:  FracPete (fracpete at waikato dot ac dot nz)
+# Version: $Revision: 10248 $
+
+# the classifiers
+jsat.classifiers.Classifier=\
+  jsat.classifiers,\
+  jsat.classifiers.bayesian,\
+  jsat.classifiers.bayesian.graphicalmodel,\
+  jsat.classifiers.boosting,\
+  jsat.classifiers.calibration,\
+  jsat.classifiers.knn,\
+  jsat.classifiers.linear,\
+  jsat.classifiers.linear.kernelized,\
+  jsat.classifiers.neuralnetwork,\
+  jsat.classifiers.svm,\
+  jsat.classifiers.svm.extended,\
+  jsat.classifiers.trees
+
+# the updateable classifiers
+jsat.classifiers.UpdateableClassifier=\
+  jsat.classifiers,\
+  jsat.classifiers.bayesian,\
+  jsat.classifiers.bayesian.graphicalmodel,\
+  jsat.classifiers.boosting,\
+  jsat.classifiers.calibration,\
+  jsat.classifiers.knn,\
+  jsat.classifiers.linear,\
+  jsat.classifiers.linear.kernelized,\
+  jsat.classifiers.neuralnetwork,\
+  jsat.classifiers.svm,\
+  jsat.classifiers.svm.extended,\
+  jsat.classifiers.trees
+
+# the regressors
+jsat.regression.Regressor=\
+  jsat.regression
+
+# the clustering algorithms
+jsat.clustering.Clusterer=\
+  jsat.clustering,\
+  jsat.clustering.hierarchical,\
+  jsat.clustering.kmeans
+
+# the data transformation schemes
+jsat.datatransform.DataTransform=\
+  jsat.datatransform,\
+  jsat.datatransform.featureselection,\
+  jsat.datatransform.kernel,\
+  jsat.datatransform.visualization
+
+# the distributions
+jsat.distributions.Distribution=\
+  jsat.distributions,\
+  jsat.distributions.discrete,\
+  jsat.distributions.empirical,\
+  jsat.distributions.kernels,\
+  jsat.distributions.multivariate
+
+# the drift detectors
+jsat.driftdetectors.BaseDriftDetector=\
+  jsat.driftdetectors
+
+# the loss functions
+jsat.lossfunctions.LossFunc=\
+  jsat.lossfunctions
+
+# the stemmers
+jsat.text.stemming.Stemmer=\
+  jsat.text.stemming
+
+# the tokenizers
+jsat.text.tokenizer.Tokenizer=\
+  jsat.text.tokenizer
+
+# the word weighting schemes
+jsat.text.wordweighting.WordWeighting=\
+  jsat.text.wordweighting
+
+# statistical tests
+jsat.testing.StatisticTest=\
+  jsat.testing,\
+  jsat.testing.goodnessoffit,\
+  jsat.testing.onesample
+
+# the distance metrics
+jsat.linear.distancemetrics.DistanceMetric=\
+  jsat.linear.distancemetrics
+
+# the kernel tricks
+jsat.distributions.kernels.KernelTrick=\
+  jsat.distributions.kernels
