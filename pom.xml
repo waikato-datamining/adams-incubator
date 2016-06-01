@@ -36,6 +36,7 @@
     <module>adams-jclouds</module>
     <module>adams-jclouds-aws</module>
     <module>adams-jclouds-openstack</module>
+    <module>adams-jsat</module>
     <module>adams-tumblr</module>
     <module>adams-weka-hadoop</module>
   </modules>

@@ -124,6 +124,13 @@
       <version>${project.version}</version>
     </dependency>
 
+    <!-- jsat -->
+    <dependency>
+      <groupId>nz.ac.waikato.cms.adams</groupId>
+      <artifactId>adams-jsat</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+
     <!-- openml -->
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
