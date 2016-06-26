@@ -1,16 +1,16 @@
 # Project: adams
-# Date: 2016-06-26 22:37:02
+# Date: 2016-06-27 09:51:46
 # User: fracpete
 # Charset: UTF-8
 adams.flow.control.Flow -annotation "Downloads dataset with the specified ID." -flow-execution-listener adams.flow.execution.NullListener
  adams.flow.standalone.TabView
-  adams.flow.sink.WekaInstancesDisplay -name datasets -writer adams.gui.print.NullWriter
   adams.flow.sink.ReportDisplay -name metadata
+  adams.flow.sink.SpreadSheetDisplay -name dataset -writer adams.data.io.output.NullWriter
  adams.flow.standalone.OpenMLConnection
  adams.flow.source.StringConstants -string 1
  adams.flow.transformer.Convert -conversion adams.data.conversion.StringToInt
  adams.flow.transformer.OpenMLDownloadDataset
  adams.flow.control.ContainerValuePicker -value Dataset
-  adams.flow.sink.CallableSink -callable datasets
+  adams.flow.sink.CallableSink -callable dataset
  adams.flow.control.ContainerValuePicker -name ContainerValuePicker-1 -value Meta-data
   adams.flow.sink.CallableSink -callable metadata
