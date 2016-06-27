@@ -85,13 +85,13 @@
 
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-weka</artifactId>
+      <artifactId>adams-ml</artifactId>
       <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-weka</artifactId>
+      <artifactId>adams-ml</artifactId>
       <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>

@@ -21,7 +21,7 @@
 package adams.flow.container;
 
 import adams.data.report.Report;
-import weka.core.Instances;
+import adams.ml.data.Dataset;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -59,7 +59,7 @@ public class OpenMLDatasetContainer
    * @param dataset	the dataset
    * @param metadata	the meta-data
    */
-  public OpenMLDatasetContainer(Instances dataset, Report metadata) {
+  public OpenMLDatasetContainer(Dataset dataset, Report metadata) {
     super();
 
     store(VALUE_DATASET,  dataset);
@@ -72,7 +72,7 @@ public class OpenMLDatasetContainer
   protected void initHelp() {
     super.initHelp();
 
-    addHelp(VALUE_DATASET, "dataset; " + Instances.class.getName());
+    addHelp(VALUE_DATASET, "dataset; " + Dataset.class.getName());
     addHelp(VALUE_METADATA, "meta-data; " + Report.class.getName());
   }
 

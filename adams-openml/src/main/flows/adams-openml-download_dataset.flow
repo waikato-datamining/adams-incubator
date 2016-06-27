@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2016-06-27 09:51:46
+# Date: 2016-06-27 14:15:39
 # User: fracpete
 # Charset: UTF-8
 adams.flow.control.Flow -annotation "Downloads dataset with the specified ID." -flow-execution-listener adams.flow.execution.NullListener
@@ -9,7 +9,7 @@ adams.flow.control.Flow -annotation "Downloads dataset with the specified ID." -
  adams.flow.standalone.OpenMLConnection
  adams.flow.source.StringConstants -string 1
  adams.flow.transformer.Convert -conversion adams.data.conversion.StringToInt
- adams.flow.transformer.OpenMLDownloadDataset
+ adams.flow.transformer.OpenMLDownloadDataset -reader "adams.data.io.input.SimpleArffSpreadSheetReader -data-row-type adams.data.spreadsheet.DenseDataRow -spreadsheet-type adams.data.spreadsheet.DefaultSpreadSheet"
  adams.flow.control.ContainerValuePicker -value Dataset
   adams.flow.sink.CallableSink -callable dataset
  adams.flow.control.ContainerValuePicker -name ContainerValuePicker-1 -value Meta-data

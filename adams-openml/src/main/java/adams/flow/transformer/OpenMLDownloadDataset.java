@@ -20,14 +20,17 @@
 package adams.flow.transformer;
 
 import adams.core.Utils;
+import adams.data.io.input.SimpleArffSpreadSheetReader;
+import adams.data.io.input.SpreadSheetReader;
 import adams.data.report.Report;
+import adams.data.spreadsheet.SpreadSheet;
 import adams.flow.container.OpenMLDatasetContainer;
 import adams.flow.core.Token;
+import adams.ml.data.Dataset;
+import adams.ml.data.DatasetView;
+import adams.ml.data.DefaultDataset;
+import gnu.trove.list.array.TIntArrayList;
 import org.openml.apiconnector.xml.DataSetDescription;
-import weka.core.Instances;
-import weka.core.converters.AbstractFileLoader;
-import weka.core.converters.ArffLoader;
-import weka.core.converters.ConverterUtils.DataSource;
 
 import java.io.File;
 
@@ -83,6 +86,11 @@ import java.io.File;
  * &nbsp;&nbsp;&nbsp;default: false
  * </pre>
  * 
+ * <pre>-reader &lt;adams.data.io.input.SpreadSheetReader&gt; (property: reader)
+ * &nbsp;&nbsp;&nbsp;The spreadsheet reader to use for reading the downloaded dataset file.
+ * &nbsp;&nbsp;&nbsp;default: adams.data.io.input.SimpleArffSpreadSheetReader -data-row-type adams.data.spreadsheet.DenseDataRow -spreadsheet-type adams.data.spreadsheet.DefaultSpreadSheet
+ * </pre>
+ * 
  <!-- options-end -->
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
@@ -94,6 +102,9 @@ public class OpenMLDownloadDataset
   /** for serialization. */
   private static final long serialVersionUID = 6360812364500936369L;
 
+  /** the reader to use. */
+  protected SpreadSheetReader m_Reader;
+
   /**
    * Returns a string describing the object.
    *
@@ -102,6 +113,47 @@ public class OpenMLDownloadDataset
   @Override
   public String globalInfo() {
     return "Downloads a dataset and forwards it with its meta-data.";
+  }
+
+  /**
+   * Adds options to the internal list of options.
+   */
+  @Override
+  public void defineOptions() {
+    super.defineOptions();
+
+    m_OptionManager.add(
+      "reader", "reader",
+      new SimpleArffSpreadSheetReader());
+  }
+
+  /**
+   * Sets the spreadsheet reader to use for reading the downloaded dataset file.
+   *
+   * @param value	the reader
+   */
+  public void setReader(SpreadSheetReader value) {
+    m_Reader = value;
+    reset();
+  }
+
+  /**
+   * Returns the spreadsheet reader to use for reading the downloaded dataset file.
+   *
+   * @return		the reader
+   */
+  public SpreadSheetReader getReader() {
+    return m_Reader;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return 		tip text for this property suitable for
+   * 			displaying in the GUI or for listing the options.
+   */
+  public String readerTipText() {
+    return "The spreadsheet reader to use for reading the downloaded dataset file.";
   }
 
   /**
@@ -134,11 +186,13 @@ public class OpenMLDownloadDataset
     String			result;
     int				did;
     DataSetDescription  	dataset;
-    Instances			inst;
+    SpreadSheet 		sheet;
+    Dataset			data;
     Report			meta;
     OpenMLDatasetContainer	cont;
     File			file;
-    AbstractFileLoader		loader;
+    TIntArrayList 		visible;
+    int				index;
 
     result = null;
     did    = (Integer) m_InputToken.getPayload();
@@ -167,21 +221,32 @@ public class OpenMLDownloadDataset
       meta.setStringValue("ID", "" + dataset.getId());
       meta.setStringValue("Dataset", "" + file);
 
-      // TODO format?
-      loader = null;
-      if (dataset.getFormat().equalsIgnoreCase("arff"))
-	loader = new ArffLoader();
-      else
-        result = "Unhandled format: " + dataset.getFormat();
-      if (loader != null) {
-	loader.setFile(file);
-	inst = DataSource.read(loader);
-	if (inst.attribute(dataset.getDefault_target_attribute()) != null)
-	  inst.setClassIndex(inst.attribute(dataset.getDefault_target_attribute()).index());
+      sheet = m_Reader.read(file);
+      data  = new DefaultDataset(sheet);
 
-	cont = new OpenMLDatasetContainer(inst, meta);
-	m_OutputToken = new Token(cont);
+      // class attribute?
+      if (data.indexOfColumn(dataset.getDefault_target_attribute()) > -1)
+	data.setClassAttributeByName(dataset.getDefault_target_attribute(), true);
+
+      // ignored columns?
+      if (dataset.getIgnore_attribute() != null) {
+	if (isLoggingEnabled())
+	  getLogger().info("Creating view without ignore columns: " + Utils.flatten(dataset.getIgnore_attribute(), ","));
+	visible = new TIntArrayList();
+	for (index = 0; index < data.getColumnCount(); index++)
+	  visible.add(index);
+	for (String colName: dataset.getIgnore_attribute()) {
+	  index = data.indexOfColumn(colName);
+	  if (index == -1)
+	    getLogger().warning("Failed to locate ignored column: " + colName);
+	  else
+	    visible.remove(index);
+	}
+	data = new DatasetView(data, null, visible.toArray());
       }
+
+      cont = new OpenMLDatasetContainer(data, meta);
+      m_OutputToken = new Token(cont);
     }
     catch (Exception e) {
       result = handleException("Failed to obtain dataset #" + did + " from OpenML!", e);
