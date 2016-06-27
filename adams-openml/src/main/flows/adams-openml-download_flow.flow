@@ -1,0 +1,10 @@
+# Project: adams
+# Date: 2016-06-27 14:47:30
+# User: fracpete
+# Charset: UTF-8
+adams.flow.control.Flow -annotation "Downloads the flow with the specified ID." -flow-execution-listener adams.flow.execution.NullListener
+ adams.flow.standalone.OpenMLConnection
+ adams.flow.source.StringConstants -string 2
+ adams.flow.transformer.Convert -conversion adams.data.conversion.StringToInt
+ adams.flow.transformer.OpenMLDownloadFlow
+ adams.flow.sink.SpreadSheetDisplay -writer adams.data.io.output.NullWriter

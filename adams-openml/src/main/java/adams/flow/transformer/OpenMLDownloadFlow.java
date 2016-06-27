@@ -14,26 +14,25 @@
  */
 
 /**
- * OpenMLDownloadDataset.java
+ * OpenMLDownloadFlow.java
  * Copyright (C) 2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.transformer;
 
 import adams.core.Utils;
-import adams.data.report.Report;
-import adams.flow.container.OpenMLDatasetContainer;
+import adams.data.spreadsheet.DefaultSpreadSheet;
+import adams.data.spreadsheet.Row;
+import adams.data.spreadsheet.SpreadSheet;
 import adams.flow.core.Token;
-import org.openml.apiconnector.xml.DataSetDescription;
-import weka.core.Instances;
-import weka.core.converters.AbstractFileLoader;
-import weka.core.converters.ArffLoader;
-import weka.core.converters.ConverterUtils.DataSource;
+import org.openml.apiconnector.xml.Flow;
+import org.openml.apiconnector.xml.Flow.Component;
+import org.openml.apiconnector.xml.Flow.Parameter;
 
-import java.io.File;
+import java.lang.reflect.Array;
 
 /**
  <!-- globalinfo-start -->
- * Downloads a dataset and forwards it with its meta-data.
+ * Downloads a flow's meta-data and forwards it.
  * <br><br>
  <!-- globalinfo-end -->
  *
@@ -42,10 +41,7 @@ import java.io.File;
  * - accepts:<br>
  * &nbsp;&nbsp;&nbsp;java.lang.Integer<br>
  * - generates:<br>
- * &nbsp;&nbsp;&nbsp;adams.flow.container.OpenMLDatasetContainer<br>
- * <br><br>
- * Container information:<br>
- * - adams.flow.container.OpenMLDatasetContainer: Dataset, Meta-data
+ * &nbsp;&nbsp;&nbsp;adams.data.spreadsheet.SpreadSheet<br>
  * <br><br>
  <!-- flow-summary-end -->
  *
@@ -57,7 +53,7 @@ import java.io.File;
  * 
  * <pre>-name &lt;java.lang.String&gt; (property: name)
  * &nbsp;&nbsp;&nbsp;The name of the actor.
- * &nbsp;&nbsp;&nbsp;default: OpenMLDownloadDataset
+ * &nbsp;&nbsp;&nbsp;default: OpenMLDownloadFlow
  * </pre>
  * 
  * <pre>-annotation &lt;adams.core.base.BaseAnnotation&gt; (property: annotations)
@@ -101,7 +97,7 @@ public class OpenMLDownloadFlow
    */
   @Override
   public String globalInfo() {
-    return "Downloads a dataset and forwards it with its meta-data.";
+    return "Downloads a flow's meta-data and forwards it.";
   }
 
   /**
@@ -121,7 +117,51 @@ public class OpenMLDownloadFlow
    */
   @Override
   public Class[] generates() {
-    return new Class[]{OpenMLDatasetContainer.class};
+    return new Class[]{SpreadSheet.class};
+  }
+
+  /**
+   * Adds a row to the spreadsheet. Skips it if the value is null.
+   *
+   * @param sheet	the sheet to add the row to
+   * @param key		the key of the value to add
+   * @param value	the value to add
+   */
+  protected void addRow(SpreadSheet sheet, String key, Object value) {
+    Row		row;
+    Object[]	array;
+    Object	val;
+    Parameter 	param;
+    Component 	comp;
+    int		i;
+
+    if (value == null)
+      return;
+
+    row = sheet.addRow();
+    row.addCell("K").setContentAsString(key);
+    if (value.getClass().isArray()) {
+      array = new Object[Array.getLength(value)];
+      for (i = 0; i < array.length; i++) {
+	val = Array.get(value, i);
+	if (val instanceof Parameter) {
+	  param = (Parameter) val;
+	  val   = "name=" + param.getName()
+	    + ";datatype" + param.getData_type()
+	    + ";defaultvalue=" + param.getDefault_value()
+	    + ";description=" + param.getDescription();
+	}
+	else if (val instanceof Flow.Component) {
+	  comp = (Component) val;
+	  val  = "identifier=" + comp.getIdentifier() + ";flowImplementationID=" + comp.getImplementation().getId();
+	}
+	array[i] = val;
+      }
+      row.addCell("V").setContentAsString(Utils.flatten(array, ";"));
+    }
+    else {
+      row.addCell("V").setContentAsString(value.toString());
+    }
   }
 
   /**
@@ -131,60 +171,58 @@ public class OpenMLDownloadFlow
    */
   @Override
   protected String doExecute() {
-    String			result;
-    int				did;
-    DataSetDescription  	dataset;
-    Instances			inst;
-    Report			meta;
-    OpenMLDatasetContainer	cont;
-    File			file;
-    AbstractFileLoader		loader;
+    String	result;
+    int 	fid;
+    Flow	flow;
+    SpreadSheet	sheet;
+    Row		row;
 
     result = null;
-    did    = (Integer) m_InputToken.getPayload();
+    fid = (Integer) m_InputToken.getPayload();
 	
     try {
       if (isLoggingEnabled())
-	getLogger().info("Downloading dataset for #" + did);
-      dataset = m_Connection.getConnector().dataGet(did);
+	getLogger().info("Downloading flow for #" + fid);
+      flow = m_Connection.getConnector().flowGet(fid);
 
-      file = dataset.getDataset(m_Connection.getAPIKey());
-      meta = new Report();
-      meta.setStringValue("Name", dataset.getName());
-      meta.setStringValue("Version", dataset.getVersion());
-      meta.setStringValue("Creators", dataset.getCreator() == null ? "" : Utils.flatten(dataset.getCreator(), ";"));
-      meta.setStringValue("Contributors", dataset.getContributor() == null ? "" : Utils.flatten(dataset.getContributor(), ";"));
-      meta.setStringValue("Format", dataset.getFormat());
-      meta.setStringValue("CollectionDate", dataset.getCollection_date() == null ? "" : dataset.getCollection_date());
-      meta.setStringValue("Language", dataset.getLanguage() == null ? "" : dataset.getLanguage());
-      meta.setStringValue("Licence", dataset.getLicence() == null ? "" : dataset.getLicence());
-      meta.setStringValue("RowIdAttribute", dataset.getRow_id_attribute() == null ? "" : dataset.getRow_id_attribute());
-      meta.setStringValue("DefaultTargetAttribute", dataset.getDefault_target_attribute());
-      meta.setStringValue("IgnoreAttributes", dataset.getIgnore_attribute() == null ? "" : Utils.flatten(dataset.getIgnore_attribute(), ";"));
-      meta.setStringValue("Tags", dataset.getTag() == null ? "" : Utils.flatten(dataset.getTag(), ";"));
-      meta.setStringValue("MD5", dataset.getMd5_checksum());
-      meta.setStringValue("URL", dataset.getUrl() == null ? "" : dataset.getUrl());
-      meta.setStringValue("ID", "" + dataset.getId());
-      meta.setStringValue("Dataset", "" + file);
+      sheet = new DefaultSpreadSheet();
+      sheet.setName("Flow #" + fid);
+      // header
+      row = sheet.getHeaderRow();
+      row.addCell("K").setContentAsString("Key");
+      row.addCell("V").setContentAsString("Value");
+      // data
+      addRow(sheet, "ID", flow.getId());
+      addRow(sheet, "FullName", flow.getFullName());
+      addRow(sheet, "UploaderID", flow.getUploader());
+      addRow(sheet, "Name", flow.getName());
+      addRow(sheet, "Version", flow.getVersion());
+      addRow(sheet, "ExternalVersion", flow.getExternal_version());
+      addRow(sheet, "Description", flow.getDescription());
+      addRow(sheet, "Creators", flow.getCreator());
+      addRow(sheet, "Contributors", flow.getContributor());
+      addRow(sheet, "UploadDate", flow.getUpload_date());
+      addRow(sheet, "Licence", flow.getLicence());
+      addRow(sheet, "Language", flow.getLanguage());
+      addRow(sheet, "FullDescription", flow.getFull_description());
+      addRow(sheet, "InstallationNotes", flow.getInstallation_notes());
+      addRow(sheet, "Dependencies", flow.getDependencies());
+      addRow(sheet, "BibliographicalReferences", flow.getBibliographical_reference());
+      addRow(sheet, "Implement", flow.getImplement());
+      addRow(sheet, "Parameters", flow.getParameter());
+      addRow(sheet, "Components", flow.getComponent());
+      addRow(sheet, "Tags", flow.getTag());
+      addRow(sheet, "SourceURL", flow.getSource_url());
+      addRow(sheet, "BinaryURL", flow.getBinary_url());
+      addRow(sheet, "SourceFormat", flow.getSource_format());
+      addRow(sheet, "BinaryFormat", flow.getBinary_format());
+      addRow(sheet, "SourceMD5", flow.getSource_md5());
+      addRow(sheet, "BinaryMD5", flow.getBinary_md5());
 
-      // TODO format?
-      loader = null;
-      if (dataset.getFormat().equalsIgnoreCase("arff"))
-	loader = new ArffLoader();
-      else
-        result = "Unhandled format: " + dataset.getFormat();
-      if (loader != null) {
-	loader.setFile(file);
-	inst = DataSource.read(loader);
-	if (inst.attribute(dataset.getDefault_target_attribute()) != null)
-	  inst.setClassIndex(inst.attribute(dataset.getDefault_target_attribute()).index());
-
-	cont = new OpenMLDatasetContainer(inst, meta);
-	m_OutputToken = new Token(cont);
-      }
+      m_OutputToken = new Token(sheet);
     }
     catch (Exception e) {
-      result = handleException("Failed to obtain dataset #" + did + " from OpenML!", e);
+      result = handleException("Failed to obtain flow #" + fid + " from OpenML!", e);
     }
     
     return result;
