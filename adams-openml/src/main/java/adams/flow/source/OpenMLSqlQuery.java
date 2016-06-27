@@ -25,7 +25,7 @@ import org.json.JSONObject;
 
 import adams.core.QuickInfoHelper;
 import adams.core.Utils;
-import adams.core.net.OpenMLHelper;
+import adams.data.openml.OpenMLHelper;
 import adams.db.SQLStatement;
 import adams.flow.core.Token;
 

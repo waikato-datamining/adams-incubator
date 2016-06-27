@@ -25,7 +25,7 @@ import net.minidev.json.JSONAware;
 
 import org.json.JSONObject;
 
-import adams.core.net.OpenMLHelper;
+import adams.data.openml.OpenMLHelper;
 import adams.flow.core.ActorUtils;
 import adams.flow.standalone.OpenMLConnection;
 

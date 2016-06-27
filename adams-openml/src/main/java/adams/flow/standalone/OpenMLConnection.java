@@ -21,7 +21,7 @@
 package adams.flow.standalone;
 
 import adams.core.QuickInfoHelper;
-import adams.core.net.OpenMLHelper;
+import adams.data.openml.OpenMLHelper;
 import org.openml.apiconnector.io.OpenmlConnector;
 
 /**

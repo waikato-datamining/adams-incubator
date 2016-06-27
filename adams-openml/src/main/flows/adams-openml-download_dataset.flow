@@ -1,10 +1,10 @@
 # Project: adams
-# Date: 2016-06-27 14:15:39
+# Date: 2016-06-27 16:12:53
 # User: fracpete
 # Charset: UTF-8
 adams.flow.control.Flow -annotation "Downloads dataset with the specified ID." -flow-execution-listener adams.flow.execution.NullListener
  adams.flow.standalone.TabView
-  adams.flow.sink.ReportDisplay -name metadata
+  adams.flow.sink.SpreadSheetDisplay -name metadata -writer adams.data.io.output.NullWriter
   adams.flow.sink.SpreadSheetDisplay -name dataset -writer adams.data.io.output.NullWriter
  adams.flow.standalone.OpenMLConnection
  adams.flow.source.StringConstants -string 1

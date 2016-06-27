@@ -19,7 +19,7 @@
  */
 package adams.env;
 
-import adams.core.net.OpenMLHelper;
+import adams.data.openml.OpenMLHelper;
 
 /**
  * Definition for the OpenML props file.
@@ -64,6 +64,6 @@ public class OpenMLDefinition
    */
   @Override
   public void update(AbstractEnvironment env) {
-    replace(env, Project.NAME + "/core/net");
+    replace(env, Project.NAME + "/data/openml");
   }
 }

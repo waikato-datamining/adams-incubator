@@ -20,7 +20,7 @@
 package adams.gui.application;
 
 import adams.core.Properties;
-import adams.core.net.OpenMLHelper;
+import adams.data.openml.OpenMLHelper;
 import adams.gui.core.ParameterPanel;
 
 import javax.swing.JSpinner;

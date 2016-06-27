@@ -20,7 +20,7 @@
 
 package adams.flow.container;
 
-import adams.data.report.Report;
+import adams.data.spreadsheet.SpreadSheet;
 import adams.ml.data.Dataset;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class OpenMLDatasetContainer
    * @param dataset	the dataset
    * @param metadata	the meta-data
    */
-  public OpenMLDatasetContainer(Dataset dataset, Report metadata) {
+  public OpenMLDatasetContainer(Dataset dataset, SpreadSheet metadata) {
     super();
 
     store(VALUE_DATASET,  dataset);
@@ -73,7 +73,7 @@ public class OpenMLDatasetContainer
     super.initHelp();
 
     addHelp(VALUE_DATASET, "dataset; " + Dataset.class.getName());
-    addHelp(VALUE_METADATA, "meta-data; " + Report.class.getName());
+    addHelp(VALUE_METADATA, "meta-data; " + SpreadSheet.class.getName());
   }
 
   /**

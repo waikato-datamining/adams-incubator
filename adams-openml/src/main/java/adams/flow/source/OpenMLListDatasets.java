@@ -21,7 +21,7 @@ package adams.flow.source;
 
 import adams.core.QuickInfoHelper;
 import adams.core.base.BaseRegExp;
-import adams.core.net.OpenMLHelper;
+import adams.data.openml.OpenMLHelper;
 import adams.data.conversion.OpenMLJsonToSpreadSheet;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.db.SQL;

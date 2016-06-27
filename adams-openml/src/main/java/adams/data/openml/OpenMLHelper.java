@@ -18,13 +18,14 @@
  * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 
-package adams.core.net;
+package adams.data.openml;
 
 import adams.core.Properties;
 import adams.env.Environment;
 import adams.env.OpenMLDefinition;
 
 import java.io.StringReader;
+import java.lang.reflect.Array;
 
 /**
  * A helper class for the OpenML setup.
@@ -225,5 +226,56 @@ public class OpenMLHelper {
     reader.close();
 
     return (net.minidev.json.JSONAware) obj;
+  }
+
+  /**
+   * Turns the OpenML object into string representation, if possible.
+   *
+   * @param value	the object to convert
+   * @param separator	the separator for arrays
+   * @param nullValue	the value to use if null
+   * @return		the string representation, null if failed
+   */
+  public static String toString(Object value, String separator, String nullValue) {
+    AbstractDataTypeToString	conv;
+    StringBuilder		result;
+    int				i;
+
+    if (value == null)
+      return nullValue;
+
+    // String?
+    if (value instanceof String)
+      return (String) value;
+
+    // String array?
+    if (value instanceof String[]) {
+      result = new StringBuilder();
+      for (i = 0; i < Array.getLength(value); i++) {
+	if (i > 0)
+	  result.append(separator);
+	result.append((String) (Array.get(value, i)));
+      }
+      return result.toString();
+    }
+
+    // do we have a conversion?
+    conv = AbstractDataTypeToString.getConversion(value);
+    if (conv == null)
+      return nullValue;
+
+    result = new StringBuilder();
+    if (value.getClass().isArray()) {
+      for (i = 0; i < Array.getLength(value); i++) {
+	if (i > 0)
+	  result.append(separator);
+	result.append(conv.convert(Array.get(value, i)));
+      }
+    }
+    else {
+      result.append(conv.convert(value));
+    }
+
+    return result.toString();
   }
 }

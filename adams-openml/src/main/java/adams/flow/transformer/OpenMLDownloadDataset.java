@@ -22,7 +22,9 @@ package adams.flow.transformer;
 import adams.core.Utils;
 import adams.data.io.input.SimpleArffSpreadSheetReader;
 import adams.data.io.input.SpreadSheetReader;
-import adams.data.report.Report;
+import adams.data.openml.OpenMLHelper;
+import adams.data.spreadsheet.DefaultSpreadSheet;
+import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.flow.container.OpenMLDatasetContainer;
 import adams.flow.core.Token;
@@ -177,6 +179,24 @@ public class OpenMLDownloadDataset
   }
 
   /**
+   * Adds a row to the spreadsheet. Skips it if the value is null.
+   *
+   * @param sheet	the sheet to add the row to
+   * @param key		the key of the value to add
+   * @param value	the value to add
+   */
+  protected void addRow(SpreadSheet sheet, String key, Object value) {
+    Row row;
+
+    if (value == null)
+      return;
+
+    row = sheet.addRow();
+    row.addCell("K").setContentAsString(key);
+    row.addCell("V").setContentAsString(OpenMLHelper.toString(value, ";", ""));
+  }
+
+  /**
    * Executes the flow item.
    *
    * @return		null if everything is fine, otherwise error message
@@ -188,11 +208,12 @@ public class OpenMLDownloadDataset
     DataSetDescription  	dataset;
     SpreadSheet 		sheet;
     Dataset			data;
-    Report			meta;
+    SpreadSheet			meta;
     OpenMLDatasetContainer	cont;
     File			file;
     TIntArrayList 		visible;
     int				index;
+    Row				row;
 
     result = null;
     did    = (Integer) m_InputToken.getPayload();
@@ -203,23 +224,32 @@ public class OpenMLDownloadDataset
       dataset = m_Connection.getConnector().dataGet(did);
 
       file = dataset.getDataset(m_Connection.getAPIKey());
-      meta = new Report();
-      meta.setStringValue("Name", dataset.getName());
-      meta.setStringValue("Version", dataset.getVersion());
-      meta.setStringValue("Creators", dataset.getCreator() == null ? "" : Utils.flatten(dataset.getCreator(), ";"));
-      meta.setStringValue("Contributors", dataset.getContributor() == null ? "" : Utils.flatten(dataset.getContributor(), ";"));
-      meta.setStringValue("Format", dataset.getFormat());
-      meta.setStringValue("CollectionDate", dataset.getCollection_date() == null ? "" : dataset.getCollection_date());
-      meta.setStringValue("Language", dataset.getLanguage() == null ? "" : dataset.getLanguage());
-      meta.setStringValue("Licence", dataset.getLicence() == null ? "" : dataset.getLicence());
-      meta.setStringValue("RowIdAttribute", dataset.getRow_id_attribute() == null ? "" : dataset.getRow_id_attribute());
-      meta.setStringValue("DefaultTargetAttribute", dataset.getDefault_target_attribute());
-      meta.setStringValue("IgnoreAttributes", dataset.getIgnore_attribute() == null ? "" : Utils.flatten(dataset.getIgnore_attribute(), ";"));
-      meta.setStringValue("Tags", dataset.getTag() == null ? "" : Utils.flatten(dataset.getTag(), ";"));
-      meta.setStringValue("MD5", dataset.getMd5_checksum());
-      meta.setStringValue("URL", dataset.getUrl() == null ? "" : dataset.getUrl());
-      meta.setStringValue("ID", "" + dataset.getId());
-      meta.setStringValue("Dataset", "" + file);
+      meta = new DefaultSpreadSheet();
+
+      // header
+      row = meta.getHeaderRow();
+      row.addCell("K").setContent("Key");
+      row.addCell("V").setContent("Value");
+
+      // data
+      addRow(meta, "ID", "" + dataset.getId());
+      addRow(meta, "Name", dataset.getName());
+      addRow(meta, "Version", dataset.getVersion());
+      addRow(meta, "Description", dataset.getDescription());
+      addRow(meta, "CollectionDate", dataset.getCollection_date());
+      addRow(meta, "Creators", dataset.getCreator());
+      addRow(meta, "Contributors", dataset.getContributor());
+      addRow(meta, "Format", dataset.getFormat());
+      addRow(meta, "UploadDate", dataset.getUpload_date());
+      addRow(meta, "Language", dataset.getLanguage());
+      addRow(meta, "Licence", dataset.getLicence());
+      addRow(meta, "RowIdAttribute", dataset.getRow_id_attribute());
+      addRow(meta, "DefaultTargetAttribute", dataset.getDefault_target_attribute());
+      addRow(meta, "IgnoreAttributes", dataset.getIgnore_attribute());
+      addRow(meta, "Tags", dataset.getTag());
+      addRow(meta, "MD5", dataset.getMd5_checksum());
+      addRow(meta, "URL", dataset.getUrl());
+      addRow(meta, "Dataset", file.getAbsolutePath());
 
       sheet = m_Reader.read(file);
       data  = new DefaultDataset(sheet);

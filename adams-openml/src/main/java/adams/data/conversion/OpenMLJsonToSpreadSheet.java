@@ -19,7 +19,7 @@
  */
 package adams.data.conversion;
 
-import adams.core.net.OpenMLHelper;
+import adams.data.openml.OpenMLHelper;
 import adams.data.spreadsheet.DefaultSpreadSheet;
 import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;

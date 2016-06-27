@@ -19,7 +19,7 @@
  */
 package adams.flow.transformer;
 
-import adams.core.Utils;
+import adams.data.openml.OpenMLHelper;
 import adams.data.spreadsheet.DefaultSpreadSheet;
 import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;
@@ -111,6 +111,24 @@ public class OpenMLDatasetDescription
   }
 
   /**
+   * Adds a row to the spreadsheet. Skips it if the value is null.
+   *
+   * @param sheet	the sheet to add the row to
+   * @param key		the key of the value to add
+   * @param value	the value to add
+   */
+  protected void addRow(SpreadSheet sheet, String key, Object value) {
+    Row		row;
+
+    if (value == null)
+      return;
+
+    row = sheet.addRow();
+    row.addCell("K").setContentAsString(key);
+    row.addCell("V").setContentAsString(OpenMLHelper.toString(value, ";", ""));
+  }
+
+  /**
    * Executes the flow item.
    *
    * @return		null if everything is fine, otherwise error message
@@ -119,8 +137,8 @@ public class OpenMLDatasetDescription
   protected String doExecute() {
     String		result;
     int			did;
-    DataSetDescription	desc;
-    SpreadSheet		sheet;
+    DataSetDescription 	dataset;
+    SpreadSheet 	meta;
     Row			row;
     
     result = null;
@@ -129,76 +147,34 @@ public class OpenMLDatasetDescription
     try {
       if (isLoggingEnabled())
 	getLogger().info("Obtaining dataset description for #" + did);
-      desc  = m_Connection.getConnector().dataGet(did);
-      sheet = new DefaultSpreadSheet();
+      dataset = m_Connection.getConnector().dataGet(did);
+      meta = new DefaultSpreadSheet();
       
       // header
-      row = sheet.getHeaderRow();
-      row.addCell("k").setContent("Key");
-      row.addCell("v").setContent("Value");
+      row = meta.getHeaderRow();
+      row.addCell("K").setContent("Key");
+      row.addCell("V").setContent("Value");
 
       // data
-      row = sheet.addRow();
-      row.addCell("k").setContent("ID");
-      row.addCell("v").setContent(did);
+      addRow(meta, "ID", did);
+      addRow(meta, "Name", dataset.getName());
+      addRow(meta, "Version", dataset.getVersion());
+      addRow(meta, "Description", dataset.getDescription());
+      addRow(meta, "Format", dataset.getFormat());
+      addRow(meta, "Creators", dataset.getCreator());
+      addRow(meta, "Contributors", dataset.getContributor());
+      addRow(meta, "CollectionDate", dataset.getCollection_date());
+      addRow(meta, "UploadDate", dataset.getUpload_date());
+      addRow(meta, "Language", dataset.getLanguage());
+      addRow(meta, "Licence", dataset.getLicence());
+      addRow(meta, "URL", dataset.getUrl());
+      addRow(meta, "RowIdAttribute", dataset.getRow_id_attribute());
+      addRow(meta, "DefaultTargetAttribute", dataset.getDefault_target_attribute());
+      addRow(meta, "IgnoreAttributes", dataset.getIgnore_attribute());
+      addRow(meta, "Tags", dataset.getTag());
+      addRow(meta, "MD5", dataset.getMd5_checksum());
 
-      row = sheet.addRow();
-      row.addCell("k").setContent("Name");
-      row.addCell("v").setContent(desc.getName());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Version");
-      row.addCell("v").setContent(desc.getVersion());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Description");
-      row.addCell("v").setContent(desc.getDescription());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Format");
-      row.addCell("v").setContent(desc.getFormat());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Creator(s)");
-      row.addCell("v").setContent(desc.getCreator() == null ? "" : Utils.flatten(desc.getCreator(), ", "));
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Contributor(s)");
-      row.addCell("v").setContent(desc.getContributor() == null ? "" : Utils.flatten(desc.getContributor(), ", "));
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Collection date");
-      row.addCell("v").setContent(desc.getCollection_date());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Upload date");
-      row.addCell("v").setContent(desc.getUpload_date());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Language");
-      row.addCell("v").setContent(desc.getLanguage());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Licence");
-      row.addCell("v").setContent(desc.getLicence());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("URL");
-      row.addCell("v").setContent(desc.getUrl());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Row ID attribute");
-      row.addCell("v").setContent(desc.getRow_id_attribute());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("Default target attribute");
-      row.addCell("v").setContent(desc.getDefault_target_attribute());
-
-      row = sheet.addRow();
-      row.addCell("k").setContent("MD5");
-      row.addCell("v").setContent(desc.getMd5_checksum());
-      
-      m_OutputToken = new Token(sheet);
+      m_OutputToken = new Token(meta);
     }
     catch (Exception e) {
       result = handleException("Failed to obtain description for dataset #" + did + " from OpenML!", e);

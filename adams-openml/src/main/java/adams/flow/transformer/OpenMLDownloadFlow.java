@@ -19,16 +19,12 @@
  */
 package adams.flow.transformer;
 
-import adams.core.Utils;
+import adams.data.openml.OpenMLHelper;
 import adams.data.spreadsheet.DefaultSpreadSheet;
 import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.flow.core.Token;
 import org.openml.apiconnector.xml.Flow;
-import org.openml.apiconnector.xml.Flow.Component;
-import org.openml.apiconnector.xml.Flow.Parameter;
-
-import java.lang.reflect.Array;
 
 /**
  <!-- globalinfo-start -->
@@ -129,39 +125,13 @@ public class OpenMLDownloadFlow
    */
   protected void addRow(SpreadSheet sheet, String key, Object value) {
     Row		row;
-    Object[]	array;
-    Object	val;
-    Parameter 	param;
-    Component 	comp;
-    int		i;
 
     if (value == null)
       return;
 
     row = sheet.addRow();
     row.addCell("K").setContentAsString(key);
-    if (value.getClass().isArray()) {
-      array = new Object[Array.getLength(value)];
-      for (i = 0; i < array.length; i++) {
-	val = Array.get(value, i);
-	if (val instanceof Parameter) {
-	  param = (Parameter) val;
-	  val   = "name=" + param.getName()
-	    + ";datatype" + param.getData_type()
-	    + ";defaultvalue=" + param.getDefault_value()
-	    + ";description=" + param.getDescription();
-	}
-	else if (val instanceof Flow.Component) {
-	  comp = (Component) val;
-	  val  = "identifier=" + comp.getIdentifier() + ";flowImplementationID=" + comp.getImplementation().getId();
-	}
-	array[i] = val;
-      }
-      row.addCell("V").setContentAsString(Utils.flatten(array, ";"));
-    }
-    else {
-      row.addCell("V").setContentAsString(value.toString());
-    }
+    row.addCell("V").setContentAsString(OpenMLHelper.toString(value, ";", ""));
   }
 
   /**
