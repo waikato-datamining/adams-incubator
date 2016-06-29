@@ -24,6 +24,7 @@ package weka.gui.experiment;
 import adams.core.io.TempUtils;
 import adams.gui.chooser.DirectoryChooserPanel;
 import adams.gui.chooser.FileChooserPanel;
+import adams.gui.core.GUIHelper;
 import weka.classifiers.Classifier;
 import weka.core.xml.KOML;
 import weka.experiment.CSVResultListener;
@@ -422,7 +423,7 @@ public class HadoopGuiSetupPanel
 	}
       });
     m_NotesFrame.getContentPane().add(new JScrollPane(m_NotesText));
-    m_NotesFrame.setSize(600, 400);
+    m_NotesFrame.setSize(GUIHelper.getDefaultSmallDialogDimension());
 
     m_NotesButton.addActionListener(new ActionListener() {
 	public void actionPerformed(ActionEvent e) {
