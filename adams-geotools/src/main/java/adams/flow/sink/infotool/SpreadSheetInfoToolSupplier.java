@@ -27,6 +27,7 @@ import adams.data.spreadsheet.SparseDataRow;
 import adams.data.spreadsheet.SpreadSheet;
 import adams.gui.core.BaseMultiPagePane;
 import adams.gui.core.BaseScrollPane;
+import adams.gui.core.GUIHelper;
 import adams.gui.core.SearchPanel;
 import adams.gui.core.SearchPanel.LayoutType;
 import adams.gui.core.SpreadSheetTable;
@@ -128,7 +129,7 @@ public class SpreadSheetInfoToolSupplier
 	m_Dialog.setDiscardVisible(false);
 	m_Content = new BaseMultiPagePane();
 	m_Dialog.getContentPane().add(m_Content, BorderLayout.CENTER);
-	m_Dialog.setSize(800, 600);
+	m_Dialog.setSize(GUIHelper.getDefaultDialogDimension());
 	m_Dialog.setLocationRelativeTo(e.getComponent());
       }
       

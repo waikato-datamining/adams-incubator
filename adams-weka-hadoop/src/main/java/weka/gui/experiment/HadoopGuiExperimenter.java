@@ -21,6 +21,14 @@
 
 package weka.gui.experiment;
 
+import adams.gui.core.GUIHelper;
+import weka.core.Memory;
+import weka.experiment.Experiment;
+import weka.gui.LookAndFeel;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -28,14 +36,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-
-import weka.core.Memory;
-import weka.experiment.Experiment;
-import weka.gui.LookAndFeel;
 
 /** 
  * The main class for the experiment environment. Lets the user create,
@@ -141,7 +141,7 @@ public class HadoopGuiExperimenter
 	}
       });
       jf.pack();
-      jf.setSize(800, 600);
+      jf.setSize(GUIHelper.getDefaultDialogDimension());
       jf.setVisible(true);
 
       Image icon = Toolkit.getDefaultToolkit().
