@@ -15,7 +15,7 @@
 
 /*
  * MapDisplay.java
- * Copyright (C) 2013 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2016 University of Waikato, Hamilton, New Zealand
  *
  */
 
@@ -24,6 +24,7 @@ package adams.gui.menu;
 import adams.core.io.PlaceholderFile;
 import adams.gui.application.AbstractApplicationFrame;
 import adams.gui.application.UserMode;
+import adams.gui.core.GUIHelper;
 import adams.gui.visualization.maps.MapDisplayPanel;
 
 /**
@@ -70,7 +71,7 @@ public class MapDisplay
   @Override
   public void launch() {
     MapDisplayPanel panel = new MapDisplayPanel();
-    createChildFrame(panel, 1000, 800);
+    createChildFrame(panel, GUIHelper.getDefaultLargeDialogDimension());
     for (int i = 0; i < m_Parameters.length; i++)
       panel.load(new PlaceholderFile(m_Parameters[i]));
   }
