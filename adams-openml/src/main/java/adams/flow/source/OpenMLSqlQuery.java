@@ -19,15 +19,13 @@
  */
 package adams.flow.source;
 
-import net.minidev.json.JSONAware;
-
-import org.json.JSONObject;
-
 import adams.core.QuickInfoHelper;
-import adams.core.Utils;
+import adams.core.Shortening;
 import adams.data.openml.OpenMLHelper;
 import adams.db.SQLStatement;
 import adams.flow.core.Token;
+import net.minidev.json.JSONAware;
+import org.json.JSONObject;
 
 /**
  <!-- globalinfo-start -->
@@ -147,7 +145,7 @@ public class OpenMLSqlQuery
    */
   @Override
   public String getQuickInfo() {
-    return QuickInfoHelper.toString(this, "query", Utils.shorten(m_Query.stringValue(), 40), "query: ");
+    return QuickInfoHelper.toString(this, "query", Shortening.shortenEnd(m_Query.stringValue(), 40), "query: ");
   }
 
   /**
