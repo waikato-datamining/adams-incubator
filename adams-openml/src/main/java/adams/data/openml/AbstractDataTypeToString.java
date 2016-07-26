@@ -21,12 +21,12 @@
 package adams.data.openml;
 
 import adams.core.ClassLister;
+import adams.core.logging.Logger;
 import adams.core.logging.LoggingHelper;
 import adams.core.option.AbstractOptionHandler;
 
 import java.util.HashMap;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Ancestor for conversions that turn OpenML data types to strings.

@@ -19,21 +19,19 @@
  */
 package adams.flow.sink.infotool;
 
-import java.awt.Cursor;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.ImageIcon;
-
+import adams.core.CleanUpHandler;
+import adams.core.logging.Logger;
+import adams.core.logging.LoggingHelper;
+import adams.core.logging.LoggingLevel;
 import org.geotools.swing.event.MapMouseEvent;
 import org.geotools.swing.locale.LocaleUtils;
 import org.geotools.swing.tool.CursorTool;
 
-import adams.core.CleanUpHandler;
-import adams.core.logging.LoggingHelper;
-import adams.core.logging.LoggingLevel;
+import javax.swing.ImageIcon;
+import java.awt.Cursor;
+import java.awt.Point;
+import java.awt.Toolkit;
+import java.util.logging.Level;
 
 /**
  * Ancestor for info tools.
