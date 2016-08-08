@@ -15,11 +15,11 @@ then
   cd ~
 fi
 echo "...downloading Java"
-wget https://adams.cms.waikato.ac.nz/download/jdk/jdk-8u92-linux-x64.tar.gz
+wget https://adams.cms.waikato.ac.nz/download/jdk/jdk-8u102-linux-x64.tar.gz
 echo "...decompressing Java"
-tar -xzf jdk-8u92-linux-x64.tar.gz
+tar -xzf jdk-8u102-linux-x64.tar.gz
 echo "...installing Java"
-sudo mv jdk1.8.0_92 /opt/jdk
+sudo mv jdk1.8.0_102 /opt/jdk
 echo "...cleaning up Java"
 rm -f jdk-*.tar.gz*
 
