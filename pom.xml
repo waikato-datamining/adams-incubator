@@ -27,7 +27,6 @@
   </properties>
 
   <modules>
-    <module>adams-incubator-all</module>
     <module>adams-geonet</module>
     <module>adams-geotools</module>
     <module>adams-hadoop</module>
