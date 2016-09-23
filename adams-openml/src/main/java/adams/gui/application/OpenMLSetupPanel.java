@@ -15,12 +15,15 @@
 
 /**
  * OpenMLSetupPanel.java
- * Copyright (C) 2014 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
  */
 package adams.gui.application;
 
 import adams.core.Properties;
+import adams.core.io.FileUtils;
 import adams.data.openml.OpenMLHelper;
+import adams.env.Environment;
+import adams.env.OpenMLDefinition;
 import adams.gui.core.ParameterPanel;
 
 import javax.swing.JSpinner;
@@ -131,5 +134,34 @@ public class OpenMLSetupPanel
       return null;
     else
       return "Failed to save OpenML setup to " + OpenMLHelper.FILENAME + "!";
+  }
+
+  /**
+   * Returns whether the panel supports resetting the options.
+   *
+   * @return		true if supported
+   */
+  public boolean canReset() {
+    String	props;
+
+    props = Environment.getInstance().getCustomPropertiesFilename(OpenMLDefinition.KEY);
+    return (props != null) && FileUtils.fileExists(props);
+  }
+
+  /**
+   * Resets the settings to their default.
+   *
+   * @return		null if successfully reset, otherwise error message
+   */
+  public String reset() {
+    String	props;
+
+    props = Environment.getInstance().getCustomPropertiesFilename(OpenMLDefinition.KEY);
+    if ((props != null) && FileUtils.fileExists(props)) {
+      if (!FileUtils.delete(props))
+	return "Failed to remove custom OpenML properties: " + props;
+    }
+
+    return null;
   }
 }

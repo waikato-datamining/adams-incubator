@@ -19,8 +19,12 @@
  */
 package adams.gui.application;
 
+import adams.core.io.FileUtils;
 import adams.core.net.JClouds;
+import adams.env.Environment;
 import adams.gui.core.PropertiesParameterPanel.PropertyType;
+
+import java.io.File;
 
 /**
  * Panel for configuring the default JClouds settings.
@@ -83,5 +87,34 @@ public class JCloudsSettingsPanel
       return null;
     else
       return "Failed to save JClouds setup!";
+  }
+
+  /**
+   * Returns whether the panel supports resetting the options.
+   *
+   * @return		true if supported
+   */
+  public boolean canReset() {
+    String	props;
+
+    props = Environment.getInstance().createPropertiesFilename(new File(JClouds.FILENAME).getName());
+    return FileUtils.fileExists(props);
+  }
+
+  /**
+   * Resets the settings to their default.
+   *
+   * @return		null if successfully reset, otherwise error message
+   */
+  public String reset() {
+    String	props;
+
+    props = Environment.getInstance().createPropertiesFilename(new File(JClouds.FILENAME).getName());
+    if (FileUtils.fileExists(props)) {
+      if (!FileUtils.delete(props))
+        return "Failed to remove custom JClouds properties: " + props;
+    }
+
+    return null;
   }
 }
