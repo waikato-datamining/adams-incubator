@@ -19,7 +19,7 @@ adams.flow.control.Flow
 	-actor
 		adams.flow.source.FileSupplier
 			-file
-			${EXAMPLE_FLOWS}/data/gps.csv
+			${FLOWS}/data/gps.csv
 	-actor
 		adams.flow.transformer.SpreadSheetFileReader
 			-reader

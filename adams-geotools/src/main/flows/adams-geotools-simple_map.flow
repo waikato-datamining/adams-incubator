@@ -9,7 +9,7 @@ adams.flow.control.Flow
 	-actor
 		adams.flow.source.FileSupplier
 			-file
-			${EXAMPLE_FLOWS}/data/ne_110m_populated_places.shp
+			${FLOWS}/data/ne_110m_populated_places.shp
 	-actor
 		adams.flow.transformer.GeoToolsLayerFileReader
 			-reader
@@ -21,7 +21,7 @@ adams.flow.control.Flow
 			-writer
 				adams.gui.print.NullWriter
 			-background-shape
-			${EXAMPLE_FLOWS}/data/ne_110m_admin_0_countries.shp
+			${FLOWS}/data/ne_110m_admin_0_countries.shp
 			-fill-color
 			#cccccc
 			-info-tool

@@ -7,7 +7,7 @@ adams.flow.control.Flow
 	-actor
 		adams.flow.source.FileSupplier
 			-file
-			${EXAMPLE_FLOWS}/data/3267694739_4981d2f944_z.jpg
+			${FLOWS}/data/3267694739_4981d2f944_z.jpg
 	-actor
 		adams.flow.transformer.ImageReader
 			-reader

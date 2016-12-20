@@ -35,7 +35,7 @@ adams.flow.control.Flow
 					-writer
 						adams.gui.print.NullWriter
 					-background-shape
-					${EXAMPLE_FLOWS}/data/ne_110m_admin_0_countries.shp
+					${FLOWS}/data/ne_110m_admin_0_countries.shp
 					-fill-color
 					#cccccc
 					-info-tool
@@ -55,7 +55,7 @@ adams.flow.control.Flow
 	-actor
 		adams.flow.source.FileSupplier
 			-file
-			${EXAMPLE_FLOWS}/data/cow.csv
+			${FLOWS}/data/cow.csv
 	-actor
 		adams.flow.transformer.SpreadSheetFileReader
 			-reader

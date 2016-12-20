@@ -55,7 +55,7 @@ adams.flow.control.Flow
 							-query-option
 							2012/02/07 00:20:00
 							-output-dir
-							${EXAMPLE_FLOWS}/output
+							${FLOWS}/output
 			-branch
 				adams.flow.control.Sequence
 					-name
