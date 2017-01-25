@@ -1,4 +1,4 @@
-package adams.ml.jsat;/*
+/*
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
  *   the Free Software Foundation, either version 3 of the License, or
@@ -17,6 +17,8 @@ package adams.ml.jsat;/*
  * GPD.java
  * Copyright (C) 2016 University of Waikato, Hamilton, NZ
  */
+
+package adams.ml.jsat;
 
 import adams.env.Environment;
 import jsat.ARFFLoader;
