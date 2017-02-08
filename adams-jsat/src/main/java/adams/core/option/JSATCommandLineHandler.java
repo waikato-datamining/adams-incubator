@@ -19,7 +19,6 @@
  */
 package adams.core.option;
 
-import adams.core.ClassLocator;
 import adams.core.Utils;
 import adams.env.Environment;
 import jsat.classifiers.boosting.AdaBoostM1;
@@ -34,6 +33,7 @@ import jsat.parameters.MetricParameter;
 import jsat.parameters.ObjectParameter;
 import jsat.parameters.Parameter;
 import jsat.parameters.Parameterized;
+import nz.ac.waikato.cms.locator.ClassLocator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
