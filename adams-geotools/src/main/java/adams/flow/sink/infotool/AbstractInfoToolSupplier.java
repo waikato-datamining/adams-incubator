@@ -15,7 +15,7 @@
 
 /**
  * AbstractInfoToolSupplier.java
- * Copyright (C) 2013-2016 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2017 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.sink.infotool;
 
@@ -107,7 +107,7 @@ public abstract class AbstractInfoToolSupplier
   protected adams.db.AbstractDatabaseConnection getDatabaseConnection(Actor actor) {
     return ActorUtils.getDatabaseConnection(
 	  actor,
-	  adams.flow.standalone.DatabaseConnection.class,
+	  adams.flow.standalone.DatabaseConnectionProvider.class,
 	  adams.db.DatabaseConnection.getSingleton());
   }
 
