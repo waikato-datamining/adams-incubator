@@ -40,7 +40,6 @@
     <module>adams-jclouds-openstack</module>
     <module>adams-jsat</module>
     <module>adams-svn</module>
-    <module>adams-tumblr</module>
     <module>adams-weka-hadoop</module>
   </modules>
 </project>
