@@ -9,11 +9,11 @@
     <version>17.8.0-SNAPSHOT</version>
   </parent>
 
-  <artifactId>adams-openml</artifactId>
+  <artifactId>adams-openml-weka</artifactId>
   <packaging>jar</packaging>
 
-  <name>adams-openml</name>
-  <description>Module containing support for OpenML.</description>
+  <name>adams-openml-weka</name>
+  <description>Module containing Weka support for OpenML.</description>
   <url>https://adams.cms.waikato.ac.nz/</url>
   <organization>
     <name>University of Waikato, Hamilton, NZ</name>
@@ -48,50 +48,66 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.openml</groupId>
-      <artifactId>apiconnector</artifactId>
-      <version>1.0.16</version>
+      <artifactId>openmlweka</artifactId>
+      <version>0.9.5</version>
+      <exclusions>
+        <exclusion>
+          <groupId>net.sf.squirrel-sql.thirdparty-non-maven</groupId>
+          <artifactId>java-cup</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.github.fommil.netlib</groupId>
+          <artifactId>netlib-native_system-linux-armhf</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.github.fommil.netlib</groupId>
+          <artifactId>netlib-native_system-linux-i686</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.github.fommil.netlib</groupId>
+          <artifactId>netlib-native_system-win-i686</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.github.fommil.netlib</groupId>
+          <artifactId>netlib-native_ref-linux-armhf</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.github.fommil.netlib</groupId>
+          <artifactId>netlib-native_ref-linux-i686</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.github.fommil.netlib</groupId>
+          <artifactId>netlib-native_ref-win-i686</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-core</artifactId>
-      <version>${adams.version}</version>
+      <artifactId>adams-openml</artifactId>
+      <version>${project.version}</version>
     </dependency>
 
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-core</artifactId>
-      <version>${adams.version}</version>
+      <artifactId>adams-openml</artifactId>
+      <version>${project.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
     </dependency>
 
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-spreadsheet</artifactId>
+      <artifactId>adams-weka</artifactId>
       <version>${adams.version}</version>
     </dependency>
 
     <dependency>
       <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-spreadsheet</artifactId>
-      <version>${adams.version}</version>
-      <scope>test</scope>
-      <type>test-jar</type>
-    </dependency>
-
-    <dependency>
-      <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-ml</artifactId>
-      <version>${adams.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>nz.ac.waikato.cms.adams</groupId>
-      <artifactId>adams-ml</artifactId>
+      <artifactId>adams-weka</artifactId>
       <version>${adams.version}</version>
       <scope>test</scope>
       <type>test-jar</type>
@@ -141,7 +157,7 @@
               <attach>true</attach>
               <descriptors>
                 <!--descriptor>src/main/assembly/doc.xml</descriptor-->
-                <descriptor>src/main/assembly/flows.xml</descriptor>
+                <!--descriptor>src/main/assembly/flows.xml</descriptor-->
                 <descriptor>src/main/assembly/sources.xml</descriptor>
                 <!--descriptor>src/main/assembly/test-sources.xml</descriptor-->
               </descriptors>

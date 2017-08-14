@@ -35,6 +35,7 @@
     <module>adams-git</module>
     <module>adams-javacv</module>
     <module>adams-openml</module>
+    <module>adams-openml-weka</module>
     <module>adams-jclouds</module>
     <module>adams-jclouds-aws</module>
     <module>adams-jclouds-openstack</module>
