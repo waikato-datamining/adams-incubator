@@ -15,7 +15,7 @@
 
 /**
  * OpenMLDownloadFlow.java
- * Copyright (C) 2016 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2016-2017 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.transformer;
 
@@ -177,7 +177,6 @@ public class OpenMLDownloadFlow
       addRow(sheet, "FullDescription", flow.getFull_description());
       addRow(sheet, "InstallationNotes", flow.getInstallation_notes());
       addRow(sheet, "Dependencies", flow.getDependencies());
-      addRow(sheet, "BibliographicalReferences", flow.getBibliographical_reference());
       addRow(sheet, "Implement", flow.getImplement());
       addRow(sheet, "Parameters", flow.getParameter());
       addRow(sheet, "Components", flow.getComponent());

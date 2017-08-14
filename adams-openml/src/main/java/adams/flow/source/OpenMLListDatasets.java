@@ -15,68 +15,31 @@
 
 /**
  * OpenMLListDatasets.java
- * Copyright (C) 2014-2015 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2017 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.source;
 
 import adams.core.QuickInfoHelper;
-import adams.core.base.BaseRegExp;
-import adams.data.openml.OpenMLHelper;
-import adams.data.conversion.OpenMLJsonToSpreadSheet;
+import adams.core.base.BaseKeyValuePair;
+import adams.data.spreadsheet.DefaultSpreadSheet;
+import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SpreadSheet;
-import adams.db.SQL;
 import adams.flow.core.Token;
-import net.minidev.json.JSONAware;
+import org.openml.apiconnector.xml.Data;
+import org.openml.apiconnector.xml.Data.DataSet;
+import org.openml.apiconnector.xml.Data.DataSet.Quality;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  <!-- globalinfo-start -->
- * Sends a free-form SQL query to OpenML and returns the result as JSON.
- * <br><br>
  <!-- globalinfo-end -->
  *
  <!-- flow-summary-start -->
- * Input&#47;output:<br>
- * - generates:<br>
- * &nbsp;&nbsp;&nbsp;adams.data.spreadsheet.SpreadSheet<br>
- * <br><br>
  <!-- flow-summary-end -->
  *
  <!-- options-start -->
- * <pre>-logging-level &lt;OFF|SEVERE|WARNING|INFO|CONFIG|FINE|FINER|FINEST&gt; (property: loggingLevel)
- * &nbsp;&nbsp;&nbsp;The logging level for outputting errors and debugging output.
- * &nbsp;&nbsp;&nbsp;default: WARNING
- * </pre>
- * 
- * <pre>-name &lt;java.lang.String&gt; (property: name)
- * &nbsp;&nbsp;&nbsp;The name of the actor.
- * &nbsp;&nbsp;&nbsp;default: OpenMLListDatasets
- * </pre>
- * 
- * <pre>-annotation &lt;adams.core.base.BaseText&gt; (property: annotations)
- * &nbsp;&nbsp;&nbsp;The annotations to attach to this actor.
- * &nbsp;&nbsp;&nbsp;default: 
- * </pre>
- * 
- * <pre>-skip &lt;boolean&gt; (property: skip)
- * &nbsp;&nbsp;&nbsp;If set to true, transformation is skipped and the input token is just forwarded 
- * &nbsp;&nbsp;&nbsp;as it is.
- * &nbsp;&nbsp;&nbsp;default: false
- * </pre>
- * 
- * <pre>-stop-flow-on-error &lt;boolean&gt; (property: stopFlowOnError)
- * &nbsp;&nbsp;&nbsp;If set to true, the flow gets stopped in case this actor encounters an error;
- * &nbsp;&nbsp;&nbsp; useful for critical actors.
- * &nbsp;&nbsp;&nbsp;default: false
- * </pre>
- * 
- * <pre>-regexp-name &lt;adams.core.base.BaseRegExp&gt; (property: regExpName)
- * &nbsp;&nbsp;&nbsp;The regular expression that the dataset names must match.
- * &nbsp;&nbsp;&nbsp;default: .*
- * </pre>
- * 
  <!-- options-end -->
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
@@ -88,8 +51,8 @@ public class OpenMLListDatasets
   /** for serialization. */
   private static final long serialVersionUID = -5561129671356371714L;
   
-  /** the regular expression on the name. */
-  protected BaseRegExp m_RegExpName;
+  /** the filters. */
+  protected BaseKeyValuePair[] m_Filters;
   
   /**
    * Returns a string describing the object.
@@ -98,7 +61,8 @@ public class OpenMLListDatasets
    */
   @Override
   public String globalInfo() {
-    return "Sends a free-form SQL query to OpenML and returns the result as JSON.";
+    return "Lists all the datasets that match the filters:\n"
+      + "https://www.openml.org/api_docs/#!/data/get_data_list";
   }
 
   /**
@@ -109,27 +73,27 @@ public class OpenMLListDatasets
     super.defineOptions();
 
     m_OptionManager.add(
-	    "regexp-name", "regExpName",
-	    new BaseRegExp(BaseRegExp.MATCH_ALL));
+	    "filter", "filters",
+	    new BaseKeyValuePair[0]);
   }
   
   /**
-   * Sets the regular expression that the names must match.
+   * Sets the filters.
    *
-   * @param value	the regexp
+   * @param value	the filters
    */
-  public void setRegExpName(BaseRegExp value) {
-    m_RegExpName = value;
+  public void setFilters(BaseKeyValuePair[] value) {
+    m_Filters = value;
     reset();
   }
 
   /**
-   * Returns the regular expression that the names must match.
+   * Returns the filters.
    *
-   * @return		the regexp
+   * @return		the filters
    */
-  public BaseRegExp getRegExpName() {
-    return m_RegExpName;
+  public BaseKeyValuePair[] getFilters() {
+    return m_Filters;
   }
 
   /**
@@ -138,8 +102,8 @@ public class OpenMLListDatasets
    * @return 		tip text for this property suitable for
    * 			displaying in the GUI or for listing the options.
    */
-  public String regExpNameTipText() {
-    return "The regular expression that the dataset names must match.";
+  public String filtersTipText() {
+    return "The filters that the datasets must match.";
   }
 
   /**
@@ -149,7 +113,7 @@ public class OpenMLListDatasets
    */
   @Override
   public String getQuickInfo() {
-    return QuickInfoHelper.toString(this, "regExpName", m_RegExpName, "name: ");
+    return QuickInfoHelper.toString(this, "filters", m_Filters, "filters: ");
   }
 
   /**
@@ -170,42 +134,55 @@ public class OpenMLListDatasets
   @Override
   protected String doExecute() {
     String			result;
-    JSONAware			json;
-    String			sql;
-    List<String>		where;
-    int				i;
-    OpenMLJsonToSpreadSheet	conv;
+    Map<String,String> 		filters;
+    Data			data;
+    SpreadSheet			sheet;
+    Row				row;
+    StringBuilder		quals;
     
     result = null;
     
-    sql = null;
     try {
-      sql    = "select did, name, version from dataset where ";
-      where = new ArrayList<>();
-      where.add("source = 0");
-      if (!m_RegExpName.isMatchAll())
-	where.add("name regexp " + SQL.backquote(m_RegExpName));
-      for (i = 0; i < where.size(); i++) {
-	if (i > 0)
-	  sql += " and ";
-	sql += where.get(i);
+      filters = null;
+      if (m_Filters.length > 0) {
+        filters = new HashMap<>();
+        for (BaseKeyValuePair filter: m_Filters)
+          filters.put(filter.getPairKey(), filter.getPairValue());
       }
-      sql   += " order by name, version";
-      if (isLoggingEnabled())
-	getLogger().info("Executing query: " + sql);
-      json   = OpenMLHelper.convertJson(m_Connection.getConnector().freeQuery(sql));
-      result = checkJSON(json);
-      if (result == null) {
-	conv   = new OpenMLJsonToSpreadSheet();
-	conv.setInput(json);
-	result = conv.convert();
-	if (result == null)
-	  m_OutputToken = new Token(conv.getOutput());
-	conv.cleanUp();
+      data  = m_Connection.getConnector().dataList(filters);
+      sheet = new DefaultSpreadSheet();
+      row   = sheet.getHeaderRow();
+      row.addCell("id").setContent("ID");
+      row.addCell("fid").setContent("File ID");
+      row.addCell("name").setContent("Name");
+      row.addCell("format").setContent("Format");
+      row.addCell("version").setContent("Version");
+      row.addCell("status").setContent("Status");
+      row.addCell("qualities").setContent("Qualities");
+      for (DataSet ds: data.getData()) {
+        row = sheet.addRow();
+        row.addCell("id").setContent(ds.getDid());
+        row.addCell("fid").setContent(ds.getFileId());
+        row.addCell("name").setContent(ds.getName());
+        row.addCell("format").setContent(ds.getFormat());
+        row.addCell("version").setContent(ds.getVersion());
+        row.addCell("status").setContent(ds.getStatus());
+        quals = new StringBuilder();
+        if (ds.getQualities() != null) {
+	  for (Quality q : ds.getQualities()) {
+	    if (quals.length() > 0)
+	      quals.append(" ");
+	    quals.append(q.getName());
+	    quals.append("=");
+	    quals.append(q.getValue());
+	  }
+	}
+        row.addCell("qualities").setContent(quals.toString());
       }
+      m_OutputToken = new Token(sheet);
     }
     catch (Exception e) {
-      result = handleException("Failed to query OpenML, query: " + sql, e);
+      result = handleException("Failed to query OpenML!", e);
     }
     
     return result;

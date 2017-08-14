@@ -1,5 +1,5 @@
 # Project: adams
-# Date: 2016-05-19 17:19:33
+# Date: 2017-08-15 09:12:35
 # User: fracpete
 # Charset: UTF-8
 adams.flow.control.Flow -annotation "Lists all datasets that start with \\\"a\\\" and displays\\nsome more information on the the first dataset." -flow-execution-listener adams.flow.execution.NullListener
@@ -7,11 +7,11 @@ adams.flow.control.Flow -annotation "Lists all datasets that start with \\\"a\\\
   adams.flow.sink.SpreadSheetDisplay -name datasets -allow-search true -writer adams.data.io.output.NullWriter
   adams.flow.sink.Display -name description -writer adams.data.io.output.NullWriter
  adams.flow.standalone.OpenMLConnection
- adams.flow.source.OpenMLListDatasets -regexp-name a.*
+ adams.flow.source.OpenMLListDatasets
  adams.flow.control.Tee -name "display datasets"
   adams.flow.sink.CallableSink -callable datasets
  adams.flow.control.Tee -name description
-  adams.flow.transformer.SpreadSheetRowFilter -name SpreadSheetRowFilter-1 -finder "adams.data.spreadsheet.rowfinder.ByValue -att-index name -reg-exp abalone"
+  adams.flow.transformer.SpreadSheetRowFilter -name SpreadSheetRowFilter-1 -finder "adams.data.spreadsheet.rowfinder.ByValue -att-index Name -reg-exp abalone"
   adams.flow.transformer.SpreadSheetGetCell
   adams.flow.transformer.Convert -conversion adams.data.conversion.StringToInt
   adams.flow.transformer.OpenMLDatasetDescription
