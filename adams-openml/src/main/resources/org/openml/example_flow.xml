@@ -1,0 +1,14 @@
+<!-- https://www.openml.org/api/v1/xml_example/flow -->
+<oml:flow xmlns:oml="http://openml.org/openml">
+<oml:name>Flow_name</oml:name>
+<oml:external_version>1.0.0</oml:external_version>
+<oml:description>Description of your dataset</oml:description>
+<oml:dependencies>library_version, comma-seperated</oml:dependencies>
+<oml:parameter>
+	<oml:name>param_name</oml:name>
+	<oml:data_type>integer, numeric, string, vector, matrix, object, flag, or option</oml:data_type>
+	<oml:default_value>Default value, if any</oml:default_value>
+	<oml:description>Description of the parameter</oml:description>
+</oml:parameter>
+</oml:flow>
+
