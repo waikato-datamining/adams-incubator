@@ -63,6 +63,16 @@ public class OpenMLExperimenter
   }
 
   /**
+   * Returns the file name of the icon.
+   *
+   * @return		the filename or null if no icon available
+   */
+  @Override
+  public String getIconName() {
+    return "openml.png";
+  }
+
+  /**
    * Whether the panel can only be displayed once.
    *
    * @return		true if the panel can only be displayed once
