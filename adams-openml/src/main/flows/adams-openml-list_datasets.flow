@@ -1,17 +1,17 @@
 # Project: adams
-# Date: 2017-08-15 09:12:35
+# Date: 2017-08-17 13:58:16
 # User: fracpete
 # Charset: UTF-8
-adams.flow.control.Flow -annotation "Lists all datasets that start with \\\"a\\\" and displays\\nsome more information on the the first dataset." -flow-execution-listener adams.flow.execution.NullListener
+adams.flow.control.Flow -annotation "Lists all \\\"abalone\\\" datasets displays some more information \\nfor the latest version of the dataset." -flow-execution-listener adams.flow.execution.NullListener
  adams.flow.standalone.TabView
   adams.flow.sink.SpreadSheetDisplay -name datasets -allow-search true -writer adams.data.io.output.NullWriter
   adams.flow.sink.Display -name description -writer adams.data.io.output.NullWriter
  adams.flow.standalone.OpenMLConnection
- adams.flow.source.OpenMLListDatasets
+ adams.flow.source.OpenMLListDatasets -filter data_name=abalone
  adams.flow.control.Tee -name "display datasets"
   adams.flow.sink.CallableSink -callable datasets
  adams.flow.control.Tee -name description
-  adams.flow.transformer.SpreadSheetRowFilter -name SpreadSheetRowFilter-1 -finder "adams.data.spreadsheet.rowfinder.ByValue -att-index Name -reg-exp abalone"
+  adams.flow.transformer.SpreadSheetSort -sort-column Version -sort-order false
   adams.flow.transformer.SpreadSheetGetCell
   adams.flow.transformer.Convert -conversion adams.data.conversion.StringToInt
   adams.flow.transformer.OpenMLDatasetDescription
