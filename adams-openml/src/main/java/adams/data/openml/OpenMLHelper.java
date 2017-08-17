@@ -15,7 +15,7 @@
 
 /*
  * OpenMLHelper.java
- * Copyright (C) 2014-2016 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2014-2017 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.data.openml;
@@ -99,7 +99,7 @@ public class OpenMLHelper {
    * @return		the URL
    */
   public static String getURL() {
-    return getProperties().getProperty(URL, "http://openml.liacs.nl/");
+    return getProperties().getProperty(URL, "http://openml.org/");
   }
 
   /**
@@ -247,6 +247,10 @@ public class OpenMLHelper {
     // String?
     if (value instanceof String)
       return (String) value;
+
+    // Number?
+    if (value instanceof Number)
+      return value.toString();
 
     // String array?
     if (value instanceof String[]) {
