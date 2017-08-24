@@ -1,0 +1,25 @@
+# Configuration file listing the superclasses/interfaces to be handled by
+# the jeneric-cmdline library to add command-line functionality..
+#
+# Format:
+# class.name=true|false
+#
+# Author:  FracPete (fracpete at waikato dot ac dot nz)
+# Version: $Revision: 15816 $
+
+jsat.classifiers.Classifier=true
+jsat.classifiers.UpdateableClassifier=true
+jsat.regression.Regressor=true
+jsat.clustering.Clusterer=true
+jsat.datatransform.DataTransform=true
+jsat.distributions.Distribution=true
+jsat.driftdetectors.BaseDriftDetector=true
+jsat.lossfunctions.LossFunc=true
+jsat.text.stemming.Stemmer=true
+jsat.text.tokenizer.Tokenizer=true
+jsat.text.wordweighting.WordWeighting=true
+jsat.testing.StatisticTest=true
+jsat.linear.distancemetrics.DistanceMetric=true
+jsat.distributions.kernels.KernelTrick=true
+jsat.regression.evaluation.RegressionScore=true
+jsat.regression.evaluation.ClassificationScore=true

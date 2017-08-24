@@ -95,3 +95,11 @@ jsat.linear.distancemetrics.DistanceMetric=\
 # the kernel tricks
 jsat.distributions.kernels.KernelTrick=\
   jsat.distributions.kernels
+
+# the regression evaluation metrics
+jsat.regression.evaluation.RegressionScore=\
+  jsat.regression.evaluation
+
+# the classification evaluation metrics
+jsat.regression.evaluation.ClassificationScore=\
+  jsat.regression.evaluation
