@@ -101,5 +101,5 @@ jsat.regression.evaluation.RegressionScore=\
   jsat.regression.evaluation
 
 # the classification evaluation metrics
-jsat.regression.evaluation.ClassificationScore=\
-  jsat.regression.evaluation
+jsat.classifiers.evaluation.ClassificationScore=\
+  jsat.classifiers.evaluation
