@@ -72,8 +72,8 @@ public class OpenMLDatasetContainer
   protected void initHelp() {
     super.initHelp();
 
-    addHelp(VALUE_DATASET, "dataset; " + Dataset.class.getName());
-    addHelp(VALUE_METADATA, "meta-data; " + SpreadSheet.class.getName());
+    addHelp(VALUE_DATASET, "dataset", Dataset.class);
+    addHelp(VALUE_METADATA, "meta-data", SpreadSheet.class);
   }
 
   /**
