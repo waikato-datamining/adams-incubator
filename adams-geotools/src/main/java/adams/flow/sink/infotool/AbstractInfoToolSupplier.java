@@ -13,7 +13,7 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
+/*
  * AbstractInfoToolSupplier.java
  * Copyright (C) 2013-2017 University of Waikato, Hamilton, New Zealand
  */
@@ -22,6 +22,7 @@ package adams.flow.sink.infotool;
 import adams.core.CleanUpHandler;
 import adams.core.option.AbstractOptionHandler;
 import adams.core.option.OptionUtils;
+import adams.db.DatabaseConnectionUser;
 import adams.flow.core.Actor;
 import adams.flow.core.ActorUtils;
 import adams.gui.visualization.maps.MapDisplayPanel;
@@ -36,7 +37,7 @@ import org.geotools.swing.tool.CursorTool;
  */
 public abstract class AbstractInfoToolSupplier
   extends AbstractOptionHandler
-  implements InfoToolSupplier {
+  implements InfoToolSupplier, DatabaseConnectionUser {
 
   /** for serialization. */
   private static final long serialVersionUID = -8529811448306458643L;
