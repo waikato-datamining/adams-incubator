@@ -39,6 +39,7 @@
     <module>adams-jclouds-aws</module>
     <module>adams-jclouds-openstack</module>
     <module>adams-jsat</module>
+    <module>adams-mongodb</module>
     <module>adams-svn</module>
     <module>adams-weka-hadoop</module>
   </modules>
