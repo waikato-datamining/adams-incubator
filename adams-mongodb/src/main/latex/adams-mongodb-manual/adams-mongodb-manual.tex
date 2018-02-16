@@ -71,6 +71,11 @@ MongoDB uses JSON-like\cite{json} documents with schemas.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Flow}
+The following boolean conditions are available:
+\begin{tight_itemize}
+  \item \textit{MongoDbCollectionExists} -- checks whether the specified collection exists.
+\end{tight_itemize}
+
 The following standalones are available:
 \begin{tight_itemize}
   \item \textit{MongoDbConnection} -- defines a connection to a MongoDB instance.
@@ -78,10 +83,12 @@ The following standalones are available:
 
 The following sources are available:
 \begin{tight_itemize}
+  \item \textit{MongoDbGetCollection} -- forwards the specified collection.
   \item \textit{MongoDbListCollections} -- lists all collections in the current
   database context.
   \item \textit{MongoDbListDatabases} -- lists all databases in the current
   connection context.
+  \item \textit{MongoDbNewCollection} -- creates a new collection and forwards it.
 \end{tight_itemize}
 
 The following transformers are available:
@@ -91,7 +98,7 @@ The following transformers are available:
 
 The following sinks are available:
 \begin{tight_itemize}
-  \item \textit{} --
+  \item \textit{MongoDbDropCollection} -- drops the incoming collection.
 \end{tight_itemize}
 
 
