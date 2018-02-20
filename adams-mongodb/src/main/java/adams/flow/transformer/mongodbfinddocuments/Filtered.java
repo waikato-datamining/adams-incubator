@@ -21,7 +21,7 @@
 package adams.flow.transformer.mongodbfinddocuments;
 
 import adams.core.QuickInfoHelper;
-import adams.flow.transformer.mongodbfinddocuments.filter.Equals;
+import adams.flow.transformer.mongodbfinddocuments.filter.Equal;
 import adams.flow.transformer.mongodbfinddocuments.filter.MongoDbDocumentFilter;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -59,7 +59,7 @@ public class Filtered
 
     m_OptionManager.add(
       "filter", "filter",
-      new Equals());
+      new Equal());
   }
 
   /**

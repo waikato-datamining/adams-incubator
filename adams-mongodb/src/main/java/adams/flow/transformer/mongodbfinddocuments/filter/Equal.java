@@ -14,7 +14,7 @@
  */
 
 /*
- * Equals.java
+ * Equal.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
@@ -28,7 +28,7 @@ import org.bson.conversions.Bson;
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Equals
+public class Equal
   extends AbstractMongoDbKeyValueDocumentFilter {
 
   private static final long serialVersionUID = 9100548349662348823L;
