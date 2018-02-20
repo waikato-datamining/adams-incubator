@@ -14,7 +14,7 @@
  */
 
 /*
- * Append.java
+ * AppendStorage.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
@@ -24,15 +24,17 @@ import adams.core.MessageCollection;
 import adams.core.Utils;
 import adams.core.base.BaseKeyValuePair;
 import adams.data.conversion.ConversionFromString;
-import adams.data.conversion.StringToString;
+import adams.data.conversion.ObjectToObject;
+import adams.flow.control.Storage;
+import adams.flow.control.StorageName;
 import org.bson.Document;
 
 /**
- * Appends the document with the specified key-value pairs.
+ * Appends the document with the specified key-value pairs from storage.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Append
+public class AppendStorage
   extends AbstractMongoDbDocumentUpdate {
 
   private static final long serialVersionUID = 3771202579365692102L;
@@ -40,7 +42,7 @@ public class Append
   /** the key-value pairs to add. */
   protected BaseKeyValuePair[] m_KeyValuePairs;
 
-  /** the value conversion. */
+  /** the storage item conversion. */
   protected ConversionFromString m_ValueConversion;
 
   /**
@@ -50,7 +52,7 @@ public class Append
    */
   @Override
   public String globalInfo() {
-    return "Appends the document with the specified key-value pairs.";
+    return "Appends the document with the specified key-value pairs, with the values representing storage names.";
   }
 
   /**
@@ -66,7 +68,7 @@ public class Append
 
     m_OptionManager.add(
       "value-conversion", "valueConversion",
-      new StringToString());
+      new ObjectToObject());
   }
 
   /**
@@ -95,11 +97,11 @@ public class Append
    *             displaying in the GUI or for listing the options.
    */
   public String keyValuePairsTipText() {
-    return "The key-value pairs to add.";
+    return "The key-value pairs to add (the value represents a storage name).";
   }
 
   /**
-   * Sets the conversion for turning the value string into the actual type.
+   * Sets the conversion for turning the storage value into the actual type.
    *
    * @param value	the conversion
    */
@@ -109,7 +111,7 @@ public class Append
   }
 
   /**
-   * Returns the conversion for turning the value string into the actual type.
+   * Returns the conversion for turning the storage value into the actual type.
    *
    * @return 		the conversion
    */
@@ -124,7 +126,7 @@ public class Append
    *             displaying in the GUI or for listing the options.
    */
   public String valueConversionTipText() {
-    return "For converting the value string into the actual type.";
+    return "For converting the storage value into the actual type.";
   }
 
   /**
@@ -136,19 +138,22 @@ public class Append
   @Override
   protected String doUpdate(Document doc) {
     String		result;
-    MessageCollection	errors;
+    Storage 		storage;
+    MessageCollection 	errors;
     Object		val;
     String		msg;
 
     result = null;
 
-    errors = new MessageCollection();
+    storage = getFlowContext().getStorageHandler().getStorage();
+    errors  = new MessageCollection();
     try {
       for (BaseKeyValuePair pair: m_KeyValuePairs) {
-        m_ValueConversion.setInput(pair.getPairValue());
+        val = storage.get(new StorageName(pair.getPairValue()));
+        m_ValueConversion.setInput(val);
         msg = m_ValueConversion.convert();
         if (msg != null) {
-          errors.add("Failed to convert " + pair + " using " + m_ValueConversion + "\n" + msg);
+          errors.add("Failed to convert storage item from " + pair + " using " + m_ValueConversion + "\n" + msg);
 	}
 	else {
           val = m_ValueConversion.getOutput();

@@ -14,7 +14,7 @@
  */
 
 /*
- * Append.java
+ * AppendVariables.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
@@ -22,17 +22,19 @@ package adams.flow.transformer.mongodbdocumentupdate;
 
 import adams.core.MessageCollection;
 import adams.core.Utils;
+import adams.core.Variables;
 import adams.core.base.BaseKeyValuePair;
 import adams.data.conversion.ConversionFromString;
 import adams.data.conversion.StringToString;
 import org.bson.Document;
 
 /**
- * Appends the document with the specified key-value pairs.
+ * Appends the document with the specified key-value pairs, with the values
+ * representing variable names.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class Append
+public class AppendVariables
   extends AbstractMongoDbDocumentUpdate {
 
   private static final long serialVersionUID = 3771202579365692102L;
@@ -40,7 +42,7 @@ public class Append
   /** the key-value pairs to add. */
   protected BaseKeyValuePair[] m_KeyValuePairs;
 
-  /** the value conversion. */
+  /** the value value conversion. */
   protected ConversionFromString m_ValueConversion;
 
   /**
@@ -99,7 +101,7 @@ public class Append
   }
 
   /**
-   * Sets the conversion for turning the value string into the actual type.
+   * Sets the conversion for turning the variable value into the actual type.
    *
    * @param value	the conversion
    */
@@ -109,7 +111,7 @@ public class Append
   }
 
   /**
-   * Returns the conversion for turning the value string into the actual type.
+   * Returns the conversion for turning the variable value into the actual type.
    *
    * @return 		the conversion
    */
@@ -124,7 +126,7 @@ public class Append
    *             displaying in the GUI or for listing the options.
    */
   public String valueConversionTipText() {
-    return "For converting the value string into the actual type.";
+    return "For converting the variable value into the actual type.";
   }
 
   /**
@@ -136,19 +138,22 @@ public class Append
   @Override
   protected String doUpdate(Document doc) {
     String		result;
-    MessageCollection	errors;
+    Variables 		variables;
+    MessageCollection 	errors;
     Object		val;
     String		msg;
 
     result = null;
 
-    errors = new MessageCollection();
+    variables = getFlowContext().getVariables();
+    errors    = new MessageCollection();
     try {
       for (BaseKeyValuePair pair: m_KeyValuePairs) {
-        m_ValueConversion.setInput(pair.getPairValue());
+        val = variables.get(pair.getPairValue());
+        m_ValueConversion.setInput(val);
         msg = m_ValueConversion.convert();
         if (msg != null) {
-          errors.add("Failed to convert " + pair + " using " + m_ValueConversion + "\n" + msg);
+          errors.add("Failed to convert variable value from " + pair + " using " + m_ValueConversion + "\n" + msg);
 	}
 	else {
           val = m_ValueConversion.getOutput();
