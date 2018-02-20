@@ -27,6 +27,8 @@ import adams.data.conversion.Conversion;
 import adams.data.conversion.ObjectToObject;
 import adams.flow.control.Storage;
 import adams.flow.control.StorageName;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
 /**
@@ -137,7 +139,7 @@ public class AppendStorage
    * @return		null if successful, otherwise the error message
    */
   @Override
-  protected String doUpdate(Document doc) {
+  protected String doUpdate(MongoCollection coll, Document doc) {
     String		result;
     Storage 		storage;
     MessageCollection 	errors;
@@ -160,6 +162,10 @@ public class AppendStorage
           val = m_ValueConversion.getOutput();
 	  doc.append(pair.getPairKey(), val);
 	}
+      }
+      if (errors.isEmpty()) {
+	coll.deleteOne(Filters.eq("_id", doc.get("_id")));
+	coll.insertOne(doc);
       }
     }
     catch (Exception e) {

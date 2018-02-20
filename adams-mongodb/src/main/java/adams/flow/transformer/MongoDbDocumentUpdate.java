@@ -21,7 +21,9 @@
 package adams.flow.transformer;
 
 import adams.core.QuickInfoHelper;
+import adams.flow.container.MongoDbDocumentContainer;
 import adams.flow.core.Token;
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 /**
@@ -159,7 +161,7 @@ public class MongoDbDocumentUpdate
    */
   @Override
   public Class[] accepts() {
-    return new Class[]{Document.class};
+    return new Class[]{MongoDbDocumentContainer.class};
   }
 
   /**
@@ -169,7 +171,7 @@ public class MongoDbDocumentUpdate
    */
   @Override
   public Class[] generates() {
-    return new Class[]{Document.class};
+    return new Class[]{MongoDbDocumentContainer.class};
   }
 
   /**
@@ -179,14 +181,18 @@ public class MongoDbDocumentUpdate
    */
   @Override
   protected String doExecute() {
-    String	result;
-    Document	doc;
+    String			result;
+    MongoDbDocumentContainer	cont;
+    MongoCollection		coll;
+    Document			doc;
 
-    doc = m_InputToken.getPayload(Document.class);
+    cont = m_InputToken.getPayload(MongoDbDocumentContainer.class);
+    coll = cont.getValue(MongoDbDocumentContainer.VALUE_COLLECTION, MongoCollection.class);
+    doc  = cont.getValue(MongoDbDocumentContainer.VALUE_DOCUMENT, Document.class);
     try {
       m_Operation.setFlowContext(this);
-      result = m_Operation.update(doc);
-      m_OutputToken = new Token(doc);
+      result = m_Operation.update(coll, doc);
+      m_OutputToken = new Token(new MongoDbDocumentContainer(coll, doc));
     }
     catch (Exception e) {
       result = handleException("Failed to update document, using: " + m_Operation, e);

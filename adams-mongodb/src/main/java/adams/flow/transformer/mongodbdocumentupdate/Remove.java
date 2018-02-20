@@ -22,6 +22,8 @@ package adams.flow.transformer.mongodbdocumentupdate;
 
 import adams.core.Utils;
 import adams.core.base.BaseString;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
 /**
@@ -95,7 +97,7 @@ public class Remove
    * @return		null if successful, otherwise the error message
    */
   @Override
-  protected String doUpdate(Document doc) {
+  protected String doUpdate(MongoCollection coll, Document doc) {
     String	result;
 
     result = null;
@@ -103,6 +105,8 @@ public class Remove
     try {
       for (BaseString key: m_Keys)
         doc.remove(key.getValue());
+      coll.deleteOne(Filters.eq("_id", doc.get("_id")));
+      coll.insertOne(doc);
     }
     catch (Exception e) {
       result = Utils.handleException(this, "Failed to remove key(s)!", e);

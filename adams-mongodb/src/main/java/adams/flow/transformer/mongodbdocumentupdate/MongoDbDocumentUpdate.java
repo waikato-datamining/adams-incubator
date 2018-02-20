@@ -23,6 +23,7 @@ package adams.flow.transformer.mongodbdocumentupdate;
 import adams.core.QuickInfoSupporter;
 import adams.core.option.OptionHandler;
 import adams.flow.core.FlowContextHandler;
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 /**
@@ -36,8 +37,9 @@ public interface MongoDbDocumentUpdate
   /**
    * Updates the document.
    *
+   * @param coll	the collection the document belongs to
    * @param doc		the document to update
    * @return		null if successful, otherwise the error message
    */
-  public String update(Document doc);
+  public String update(MongoCollection coll, Document doc);
 }

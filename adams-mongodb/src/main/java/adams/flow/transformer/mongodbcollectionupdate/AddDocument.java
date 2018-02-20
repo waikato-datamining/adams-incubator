@@ -157,15 +157,14 @@ public class AddDocument
       else
 	doc = new Document("_id", m_ID);
 
+      coll.insertOne(doc);
+
       for (MongoDbDocumentAppend update: m_Updates) {
         update.setFlowContext(getFlowContext());
-        result = update.update(doc);
+        result = update.update(coll, doc);
         if (result != null)
           break;
       }
-
-      if (result == null)
-	coll.insertOne(doc);
     }
     catch (Exception e) {
       result = Utils.handleException(this, "Failed to add document!", e);

@@ -22,6 +22,7 @@ package adams.flow.transformer.mongodbdocumentupdate;
 
 import adams.core.option.AbstractOptionHandler;
 import adams.flow.core.Actor;
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 /**
@@ -73,10 +74,13 @@ public abstract class AbstractMongoDbDocumentUpdate
   /**
    * Hook method for checking the document before updating it.
    *
+   * @param coll	the collection the document belongs to
    * @param doc		the document to check
    * @return		null if successful, otherwise error message
    */
-  protected String check(Document doc) {
+  protected String check(MongoCollection coll, Document doc) {
+    if (coll == null)
+      return "No collection provided!";
     if (doc == null)
       return "No document provided!";
     if (m_FlowContext == null)
@@ -87,23 +91,25 @@ public abstract class AbstractMongoDbDocumentUpdate
   /**
    * Updates the document.
    *
+   * @param coll	the collection the document belongs to
    * @param doc		the document to update
    * @return		null if successful, otherwise the error message
    */
-  protected abstract String doUpdate(Document doc);
+  protected abstract String doUpdate(MongoCollection coll, Document doc);
 
   /**
    * Updates the document.
    *
+   * @param coll	the collection the document belongs to
    * @param doc		the document to update
    * @return		null if successful, otherwise the error message
    */
-  public String update(Document doc) {
+  public String update(MongoCollection coll, Document doc) {
     String	result;
 
-    result = check(doc);
+    result = check(coll, doc);
     if (result == null)
-      result = doUpdate(doc);
+      result = doUpdate(coll, doc);
 
     return result;
   }

@@ -20,6 +20,7 @@
 
 package adams.flow.transformer.mongodbdocumentupdate;
 
+import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 /**
@@ -49,7 +50,7 @@ public class PassThrough
    * @return		null if successful, otherwise the error message
    */
   @Override
-  protected String doUpdate(Document doc) {
+  protected String doUpdate(MongoCollection coll, Document doc) {
     return null;
   }
 }

@@ -21,6 +21,7 @@
 package adams.flow.transformer;
 
 import adams.core.QuickInfoHelper;
+import adams.flow.container.MongoDbDocumentContainer;
 import adams.flow.transformer.mongodbfinddocuments.All;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -177,7 +178,7 @@ public class MongoDbFindDocuments
    */
   @Override
   protected Class getItemClass() {
-    return Document.class;
+    return MongoDbDocumentContainer.class;
   }
 
   /**
@@ -208,7 +209,7 @@ public class MongoDbFindDocuments
       m_Operation.setFlowContext(this);
       iter = m_Operation.find(coll);
       for (Document doc: iter)
-	m_Queue.add(doc);
+	m_Queue.add(new MongoDbDocumentContainer(coll, doc));
     }
     catch (Exception e) {
       result = handleException("Failed to find documents!", e);

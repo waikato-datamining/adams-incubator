@@ -24,6 +24,8 @@ import adams.core.MessageCollection;
 import adams.core.Utils;
 import adams.core.base.BaseKeyValuePair;
 import adams.data.conversion.ConversionFromString;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
 /**
@@ -135,7 +137,7 @@ public abstract class AbstractAppend
    * @return		null if successful, otherwise the error message
    */
   @Override
-  protected String doUpdate(Document doc) {
+  protected String doUpdate(MongoCollection coll, Document doc) {
     String		result;
     MessageCollection	errors;
     Object		val;
@@ -156,6 +158,10 @@ public abstract class AbstractAppend
           val = m_ValueConversion.getOutput();
 	  doc.append(pair.getPairKey(), val);
 	}
+      }
+      if (errors.isEmpty()) {
+	coll.deleteOne(Filters.eq("_id", doc.get("_id")));
+	coll.insertOne(doc);
       }
     }
     catch (Exception e) {
