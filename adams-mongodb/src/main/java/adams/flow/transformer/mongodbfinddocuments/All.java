@@ -45,9 +45,9 @@ public class All
   }
 
   /**
-   * Updates the collection.
+   * Filters the collection.
    *
-   * @param coll	the collection to update
+   * @param coll	the collection to filter
    * @return		the documents matching the query
    */
   @Override

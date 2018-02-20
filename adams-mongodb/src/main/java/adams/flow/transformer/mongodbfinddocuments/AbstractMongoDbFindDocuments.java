@@ -89,17 +89,17 @@ public abstract class AbstractMongoDbFindDocuments
   }
 
   /**
-   * Updates the collection.
+   * Filters the collection.
    *
-   * @param coll	the collection to update
+   * @param coll	the collection to filter
    * @return		the documents matching the query
    */
   protected abstract FindIterable<Document> doFind(MongoCollection coll);
 
   /**
-   * Updates the collection.
+   * Filters the collection.
    *
-   * @param coll	the collection to update
+   * @param coll	the collection to filter
    * @return		the documents matching the query
    * @throws IllegalStateException	if check fails
    * @see		#check(MongoCollection)
