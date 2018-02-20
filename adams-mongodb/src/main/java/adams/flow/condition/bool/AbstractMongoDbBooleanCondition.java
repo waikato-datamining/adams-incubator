@@ -23,6 +23,7 @@ package adams.flow.condition.bool;
 import adams.db.MongoDbConnection;
 import adams.flow.core.Actor;
 import adams.flow.core.MongoDbActorUtils;
+import adams.flow.core.Token;
 
 /**
  * Ancestor for MongoDB conditions.
@@ -37,6 +38,9 @@ public abstract class AbstractMongoDbBooleanCondition
   /** the database connection. */
   protected MongoDbConnection m_DatabaseConnection;
 
+  /** whether the DB connection has been updated. */
+  protected boolean m_DatabaseConnectionUpdated;
+
   /**
    * Initializes the members.
    */
@@ -44,7 +48,7 @@ public abstract class AbstractMongoDbBooleanCondition
   protected void initialize() {
     super.initialize();
 
-    m_DatabaseConnection = null;
+    m_DatabaseConnection = getDefaultDatabaseConnection();
   }
 
   /**
@@ -54,7 +58,7 @@ public abstract class AbstractMongoDbBooleanCondition
   protected void reset() {
     super.reset();
 
-    m_DatabaseConnection = null;
+    m_DatabaseConnectionUpdated = false;
   }
 
   /**
@@ -67,19 +71,33 @@ public abstract class AbstractMongoDbBooleanCondition
   }
 
   /**
-   * Configures the condition.
+   * Returns the database connection from the flow.
    *
-   * @param owner	the actor this condition belongs to
-   * @return		null if everything is fine, otherwise error message
+   * @param actor	the actor to use for determining the connection
+   * @return		the connection
    */
-  public String setUp(Actor owner) {
+  protected MongoDbConnection getConnection(Actor actor) {
+    return MongoDbActorUtils.getDatabaseConnection(
+	actor, adams.flow.standalone.DatabaseConnectionProvider.class, getDefaultDatabaseConnection());  }
+
+  /**
+   * Uses the token to determine the evaluation.
+   *
+   * @param owner	the owning actor
+   * @param token	the current token passing through
+   * @return		null if OK, otherwise error message
+   */
+  protected String preEvaluate(Actor owner, Token token) {
     String	result;
 
-    result = setUp(owner);
+    result = super.preEvaluate(owner, token);
 
     if (result == null) {
-      m_DatabaseConnection = MongoDbActorUtils.getDatabaseConnection(
-	owner, adams.flow.standalone.DatabaseConnectionProvider.class, getDefaultDatabaseConnection());
+      if (!m_DatabaseConnectionUpdated) {
+	m_DatabaseConnectionUpdated = true;
+	if (owner instanceof Actor)
+	  m_DatabaseConnection = getConnection(owner);
+      }
     }
 
     return result;
