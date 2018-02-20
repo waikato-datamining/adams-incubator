@@ -14,7 +14,7 @@
  */
 
 /*
- * PassThrough.java
+ * AddDocument.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
@@ -22,10 +22,6 @@ package adams.flow.transformer.mongodbcollectionupdate;
 
 import adams.core.QuickInfoHelper;
 import adams.core.Utils;
-import adams.core.Variables;
-import adams.core.base.BaseKeyValuePair;
-import adams.flow.control.Storage;
-import adams.flow.control.StorageName;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
@@ -41,15 +37,6 @@ public class AddDocument
 
   /** the ID for the document. */
   protected String m_ID;
-
-  /** the key-value pairs to add. */
-  protected BaseKeyValuePair[] m_KeyValuePairs;
-
-  /** the key-value pairs to add, with the value being a variable name. */
-  protected BaseKeyValuePair[] m_KeyValuePairsVariables;
-
-  /** the key-value pairs to add, with the value being a storage name. */
-  protected BaseKeyValuePair[] m_KeyValuePairsStorage;
 
   /**
    * Returns a string describing the object.
@@ -73,18 +60,6 @@ public class AddDocument
     m_OptionManager.add(
       "id", "ID",
       "");
-
-    m_OptionManager.add(
-      "key-value", "keyValuePairs",
-      new BaseKeyValuePair[0]);
-
-    m_OptionManager.add(
-      "key-value-storage", "keyValuePairsStorage",
-      new BaseKeyValuePair[0]);
-
-    m_OptionManager.add(
-      "key-value-var", "keyValuePairsVariables",
-      new BaseKeyValuePair[0]);
   }
 
   /**
@@ -127,95 +102,6 @@ public class AddDocument
   }
 
   /**
-   * Sets the key-value pairs to add.
-   *
-   * @param value	the pairs
-   */
-  public void setKeyValuePairs(BaseKeyValuePair[] value) {
-    m_KeyValuePairs = value;
-    reset();
-  }
-
-  /**
-   * Returns the key-value pairs to add.
-   *
-   * @return 		the pairs
-   */
-  public BaseKeyValuePair[] getKeyValuePairs() {
-    return m_KeyValuePairs;
-  }
-
-  /**
-   * Returns the tip text for this property.
-   *
-   * @return     tip text for this property suitable for
-   *             displaying in the GUI or for listing the options.
-   */
-  public String keyValuePairsTipText() {
-    return "The key-value pairs to add.";
-  }
-
-  /**
-   * Sets the key-value pairs to add, with the value representing a storage name.
-   *
-   * @param value	the pairs
-   */
-  public void setKeyValuePairsStorage(BaseKeyValuePair[] value) {
-    m_KeyValuePairs = value;
-    reset();
-  }
-
-  /**
-   * Returns the key-value pairs to add, with the value representing a storage name.
-   *
-   * @return 		the pairs
-   */
-  public BaseKeyValuePair[] getKeyValuePairsStorage() {
-    return m_KeyValuePairsStorage;
-  }
-
-  /**
-   * Returns the tip text for this property.
-   *
-   * @return     tip text for this property suitable for
-   *             displaying in the GUI or for listing the options.
-   */
-  public String keyValuePairsStorageTipText() {
-    return "The key-value pairs to add, with the value representing a storage name.";
-  }
-
-  /**
-   * Sets the key-value pairs to add, with the value representing a variable
-   * name (without surrounding @{...}).
-   *
-   * @param value	the pairs
-   */
-  public void setKeyValuePairsVariables(BaseKeyValuePair[] value) {
-    m_KeyValuePairsVariables = value;
-    reset();
-  }
-
-  /**
-   * Returns the key-value pairs to add, with the value representing a variable
-   * name (without surrounding @{...}).
-   *
-   * @return 		the pairs
-   */
-  public BaseKeyValuePair[] getKeyValuePairsVariables() {
-    return m_KeyValuePairsVariables;
-  }
-
-  /**
-   * Returns the tip text for this property.
-   *
-   * @return     tip text for this property suitable for
-   *             displaying in the GUI or for listing the options.
-   */
-  public String keyValuePairsVariablesTipText() {
-    return "The key-value pairs to add, with the value representing a variable name (without surrounding @{...}).";
-  }
-
-  /**
    * Updates the collection.
    *
    * @param coll	the collection to update
@@ -225,31 +111,14 @@ public class AddDocument
   protected String doUpdate(MongoCollection coll) {
     String	result;
     Document	doc;
-    Storage	storage;
-    Variables 	variables;
 
     result = null;
-
-    storage   = getFlowContext().getStorageHandler().getStorage();
-    variables = getFlowContext().getVariables();
 
     try {
       if (m_ID.isEmpty())
 	doc = new Document();
       else
 	doc = new Document("_id", m_ID);
-
-      // regular
-      for (BaseKeyValuePair pair: m_KeyValuePairs)
-        doc.append(pair.getPairKey(), pair.getPairValue());
-
-      // storage
-      for (BaseKeyValuePair pair: m_KeyValuePairs)
-        doc.append(pair.getPairKey(), storage.get(new StorageName(pair.getPairValue())));
-
-      // variables
-      for (BaseKeyValuePair pair: m_KeyValuePairs)
-        doc.append(pair.getPairKey(), variables.get(pair.getPairValue()));
 
       coll.insertOne(doc);
     }
