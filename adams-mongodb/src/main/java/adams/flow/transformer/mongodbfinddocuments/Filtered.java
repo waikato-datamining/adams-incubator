@@ -21,8 +21,8 @@
 package adams.flow.transformer.mongodbfinddocuments;
 
 import adams.core.QuickInfoHelper;
-import adams.flow.transformer.mongodbfinddocuments.filter.AbstractMongoDbDocumentFilter;
 import adams.flow.transformer.mongodbfinddocuments.filter.Equals;
+import adams.flow.transformer.mongodbfinddocuments.filter.MongoDbDocumentFilter;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
@@ -38,7 +38,7 @@ public class Filtered
   private static final long serialVersionUID = -8119121394992753776L;
 
   /** the filter to use. */
-  protected AbstractMongoDbDocumentFilter m_Filter;
+  protected MongoDbDocumentFilter m_Filter;
 
   /**
    * Returns a string describing the object.
@@ -67,7 +67,7 @@ public class Filtered
    *
    * @param value	the filter
    */
-  public void setKey(AbstractMongoDbDocumentFilter value) {
+  public void setFilter(MongoDbDocumentFilter value) {
     m_Filter = value;
     reset();
   }
@@ -77,7 +77,7 @@ public class Filtered
    *
    * @return 		the filter
    */
-  public AbstractMongoDbDocumentFilter getKey() {
+  public MongoDbDocumentFilter getFilter() {
     return m_Filter;
   }
 

@@ -1,0 +1,17 @@
+# Project: adams
+# Date: 2018-02-20 15:40:09
+# User: fracpete
+# Charset: UTF-8
+adams.flow.control.Flow -annotation "You will need to update database and collection to work in your environment." -flow-execution-listener adams.flow.execution.NullListener
+ adams.flow.standalone.MongoDbConnection -url mongodb://localhost:27017/mydb
+ adams.flow.source.Start
+ adams.flow.control.Trigger -name "init storage"
+  adams.flow.source.StringConstants -string 1 -conversion adams.data.conversion.StringToInt
+  adams.flow.transformer.SetStorageValue -storage-name integer
+ adams.flow.control.Trigger -name "update collection"
+  adams.flow.source.MongoDbGetCollection -collection yo
+  adams.flow.transformer.MongoDbCollectionUpdate -operation "adams.flow.transformer.mongodbcollectionupdate.AddDocument -id my_id -update \"adams.flow.transformer.mongodbdocumentupdate.Append -key-value hello=world -value-conversion adams.data.conversion.StringToString\" -update \"adams.flow.transformer.mongodbdocumentupdate.AppendStorage -key-value intvalue=integer -value-conversion adams.data.conversion.ObjectToObject\""
+  adams.flow.transformer.MongoDbFindDocuments -operation "adams.flow.transformer.mongodbfinddocuments.Filtered -filter \"adams.flow.transformer.mongodbfinddocuments.filter.Equals -key _id -value my_id -value-conversion adams.data.conversion.StringToString\""
+  adams.flow.transformer.MongoDbDocumentUpdate -operation "adams.flow.transformer.mongodbdocumentupdate.Append -key-value another=value -value-conversion adams.data.conversion.StringToString"
+  adams.flow.transformer.Convert -conversion adams.data.conversion.AnyToString
+  adams.flow.sink.Display -writer adams.data.io.output.NullWriter

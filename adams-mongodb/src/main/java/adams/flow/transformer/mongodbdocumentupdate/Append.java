@@ -20,12 +20,8 @@
 
 package adams.flow.transformer.mongodbdocumentupdate;
 
-import adams.core.MessageCollection;
-import adams.core.Utils;
-import adams.core.base.BaseKeyValuePair;
 import adams.data.conversion.ConversionFromString;
 import adams.data.conversion.StringToString;
-import org.bson.Document;
 
 /**
  * Appends the document with the specified key-value pairs.
@@ -33,15 +29,9 @@ import org.bson.Document;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Append
-  extends AbstractMongoDbDocumentUpdate {
+  extends AbstractAppend {
 
   private static final long serialVersionUID = 3771202579365692102L;
-
-  /** the key-value pairs to add. */
-  protected BaseKeyValuePair[] m_KeyValuePairs;
-
-  /** the value conversion. */
-  protected ConversionFromString m_ValueConversion;
 
   /**
    * Returns a string describing the object.
@@ -51,41 +41,6 @@ public class Append
   @Override
   public String globalInfo() {
     return "Appends the document with the specified key-value pairs.";
-  }
-
-  /**
-   * Adds options to the internal list of options.
-   */
-  @Override
-  public void defineOptions() {
-    super.defineOptions();
-
-    m_OptionManager.add(
-      "key-value", "keyValuePairs",
-      new BaseKeyValuePair[0]);
-
-    m_OptionManager.add(
-      "value-conversion", "valueConversion",
-      new StringToString());
-  }
-
-  /**
-   * Sets the key-value pairs to add.
-   *
-   * @param value	the pairs
-   */
-  public void setKeyValuePairs(BaseKeyValuePair[] value) {
-    m_KeyValuePairs = value;
-    reset();
-  }
-
-  /**
-   * Returns the key-value pairs to add.
-   *
-   * @return 		the pairs
-   */
-  public BaseKeyValuePair[] getKeyValuePairs() {
-    return m_KeyValuePairs;
   }
 
   /**
@@ -99,22 +54,13 @@ public class Append
   }
 
   /**
-   * Sets the conversion for turning the value string into the actual type.
+   * Returns the default conversion.
    *
-   * @param value	the conversion
+   * @return		the default
    */
-  public void setValueConversion(ConversionFromString value) {
-    m_ValueConversion = value;
-    reset();
-  }
-
-  /**
-   * Returns the conversion for turning the value string into the actual type.
-   *
-   * @return 		the conversion
-   */
-  public ConversionFromString getValueConversion() {
-    return m_ValueConversion;
+  @Override
+  protected ConversionFromString getDefaultValueConversion() {
+    return new StringToString();
   }
 
   /**
@@ -128,41 +74,13 @@ public class Append
   }
 
   /**
-   * Updates the document.
+   * Returns the actual value.
    *
-   * @param doc		the document to update
-   * @return		null if successful, otherwise the error message
+   * @param value	the value to turn into the actual value
+   * @return		the actual value
    */
   @Override
-  protected String doUpdate(Document doc) {
-    String		result;
-    MessageCollection	errors;
-    Object		val;
-    String		msg;
-
-    result = null;
-
-    errors = new MessageCollection();
-    try {
-      for (BaseKeyValuePair pair: m_KeyValuePairs) {
-        m_ValueConversion.setInput(pair.getPairValue());
-        msg = m_ValueConversion.convert();
-        if (msg != null) {
-          errors.add("Failed to convert " + pair + " using " + m_ValueConversion + "\n" + msg);
-	}
-	else {
-          val = m_ValueConversion.getOutput();
-	  doc.append(pair.getPairKey(), val);
-	}
-      }
-    }
-    catch (Exception e) {
-      errors.add(Utils.handleException(this, "Failed to update document!", e));
-    }
-
-    if (!errors.isEmpty())
-      result = errors.toString();
-
-    return result;
+  protected Object getActualValue(String value) {
+    return value;
   }
 }

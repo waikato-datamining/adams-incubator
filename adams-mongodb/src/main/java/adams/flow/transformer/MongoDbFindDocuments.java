@@ -21,7 +21,6 @@
 package adams.flow.transformer;
 
 import adams.core.QuickInfoHelper;
-import adams.flow.transformer.mongodbfinddocuments.AbstractMongoDbFindDocuments;
 import adams.flow.transformer.mongodbfinddocuments.All;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
@@ -82,7 +81,7 @@ import org.bson.Document;
  * &nbsp;&nbsp;&nbsp;default: false
  * </pre>
  *
- * <pre>-operation &lt;adams.flow.transformer.mongodbfinddocuments.AbstractMongoDbFindDocuments&gt; (property: operation)
+ * <pre>-operation &lt;adams.flow.transformer.mongodbfinddocuments.MongoDbFindDocuments&gt; (property: operation)
  * &nbsp;&nbsp;&nbsp;The find operation.
  * &nbsp;&nbsp;&nbsp;default: adams.flow.transformer.mongodbfinddocuments.All
  * </pre>
@@ -97,7 +96,7 @@ public class MongoDbFindDocuments
   private static final long serialVersionUID = 4673338678018337975L;
 
   /** the update operation. */
-  protected AbstractMongoDbFindDocuments m_Operation;
+  protected adams.flow.transformer.mongodbfinddocuments.MongoDbFindDocuments m_Operation;
 
   /**
    * Returns a string describing the object.
@@ -137,7 +136,7 @@ public class MongoDbFindDocuments
    *
    * @param value	the operation
    */
-  public void setOperation(AbstractMongoDbFindDocuments value) {
+  public void setOperation(adams.flow.transformer.mongodbfinddocuments.MongoDbFindDocuments value) {
     m_Operation = value;
     reset();
   }
@@ -147,7 +146,7 @@ public class MongoDbFindDocuments
    *
    * @return 		the operation
    */
-  public AbstractMongoDbFindDocuments getOperation() {
+  public adams.flow.transformer.mongodbfinddocuments.MongoDbFindDocuments getOperation() {
     return m_Operation;
   }
 
@@ -206,6 +205,7 @@ public class MongoDbFindDocuments
     coll   = m_InputToken.getPayload(MongoCollection.class);
     m_Queue.clear();
     try {
+      m_Operation.setFlowContext(this);
       iter = m_Operation.find(coll);
       for (Document doc: iter)
 	m_Queue.add(doc);

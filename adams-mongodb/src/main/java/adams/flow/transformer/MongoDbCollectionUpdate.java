@@ -21,7 +21,7 @@
 package adams.flow.transformer;
 
 import adams.core.QuickInfoHelper;
-import adams.flow.transformer.mongodbcollectionupdate.AbstractMongoDbCollectionUpdate;
+import adams.flow.core.Token;
 import com.mongodb.client.MongoCollection;
 
 /**
@@ -74,7 +74,7 @@ import com.mongodb.client.MongoCollection;
  * &nbsp;&nbsp;&nbsp;default: false
  * </pre>
  *
- * <pre>-operation &lt;adams.flow.transformer.mongodbcollectionupdate.AbstractMongoDbCollectionUpdate&gt; (property: operation)
+ * <pre>-operation &lt;adams.flow.transformer.mongodbcollectionupdate.MongoDbCollectionUpdate&gt; (property: operation)
  * &nbsp;&nbsp;&nbsp;The update operation.
  * &nbsp;&nbsp;&nbsp;default: adams.flow.transformer.mongodbcollectionupdate.PassThrough
  * </pre>
@@ -89,7 +89,7 @@ public class MongoDbCollectionUpdate
   private static final long serialVersionUID = 296859358661875498L;
 
   /** the update operation. */
-  protected AbstractMongoDbCollectionUpdate m_Operation;
+  protected adams.flow.transformer.mongodbcollectionupdate.MongoDbCollectionUpdate m_Operation;
 
   /**
    * Returns a string describing the object.
@@ -118,7 +118,7 @@ public class MongoDbCollectionUpdate
    *
    * @param value	the operation
    */
-  public void setOperation(AbstractMongoDbCollectionUpdate value) {
+  public void setOperation(adams.flow.transformer.mongodbcollectionupdate.MongoDbCollectionUpdate value) {
     m_Operation = value;
     reset();
   }
@@ -128,7 +128,7 @@ public class MongoDbCollectionUpdate
    *
    * @return 		the operation
    */
-  public AbstractMongoDbCollectionUpdate getOperation() {
+  public adams.flow.transformer.mongodbcollectionupdate.MongoDbCollectionUpdate getOperation() {
     return m_Operation;
   }
 
@@ -186,6 +186,7 @@ public class MongoDbCollectionUpdate
     try {
       m_Operation.setFlowContext(this);
       result = m_Operation.update(coll);
+      m_OutputToken = new Token(coll);
     }
     catch (Exception e) {
       result = handleException("Failed to update collection, using: " + m_Operation, e);

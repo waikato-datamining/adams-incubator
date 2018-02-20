@@ -20,10 +20,8 @@
 
 package adams.flow.transformer.mongodbcollectionupdate;
 
-import adams.core.QuickInfoSupporter;
 import adams.core.option.AbstractOptionHandler;
 import adams.flow.core.Actor;
-import adams.flow.core.FlowContextHandler;
 import com.mongodb.client.MongoCollection;
 
 /**
@@ -33,7 +31,7 @@ import com.mongodb.client.MongoCollection;
  */
 public abstract class AbstractMongoDbCollectionUpdate
   extends AbstractOptionHandler
-  implements FlowContextHandler, QuickInfoSupporter {
+  implements MongoDbCollectionUpdate {
 
   private static final long serialVersionUID = 4047550340981016283L;
 

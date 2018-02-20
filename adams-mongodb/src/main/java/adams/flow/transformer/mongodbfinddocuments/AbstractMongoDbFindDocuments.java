@@ -20,10 +20,8 @@
 
 package adams.flow.transformer.mongodbfinddocuments;
 
-import adams.core.QuickInfoSupporter;
 import adams.core.option.AbstractOptionHandler;
 import adams.flow.core.Actor;
-import adams.flow.core.FlowContextHandler;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
@@ -35,7 +33,7 @@ import org.bson.Document;
  */
 public abstract class AbstractMongoDbFindDocuments
   extends AbstractOptionHandler
-  implements FlowContextHandler, QuickInfoSupporter {
+  implements MongoDbFindDocuments {
 
   private static final long serialVersionUID = 4047550340981016283L;
 

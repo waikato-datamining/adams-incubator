@@ -7,17 +7,21 @@
 # Author:  FracPete (fracpete at waikato dot ac dot nz)
 
 # the schemes for updating a MongoDB collection
-adams.flow.transformer.mongodbcollectionupdate.AbstractMongoDbCollectionUpdate=\
+adams.flow.transformer.mongodbcollectionupdate.MongoDbCollectionUpdate=\
   adams.flow.transformer.mongodbcollectionupdate
 
 # the schemes for updating a MongoDB document
-adams.flow.transformer.mongodbdocumentupdate.AbstractMongoDbDocumentUpdate=\
+adams.flow.transformer.mongodbdocumentupdate.MongoDbDocumentUpdate=\
+  adams.flow.transformer.mongodbdocumentupdate
+
+# the schemes for appending a MongoDB document
+adams.flow.transformer.mongodbdocumentupdate.MongoDbDocumentAppend=\
   adams.flow.transformer.mongodbdocumentupdate
 
 # the schemes for finding documents in a MongoDB collection
-adams.flow.transformer.mongodbfinddocuments.AbstractMongoDbFindDocuments=\
+adams.flow.transformer.mongodbfinddocuments.MongoDbFindDocuments=\
   adams.flow.transformer.mongodbfinddocuments
 
 # filters for documents
-adams.flow.transformer.mongodbfinddocuments.filter.AbstractMongoDbDocumentFilter=\
+adams.flow.transformer.mongodbfinddocuments.filter.MongoDbDocumentFilter=\
   adams.flow.transformer.mongodbfinddocuments.filter

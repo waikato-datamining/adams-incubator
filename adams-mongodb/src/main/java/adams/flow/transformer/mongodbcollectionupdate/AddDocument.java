@@ -22,11 +22,12 @@ package adams.flow.transformer.mongodbcollectionupdate;
 
 import adams.core.QuickInfoHelper;
 import adams.core.Utils;
+import adams.flow.transformer.mongodbdocumentupdate.MongoDbDocumentAppend;
 import com.mongodb.client.MongoCollection;
 import org.bson.Document;
 
 /**
- * Dummy, performs no update.
+ * Adds a document.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
@@ -37,6 +38,9 @@ public class AddDocument
 
   /** the ID for the document. */
   protected String m_ID;
+
+  /** for appending key-value pairs. */
+  protected MongoDbDocumentAppend[] m_Updates;
 
   /**
    * Returns a string describing the object.
@@ -60,6 +64,10 @@ public class AddDocument
     m_OptionManager.add(
       "id", "ID",
       "");
+
+    m_OptionManager.add(
+      "update", "updates",
+      new MongoDbDocumentAppend[0]);
   }
 
   /**
@@ -102,6 +110,35 @@ public class AddDocument
   }
 
   /**
+   * Sets the document updaters to apply.
+   *
+   * @param value	the updaters
+   */
+  public void setUpdates(MongoDbDocumentAppend[] value) {
+    m_Updates = value;
+    reset();
+  }
+
+  /**
+   * Returns the document updaters to apply.
+   *
+   * @return 		the updaters
+   */
+  public MongoDbDocumentAppend[] getUpdates() {
+    return m_Updates;
+  }
+
+  /**
+   * Returns the tip text for this property.
+   *
+   * @return     tip text for this property suitable for
+   *             displaying in the GUI or for listing the options.
+   */
+  public String updatesTipText() {
+    return "The for updating the document.";
+  }
+
+  /**
    * Updates the collection.
    *
    * @param coll	the collection to update
@@ -120,7 +157,15 @@ public class AddDocument
       else
 	doc = new Document("_id", m_ID);
 
-      coll.insertOne(doc);
+      for (MongoDbDocumentAppend update: m_Updates) {
+        update.setFlowContext(getFlowContext());
+        result = update.update(doc);
+        if (result != null)
+          break;
+      }
+
+      if (result == null)
+	coll.insertOne(doc);
     }
     catch (Exception e) {
       result = Utils.handleException(this, "Failed to add document!", e);

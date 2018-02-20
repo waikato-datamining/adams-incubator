@@ -20,7 +20,6 @@
 
 package adams.flow.transformer.mongodbfinddocuments.filter;
 
-import adams.core.QuickInfoSupporter;
 import adams.core.option.AbstractOptionHandler;
 import org.bson.conversions.Bson;
 
@@ -31,7 +30,7 @@ import org.bson.conversions.Bson;
  */
 public abstract class AbstractMongoDbDocumentFilter
   extends AbstractOptionHandler
-  implements QuickInfoSupporter {
+  implements MongoDbDocumentFilter {
 
   private static final long serialVersionUID = 4515883315240461022L;
 

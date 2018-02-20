@@ -14,7 +14,7 @@
  */
 
 /*
- * AppendStorage.java
+ * Append.java
  * Copyright (C) 2018 University of Waikato, Hamilton, NZ
  */
 
@@ -23,18 +23,15 @@ package adams.flow.transformer.mongodbdocumentupdate;
 import adams.core.MessageCollection;
 import adams.core.Utils;
 import adams.core.base.BaseKeyValuePair;
-import adams.data.conversion.Conversion;
-import adams.data.conversion.ObjectToObject;
-import adams.flow.control.Storage;
-import adams.flow.control.StorageName;
+import adams.data.conversion.ConversionFromString;
 import org.bson.Document;
 
 /**
- * Appends the document with the specified key-value pairs from storage.
+ * Appends the document with the specified key-value pairs.
  *
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
-public class AppendStorage
+public abstract class AbstractAppend
   extends AbstractMongoDbDocumentUpdate
   implements MongoDbDocumentAppend {
 
@@ -43,18 +40,8 @@ public class AppendStorage
   /** the key-value pairs to add. */
   protected BaseKeyValuePair[] m_KeyValuePairs;
 
-  /** the storage item conversion. */
-  protected Conversion m_ValueConversion;
-
-  /**
-   * Returns a string describing the object.
-   *
-   * @return 			a description suitable for displaying in the gui
-   */
-  @Override
-  public String globalInfo() {
-    return "Appends the document with the specified key-value pairs, with the values representing storage names.";
-  }
+  /** the value conversion. */
+  protected ConversionFromString m_ValueConversion;
 
   /**
    * Adds options to the internal list of options.
@@ -69,7 +56,7 @@ public class AppendStorage
 
     m_OptionManager.add(
       "value-conversion", "valueConversion",
-      new ObjectToObject());
+      getDefaultValueConversion());
   }
 
   /**
@@ -97,26 +84,31 @@ public class AppendStorage
    * @return     tip text for this property suitable for
    *             displaying in the GUI or for listing the options.
    */
-  public String keyValuePairsTipText() {
-    return "The key-value pairs to add (the value represents a storage name).";
-  }
+  public abstract String keyValuePairsTipText();
 
   /**
-   * Sets the conversion for turning the storage value into the actual type.
+   * Returns the default conversion.
+   *
+   * @return		the default
+   */
+  protected abstract ConversionFromString getDefaultValueConversion();
+
+  /**
+   * Sets the conversion for turning the value string into the actual type.
    *
    * @param value	the conversion
    */
-  public void setValueConversion(Conversion value) {
+  public void setValueConversion(ConversionFromString value) {
     m_ValueConversion = value;
     reset();
   }
 
   /**
-   * Returns the conversion for turning the storage value into the actual type.
+   * Returns the conversion for turning the value string into the actual type.
    *
    * @return 		the conversion
    */
-  public Conversion getValueConversion() {
+  public ConversionFromString getValueConversion() {
     return m_ValueConversion;
   }
 
@@ -126,9 +118,15 @@ public class AppendStorage
    * @return     tip text for this property suitable for
    *             displaying in the GUI or for listing the options.
    */
-  public String valueConversionTipText() {
-    return "For converting the storage value into the actual type.";
-  }
+  public abstract String valueConversionTipText();
+
+  /**
+   * Returns the actual value.
+   *
+   * @param value	the value to turn into the actual value
+   * @return		the actual value
+   */
+  protected abstract Object getActualValue(String value);
 
   /**
    * Updates the document.
@@ -139,22 +137,20 @@ public class AppendStorage
   @Override
   protected String doUpdate(Document doc) {
     String		result;
-    Storage 		storage;
-    MessageCollection 	errors;
+    MessageCollection	errors;
     Object		val;
     String		msg;
 
     result = null;
 
-    storage = getFlowContext().getStorageHandler().getStorage();
-    errors  = new MessageCollection();
+    errors = new MessageCollection();
     try {
       for (BaseKeyValuePair pair: m_KeyValuePairs) {
-        val = storage.get(new StorageName(pair.getPairValue()));
+        val = getActualValue(pair.getPairValue());
         m_ValueConversion.setInput(val);
         msg = m_ValueConversion.convert();
         if (msg != null) {
-          errors.add("Failed to convert storage item from " + pair + " using " + m_ValueConversion + "\n" + msg);
+          errors.add("Failed to convert " + pair + " using " + m_ValueConversion + "\n" + msg);
 	}
 	else {
           val = m_ValueConversion.getOutput();

@@ -21,7 +21,7 @@
 package adams.flow.transformer;
 
 import adams.core.QuickInfoHelper;
-import adams.flow.transformer.mongodbdocumentupdate.AbstractMongoDbDocumentUpdate;
+import adams.flow.core.Token;
 import org.bson.Document;
 
 /**
@@ -74,7 +74,7 @@ import org.bson.Document;
  * &nbsp;&nbsp;&nbsp;default: false
  * </pre>
  *
- * <pre>-operation &lt;adams.flow.transformer.mongodbdocumentupdate.AbstractMongoDbDocumentUpdate&gt; (property: operation)
+ * <pre>-operation &lt;adams.flow.transformer.mongodbdocumentupdate.MongoDbDocumentUpdate&gt; (property: operation)
  * &nbsp;&nbsp;&nbsp;The update operation.
  * &nbsp;&nbsp;&nbsp;default: adams.flow.transformer.mongodbdocumentupdate.PassThrough
  * </pre>
@@ -89,7 +89,7 @@ public class MongoDbDocumentUpdate
   private static final long serialVersionUID = 296859358661875498L;
 
   /** the update operation. */
-  protected AbstractMongoDbDocumentUpdate m_Operation;
+  protected adams.flow.transformer.mongodbdocumentupdate.MongoDbDocumentUpdate m_Operation;
 
   /**
    * Returns a string describing the object.
@@ -118,7 +118,7 @@ public class MongoDbDocumentUpdate
    *
    * @param value	the operation
    */
-  public void setOperation(AbstractMongoDbDocumentUpdate value) {
+  public void setOperation(adams.flow.transformer.mongodbdocumentupdate.MongoDbDocumentUpdate value) {
     m_Operation = value;
     reset();
   }
@@ -128,7 +128,7 @@ public class MongoDbDocumentUpdate
    *
    * @return 		the operation
    */
-  public AbstractMongoDbDocumentUpdate getOperation() {
+  public adams.flow.transformer.mongodbdocumentupdate.MongoDbDocumentUpdate getOperation() {
     return m_Operation;
   }
 
@@ -186,6 +186,7 @@ public class MongoDbDocumentUpdate
     try {
       m_Operation.setFlowContext(this);
       result = m_Operation.update(doc);
+      m_OutputToken = new Token(doc);
     }
     catch (Exception e) {
       result = handleException("Failed to update document, using: " + m_Operation, e);
