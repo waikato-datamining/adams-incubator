@@ -17,3 +17,7 @@ adams.flow.transformer.mongodbdocumentupdate.AbstractMongoDbDocumentUpdate=\
 # the schemes for finding documents in a MongoDB collection
 adams.flow.transformer.mongodbfinddocuments.AbstractMongoDbFindDocuments=\
   adams.flow.transformer.mongodbfinddocuments
+
+# filters for documents
+adams.flow.transformer.mongodbfinddocuments.filter.AbstractMongoDbDocumentFilter=\
+  adams.flow.transformer.mongodbfinddocuments.filter
