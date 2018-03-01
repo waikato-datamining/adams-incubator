@@ -28,6 +28,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Spark directory:
+ * /home/fracpete/programs/spark-2.2.1-bin-hadoop2.7
+ *
+ * Starting up:
+ * ./sbin/start-master.sh -h 192.168.2.7
+ * ./sbin/start-slave.sh  spark://192.168.2.7:7077
+ *
+ * Stopping:
+ * ./sbin/stop-all.sh
+ *
  * http://spark.apache.org/examples.html
  * http://letsprog.com/apache-spark-tutorial-rdd-transformation-action-examples/
  */
