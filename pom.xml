@@ -28,6 +28,7 @@
   </properties>
 
   <modules>
+    <module>adams-audio</module>
     <module>adams-gdrive</module>
     <module>adams-geotools</module>
     <module>adams-hadoop</module>
