@@ -198,6 +198,8 @@ public class Spectrogram
     int			i;
 
     result = new HeaderDefinition();
+    result.add("Frame", DataType.NUMERIC);
+    result.add("Timestamp (seconds)", DataType.NUMERIC);
     // FFT halves the number of points and then magnitude of complex number is computed
     // hence "/ 4"
     for (i = 0; i < m_FFTSampleSize / 4; i++)
@@ -228,6 +230,8 @@ public class Spectrogram
       data = sp.getAbsoluteSpectrogramData();
     for (i = 0; i < sp.getNumFrames(); i++) {
       result[i] = new ArrayList<>();
+      result[i].add((double) i);
+      result[i].add((i * 2.0) / sp.getUnitFrequency());   // not sure why "*2" is necessary
       for (n = 0; n < data[i].length; n++)
         result[i].add(data[i][n]);
     }
