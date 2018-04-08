@@ -22,6 +22,7 @@ package adams.flow.transformer.audiodata;
 
 import adams.core.Utils;
 import adams.core.option.AbstractOptionHandler;
+import adams.data.audio.AbstractAudioContainer;
 import adams.flow.core.Compatibility;
 
 /**
@@ -30,7 +31,7 @@ import adams.flow.core.Compatibility;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  * @param <T> the output type
  */
-public abstract class AbstractAudioDataReader<T>
+public abstract class AbstractAudioDataReader<T extends AbstractAudioContainer>
   extends AbstractOptionHandler {
 
   private static final long serialVersionUID = -8842035286778396740L;

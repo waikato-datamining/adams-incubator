@@ -22,11 +22,14 @@ package adams.flow.transformer.audiodata;
 
 import adams.core.Utils;
 import adams.core.base.BaseURL;
+import adams.core.io.FileUtils;
+import adams.data.audio.WaveContainer;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Map;
 
 /**
  * Reads data from WAV files or URLs.
@@ -34,7 +37,7 @@ import java.net.URL;
  * @author FracPete (fracpete at waikato dot ac dot nz)
  */
 public class Wave
-  extends AbstractAudioDataReader<com.musicg.wave.Wave> {
+  extends AbstractAudioDataReader<WaveContainer> {
 
   private static final long serialVersionUID = -8099230864926096497L;
 
@@ -65,7 +68,7 @@ public class Wave
    */
   @Override
   public Class generates() {
-    return com.musicg.wave.Wave.class;
+    return WaveContainer.class;
   }
 
   /**
@@ -76,10 +79,15 @@ public class Wave
    * @throws Exception	if reading fails
    */
   @Override
-  protected com.musicg.wave.Wave doRead(Object input) throws Exception {
-    InputStream		is;
+  protected WaveContainer doRead(Object input) throws Exception {
+    WaveContainer				result;
+    InputStream					is;
+    com.musicg.wave.Wave			wave;
+    adams.flow.transformer.audioinfo.Wave	reader;
+    Map<String,Object> 				info;
+    Object					value;
 
-    is     = null;
+    is = null;
     if (input instanceof String)
       is = new BufferedInputStream(new FileInputStream((String) input));
     else if (input instanceof URL)
@@ -87,9 +95,32 @@ public class Wave
     else if (input instanceof BaseURL)
       is = new BufferedInputStream(((BaseURL) input).urlValue().openStream());
 
-    if (is != null)
-      return new com.musicg.wave.Wave(is);
-    else
+    if (is != null) {
+      wave   = new com.musicg.wave.Wave(is);
+      result = new WaveContainer();
+      result.setAudio(wave);
+      FileUtils.closeQuietly(is);
+      // source
+      if (input instanceof String)
+	result.getReport().setStringValue(WaveContainer.FILE, input.toString());
+      else
+	result.getReport().setStringValue(WaveContainer.URL, input.toString());
+      // info
+      reader = new adams.flow.transformer.audioinfo.Wave();
+      info   = reader.read(wave);
+      for (String key: info.keySet()) {
+        value = info.get(key);
+        if (value instanceof Boolean)
+	  result.getReport().setBooleanValue(key, (Boolean) value);
+        else if (value instanceof Number)
+	  result.getReport().setNumericValue(key, ((Number) value).doubleValue());
+        else
+	  result.getReport().setStringValue(key, value.toString());
+      }
+      return result;
+    }
+    else {
       throw new IllegalStateException("Unhandled input data: " + Utils.classToString(input));
+    }
   }
 }

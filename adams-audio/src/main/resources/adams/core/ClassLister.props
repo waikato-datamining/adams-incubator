@@ -13,3 +13,7 @@ adams.flow.transformer.audiodata.AbstractAudioDataReader=\
 # the audio info schemes
 adams.flow.transformer.audioinfo.AbstractAudioInfoReader=\
   adams.flow.transformer.audioinfo
+
+# the feature generators for Wave objects
+adams.data.audiofeaturegenerator.wave.AbstractWaveFeatureGenerator=\
+  adams.data.audiofeaturegenerator.wave
