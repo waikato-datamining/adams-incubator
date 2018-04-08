@@ -198,6 +198,8 @@ public class Spectrogram
     int			i;
 
     result = new HeaderDefinition();
+    // FFT halves the number of points and then magnitude of complex number is computed
+    // hence "/ 4"
     for (i = 0; i < m_FFTSampleSize / 4; i++)
       result.add("SPG-" + (i+1), DataType.NUMERIC);
 
