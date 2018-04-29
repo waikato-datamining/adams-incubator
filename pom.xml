@@ -41,6 +41,5 @@
     <module>adams-jsat</module>
     <module>adams-svn</module>
     <module>adams-spark</module>
-    <module>adams-weka-hadoop</module>
   </modules>
 </project>

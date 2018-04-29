@@ -9,12 +9,12 @@
 
 # the hadoop mappers
 org.apache.hadoop.mapreduce.Mapper=\
-  adams.data.map
+  adams.data.hadoop.map
 
 # the hadoop reducers
 org.apache.hadoop.mapreduce.Reducer=\
-  adams.data.reduce
+  adams.data.hadoop.reduce
 
 # the hadoop main classes
 org.apache.hadoop.conf.Configured=\
-  adams.data.main
+  adams.data.hadoop.main
