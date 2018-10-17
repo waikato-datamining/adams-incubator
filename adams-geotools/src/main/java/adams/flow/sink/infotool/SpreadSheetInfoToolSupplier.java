@@ -13,9 +13,9 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
+/*
  * SpreadSheetInfoToolSupplier.java
- * Copyright (C) 2013-2016 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2018 University of Waikato, Hamilton, New Zealand
  */
 package adams.flow.sink.infotool;
 
@@ -25,9 +25,9 @@ import adams.data.spreadsheet.DefaultSpreadSheet;
 import adams.data.spreadsheet.Row;
 import adams.data.spreadsheet.SparseDataRow;
 import adams.data.spreadsheet.SpreadSheet;
-import adams.gui.core.BaseMultiPagePane;
 import adams.gui.core.BaseScrollPane;
 import adams.gui.core.GUIHelper;
+import adams.gui.core.MultiPagePane;
 import adams.gui.core.SearchPanel;
 import adams.gui.core.SearchPanel.LayoutType;
 import adams.gui.core.SpreadSheetTable;
@@ -55,7 +55,6 @@ import java.util.logging.Level;
  * SpreadSheet-based tool supplier.
  * 
  * @author  fracpete (fracpete at waikato dot ac dot nz)
- * @version $Revision$
  */
 public class SpreadSheetInfoToolSupplier
   extends AbstractInfoToolSupplier {
@@ -67,7 +66,6 @@ public class SpreadSheetInfoToolSupplier
    * SpreadSheet-based info tool.
    * 
    * @author  fracpete (fracpete at waikato dot ac dot nz)
-   * @version $Revision$
    */
   @MixedCopyright(
       author = "Michael Bedward",
@@ -81,8 +79,8 @@ public class SpreadSheetInfoToolSupplier
     /** the dialog with the spreadsheets. */
     protected ApprovalDialog m_Dialog;
     
-    /** the multi-page pane for displaying the spectra. */
-    protected BaseMultiPagePane m_Content;
+    /** the multi-page pane for displaying the info. */
+    protected MultiPagePane m_Content;
 
     /**
      * Sets whether to allow the user to search the table.
@@ -127,7 +125,8 @@ public class SpreadSheetInfoToolSupplier
 	m_Dialog = new ApprovalDialog((Dialog) null, ModalityType.MODELESS);
 	m_Dialog.setCancelVisible(false);
 	m_Dialog.setDiscardVisible(false);
-	m_Content = new BaseMultiPagePane();
+	m_Content = new MultiPagePane();
+	m_Content.setReadOnly(true);
 	m_Dialog.getContentPane().add(m_Content, BorderLayout.CENTER);
 	m_Dialog.setSize(GUIHelper.getDefaultDialogDimension());
 	m_Dialog.setLocationRelativeTo(e.getComponent());
@@ -135,8 +134,7 @@ public class SpreadSheetInfoToolSupplier
       
       pos     = e.getWorldPos();
       content = getMapPane().getMapContent();
-      n       = 0;
-      m_Content.removeAll();
+      m_Content.removeAllPages();
       for (Layer layer : content.layers()) {
 	if (layer.isSelected()) {
 	  layerName = layer.getTitle();
@@ -186,6 +184,9 @@ public class SpreadSheetInfoToolSupplier
 	  }
 	}
       }
+
+      if (m_Content.getPageCount() > 0)
+        m_Content.setSelectedIndex(0);
       
       m_Dialog.setTitle("Long: " + Utils.doubleToString(pos.getX(), 2) + ", Lat: " + Utils.doubleToString(pos.getY(), 2));
       if (!m_Dialog.isVisible())
