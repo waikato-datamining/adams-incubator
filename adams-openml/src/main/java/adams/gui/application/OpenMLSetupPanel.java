@@ -24,10 +24,10 @@ import adams.core.io.FileUtils;
 import adams.data.openml.OpenMLHelper;
 import adams.env.Environment;
 import adams.env.OpenMLDefinition;
+import adams.gui.core.BaseTextField;
 import adams.gui.core.ParameterPanel;
 
 import javax.swing.JSpinner;
-import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import java.awt.BorderLayout;
 
@@ -47,10 +47,10 @@ public class OpenMLSetupPanel
   protected ParameterPanel m_PanelParameters;
 
   /** the URL. */
-  protected JTextField m_TextURL;
+  protected BaseTextField m_TextURL;
 
   /** the API Key. */
-  protected JTextField m_TextAPIKey;
+  protected BaseTextField m_TextAPIKey;
 
   /** the verbose level. */
   protected JSpinner m_SpinnerVerboseLevel;
@@ -67,11 +67,11 @@ public class OpenMLSetupPanel
     m_PanelParameters = new ParameterPanel();
     add(m_PanelParameters, BorderLayout.CENTER);
 
-    m_TextURL = new JTextField(20);
+    m_TextURL = new BaseTextField(20);
     m_TextURL.setText(OpenMLHelper.getURL());
     m_PanelParameters.addParameter("U_RL", m_TextURL);
 
-    m_TextAPIKey = new JTextField(20);
+    m_TextAPIKey = new BaseTextField(20);
     m_TextAPIKey.setText(OpenMLHelper.getAPIKey());
     m_PanelParameters.addParameter("API _Key", m_TextAPIKey);
 
