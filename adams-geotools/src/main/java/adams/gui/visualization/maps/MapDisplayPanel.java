@@ -19,25 +19,26 @@
  */
 package adams.gui.visualization.maps;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.io.File;
-import java.util.List;
-
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
+import adams.core.CleanUpHandler;
+import adams.data.io.input.AbstractGeoToolsLayerReader;
+import adams.flow.sink.infotool.AbstractInfoToolSupplier;
+import adams.flow.sink.infotool.DefaultInfoToolSupplier;
+import adams.flow.sink.infotool.InfoToolSupplier;
+import adams.gui.action.AbstractBaseAction;
+import adams.gui.chooser.GeoToolsLayerFileChooser;
+import adams.gui.chooser.ImageFileChooser;
+import adams.gui.core.AntiAliasingSupporter;
+import adams.gui.core.BaseButton;
+import adams.gui.core.BaseSplitPane;
+import adams.gui.core.GUIHelper;
+import adams.gui.core.MenuBarProvider;
+import adams.gui.core.RecentFilesHandlerWithCommandline;
+import adams.gui.core.RecentFilesHandlerWithCommandline.Setup;
+import adams.gui.core.ToolBarPanel;
+import adams.gui.event.RecentItemEvent;
+import adams.gui.event.RecentItemListener;
+import adams.gui.sendto.SendToActionSupporter;
+import adams.gui.sendto.SendToActionUtils;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.map.Layer;
 import org.geotools.map.MapContent;
@@ -52,25 +53,22 @@ import org.geotools.swing.action.ZoomInAction;
 import org.geotools.swing.action.ZoomOutAction;
 import org.geotools.swing.control.JMapStatusBar;
 
-import adams.core.CleanUpHandler;
-import adams.data.io.input.AbstractGeoToolsLayerReader;
-import adams.flow.sink.infotool.AbstractInfoToolSupplier;
-import adams.flow.sink.infotool.DefaultInfoToolSupplier;
-import adams.flow.sink.infotool.InfoToolSupplier;
-import adams.gui.action.AbstractBaseAction;
-import adams.gui.chooser.GeoToolsLayerFileChooser;
-import adams.gui.chooser.ImageFileChooser;
-import adams.gui.core.AntiAliasingSupporter;
-import adams.gui.core.BaseSplitPane;
-import adams.gui.core.GUIHelper;
-import adams.gui.core.MenuBarProvider;
-import adams.gui.core.RecentFilesHandlerWithCommandline;
-import adams.gui.core.RecentFilesHandlerWithCommandline.Setup;
-import adams.gui.core.ToolBarPanel;
-import adams.gui.event.RecentItemEvent;
-import adams.gui.event.RecentItemListener;
-import adams.gui.sendto.SendToActionSupporter;
-import adams.gui.sendto.SendToActionUtils;
+import javax.swing.ButtonGroup;
+import javax.swing.JComponent;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
+import java.io.File;
+import java.util.List;
 
 /**
  * Specialized panel for displaying maps.
@@ -220,42 +218,42 @@ public class MapDisplayPanel
    */
   @Override
   protected void initToolBar() {
-    JButton 		btn;
+    BaseButton 		btn;
     ButtonGroup 	group;
 
     group = new ButtonGroup();
 
-    btn = new JButton(m_ActionNoTool);
+    btn = new BaseButton(m_ActionNoTool);
     btn.setName(JMapFrame.TOOLBAR_POINTER_BUTTON_NAME);
     m_ToolBar.add(btn);
     group.add(btn);
 
-    btn = new JButton(m_ActionZoomIn);
+    btn = new BaseButton(m_ActionZoomIn);
     btn.setName(JMapFrame.TOOLBAR_ZOOMIN_BUTTON_NAME);
     m_ToolBar.add(btn);
     group.add(btn);
 
-    btn = new JButton(m_ActionZoomOut);
+    btn = new BaseButton(m_ActionZoomOut);
     btn.setName(JMapFrame.TOOLBAR_ZOOMOUT_BUTTON_NAME);
     m_ToolBar.add(btn);
     group.add(btn);
 
     m_ToolBar.addSeparator();
 
-    btn = new JButton(m_ActionPan);
+    btn = new BaseButton(m_ActionPan);
     btn.setName(JMapFrame.TOOLBAR_PAN_BUTTON_NAME);
     m_ToolBar.add(btn);
     group.add(btn);
 
     m_ToolBar.addSeparator();
 
-    btn = new JButton(m_ActionInfo);
+    btn = new BaseButton(m_ActionInfo);
     btn.setName(JMapFrame.TOOLBAR_INFO_BUTTON_NAME);
     m_ToolBar.add(btn);
 
     m_ToolBar.addSeparator();
 
-    btn = new JButton(m_ActionReset);
+    btn = new BaseButton(m_ActionReset);
     btn.setName(JMapFrame.TOOLBAR_RESET_BUTTON_NAME);
     m_ToolBar.add(btn);
   }
