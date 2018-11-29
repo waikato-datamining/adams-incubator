@@ -13,7 +13,7 @@
 
 # transformer
 adams-javacv.OpenCVTransformer1=\
-  IF AFTER adams.flow.transformer.ImageReader \
+  IF AFTER adams.flow.transformer.ImageFileReader \
   THEN adams.flow.transformer.OpenCVTransformer
 
 adams-javacv.OpenCVTransformer2=\
@@ -22,7 +22,7 @@ adams-javacv.OpenCVTransformer2=\
 
 # features
 adams-javacv.OpenCVFeatureGenerator1=\
-  IF AFTER adams.flow.transformer.ImageReader \
+  IF AFTER adams.flow.transformer.ImageFileReader \
   THEN adams.flow.transformer.OpenCVFeatureGenerator
 
 adams-javacv.OpenCVFeatureGenerator2=\
