@@ -26,11 +26,6 @@ import adams.data.opencv.OpenCVHelper;
 import adams.data.opencv.OpenCVImageContainer;
 import adams.data.opencv.transformer.AbstractOpenCVTransformer;
 import adams.flow.core.Token;
-import adams.flow.provenance.ActorType;
-import adams.flow.provenance.Provenance;
-import adams.flow.provenance.ProvenanceContainer;
-import adams.flow.provenance.ProvenanceInformation;
-import adams.flow.provenance.ProvenanceSupporter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -88,11 +83,9 @@ import java.util.List;
  <!-- options-end -->
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
- * @version $Revision: 9987 $
  */
 public class OpenCVTransformer
-  extends AbstractTransformer
-  implements ProvenanceSupporter {
+  extends AbstractTransformer {
 
   /** for serialization. */
   private static final long serialVersionUID = 3690378527551302472L;
@@ -289,8 +282,6 @@ public class OpenCVTransformer
     result = new Token(m_CurrentImages.get(0));
     m_CurrentImages.remove(0);
 
-    updateProvenance(result);
-
     return result;
   }
 
@@ -302,18 +293,5 @@ public class OpenCVTransformer
     m_CurrentImages.clear();
 
     super.wrapUp();
-  }
-
-  /**
-   * Updates the provenance information in the provided container.
-   *
-   * @param cont	the provenance container to update
-   */
-  public void updateProvenance(ProvenanceContainer cont) {
-    if (Provenance.getSingleton().isEnabled()) {
-      if (m_InputToken.hasProvenance())
-	cont.setProvenance(m_InputToken.getProvenance().getClone());
-      cont.addProvenance(new ProvenanceInformation(ActorType.PREPROCESSOR, m_InputToken.getPayload().getClass(), this, ((Token) cont).getPayload().getClass()));
-    }
   }
 }
