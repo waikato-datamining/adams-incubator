@@ -21,8 +21,8 @@
 package adams.flow.sink.jclouds;
 
 import adams.core.SerializationHelper;
-import adams.core.Utils;
 import adams.core.base.BaseKeyValuePair;
+import adams.core.logging.LoggingHelper;
 import adams.core.option.OptionUtils;
 import adams.data.blob.BlobContainer;
 import adams.data.conversion.ConversionFromString;
@@ -493,7 +493,7 @@ public class OpenStackUploadObject
 	}
       }
       catch (Exception e) {
-	result = Utils.handleException(this, "Failed to create byte array from input!", e);
+	result = LoggingHelper.handleException(this, "Failed to create byte array from input!", e);
       }
 
       // upload data

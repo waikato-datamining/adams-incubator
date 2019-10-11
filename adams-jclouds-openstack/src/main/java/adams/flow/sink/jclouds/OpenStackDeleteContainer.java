@@ -20,7 +20,7 @@
 
 package adams.flow.sink.jclouds;
 
-import adams.core.Utils;
+import adams.core.logging.LoggingHelper;
 import org.jclouds.openstack.swift.v1.SwiftApi;
 import org.jclouds.openstack.swift.v1.domain.Container;
 import org.jclouds.openstack.swift.v1.domain.ObjectList;
@@ -177,7 +177,7 @@ public class OpenStackDeleteContainer
 	}
       }
       catch (Exception e) {
-	result = Utils.handleException(this, "Failed to delete container '" + name + "'!", e);
+	result = LoggingHelper.handleException(this, "Failed to delete container '" + name + "'!", e);
       }
     }
 

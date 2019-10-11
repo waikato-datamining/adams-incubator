@@ -21,7 +21,7 @@
 package adams.flow.transformer.jclouds;
 
 import adams.core.SerializationHelper;
-import adams.core.Utils;
+import adams.core.logging.LoggingHelper;
 import adams.core.option.OptionUtils;
 import adams.data.blob.BlobContainer;
 import adams.data.conversion.ConversionFromString;
@@ -270,7 +270,7 @@ public class OpenStackDownloadObject
 	}
       }
       catch (Exception e) {
-	result = Utils.handleException(
+	result = LoggingHelper.handleException(
 	  this, "Failed to download object: " + m_Region + "/" + m_ContainerName + "/" + name, e);
       }
     }

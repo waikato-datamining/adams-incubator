@@ -19,8 +19,7 @@
  */
 package adams.data.io.input;
 
-import java.awt.Color;
-
+import adams.core.logging.LoggingHelper;
 import org.geotools.data.FileDataStore;
 import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureSource;
@@ -28,7 +27,7 @@ import org.geotools.map.FeatureLayer;
 import org.geotools.styling.SLD;
 import org.geotools.styling.Style;
 
-import adams.core.Utils;
+import java.awt.Color;
 
 /**
  <!-- globalinfo-start -->
@@ -155,7 +154,7 @@ public class ShapeFileReader
       featureSource = store.getFeatureSource();
     }
     catch (Exception e) {
-      Utils.handleException(this, "Failed to load shape file : " + m_Input, e);
+      LoggingHelper.handleException(this, "Failed to load shape file : " + m_Input, e);
       return null;
     }
 

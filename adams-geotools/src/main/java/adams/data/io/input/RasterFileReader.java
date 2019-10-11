@@ -19,15 +19,14 @@
  */
 package adams.data.io.input;
 
+import adams.core.logging.LoggingHelper;
+import adams.data.RasterImageHelper;
+import adams.data.RasterType;
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.GridFormatFinder;
 import org.geotools.map.GridReaderLayer;
 import org.geotools.styling.Style;
-
-import adams.core.Utils;
-import adams.data.RasterImageHelper;
-import adams.data.RasterType;
 
 /**
  <!-- globalinfo-start -->
@@ -195,7 +194,7 @@ public class RasterFileReader
       reader = format.getReader(m_Input.getAbsoluteFile());
     }
     catch (Exception e) {
-      Utils.handleException(this, "Failed to load raster file : " + m_Input, e);
+      LoggingHelper.handleException(this, "Failed to load raster file : " + m_Input, e);
       return null;
     }
 
