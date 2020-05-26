@@ -15,12 +15,13 @@
 
 /*
  * GeoToolsLayerFileChooser.java
- * Copyright (C) 2013-2015 University of Waikato, Hamilton, New Zealand
+ * Copyright (C) 2013-2020 University of Waikato, Hamilton, New Zealand
  */
 
 package adams.gui.chooser;
 
 import adams.core.ClassLister;
+import adams.core.classmanager.ClassManager;
 import adams.core.io.PlaceholderFile;
 import adams.core.option.OptionUtils;
 import adams.data.io.input.AbstractGeoToolsLayerReader;
@@ -38,7 +39,6 @@ import java.util.List;
  * for GIS layers.
  *
  * @author  fracpete (fracpete at waikato dot ac dot nz)
- * @version $Revision$
  */
 public class GeoToolsLayerFileChooser
   extends AbstractConfigurableExtensionFileFilterFileChooser<AbstractGeoToolsLayerReader, AbstractGeoToolsLayerWriter> {
@@ -103,7 +103,7 @@ public class GeoToolsLayerFileChooser
 
       // get data from converter
       try {
-	cls       = Class.forName(classname);
+	cls       = ClassManager.getSingleton().forName(classname);
 	converter = cls.newInstance();
 	if (reader) {
 	  desc = ((AbstractGeoToolsLayerReader) converter).getFormatDescription();
@@ -222,7 +222,7 @@ public class GeoToolsLayerFileChooser
     if (m_CurrentHandler == null) {
       classname = ((ExtensionFileFilterWithClass) getFileFilter()).getClassname();
       try {
-	m_CurrentHandler = Class.forName(classname).newInstance();
+	m_CurrentHandler = ClassManager.getSingleton().forName(classname).newInstance();
       }
       catch (Exception e) {
 	handleException("Failed to configure current handler:", e);
@@ -280,7 +280,7 @@ public class GeoToolsLayerFileChooser
       for (ExtensionFileFilterWithClass filter: list) {
 	if (filter.accept(file)) {
 	  try {
-	    result = (AbstractGeoToolsLayerReader) Class.forName(filter.getClassname()).newInstance();
+	    result = (AbstractGeoToolsLayerReader) ClassManager.getSingleton().forName(filter.getClassname()).newInstance();
 	  }
 	  catch (Exception e) {
 	    handleException("Failed to instantiate reader: " + filter.getClassname(), e);
@@ -307,7 +307,7 @@ public class GeoToolsLayerFileChooser
       for (ExtensionFileFilterWithClass filter: list) {
 	if (filter.accept(file)) {
 	  try {
-	    result = (AbstractGeoToolsLayerWriter) Class.forName(filter.getClassname()).newInstance();
+	    result = (AbstractGeoToolsLayerWriter) ClassManager.getSingleton().forName(filter.getClassname()).newInstance();
 	  }
 	  catch (Exception e) {
 	    handleException("Failed to instantiate writer: " + filter.getClassname(), e);
